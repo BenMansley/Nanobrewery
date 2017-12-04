@@ -23,3 +23,5 @@ const appShell = (
 
 ReactDOM.render(appShell, document.getElementById('root'));
 registerServiceWorker();
+
+export default appShell;
