@@ -1,0 +1,71 @@
+.material-input {
+  display: block;
+  position: relative;
+  margin: 2em 0 0;
+
+  label {
+    position: absolute;
+    display: block;
+    color: #777777;
+    top: 1em;
+    left: 0;
+    transform: none;
+    transform-origin: bottom left;
+    transition: color 0.25s ease-out, transform 0.25s ease-out;
+    text-transform: capitalize;
+  }
+
+  input {
+    width: 100%;
+    border-width: 0 0 2px 0;
+    border-color: #888888;
+    background: transparent;
+    padding: 0.6em 0 0.5em;
+    font-family: inherit;
+    font-size: 1.1em;
+    
+    &:focus, &:hover {
+      border-color: $darkGreen;
+      outline: none;
+    }
+
+    &:focus + label, &.active + label {
+      color: $darkGrey;
+      transform: translateY(-2.1em) scale(0.8);
+    }
+  }
+
+  &.inline {
+    display: inline-block;
+    margin: 2em 1em 0;
+
+    .input {
+      max-width: 200px;    
+    }
+  }
+}
+
+
+button {
+  text-transform: uppercase;
+  font-size: 1em;
+  font-family: inherit;
+  padding: 0.5em 1em 0.5em;
+  border-radius: 2px;
+  border: none;
+  background: $darkGreen;
+  color: $white;
+  margin: 2em 0 1em;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+
+  // .material-icons {
+  //   vertical-align: top;
+  //   margin-left: 0.3em;
+  //   color: $pink;
+  // }
+
+  &:hover, &:focus {
+    background: $lightGreen; 
+  }
+}

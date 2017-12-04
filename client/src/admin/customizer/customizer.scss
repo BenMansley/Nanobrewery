@@ -1,0 +1,87 @@
+.page-content.customize .page-title {
+  margin: 1em 0;
+}
+
+.customizer {
+  flex: 1;
+  display: grid;
+  grid-template: 1fr 1fr / 0.75fr 1fr;
+  grid-gap: 1em 1em;
+  justify-items: stretch;
+  align-items: stretch;
+  justify-content: stretch;
+  padding-bottom: 2em;
+
+  @media all and (max-width: 600px) {
+    grid-template: 1fr 1fr 1fr 1fr / 1fr;
+
+    .customizer-description {
+      grid-row: 3 / 4;
+    }
+
+    .customizer-facts {
+      grid-row: 4 / 5;
+    }
+  }
+
+  > .card {
+    margin: 0;
+    width: 100%;
+    flex: 1 0 auto;
+  }
+
+  .customizer-sliders {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  input[type=range] {
+    display: block;
+    -webkit-appearance: none;
+    width: 100%;
+    height: 3em;
+    background: transparent;
+    font-size: 1em;
+
+    &:focus {
+      outline: none;
+
+      &::-webkit-slider-thumb {
+        background-color: $greyE;
+      }
+    }
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 2em;
+      width: 2em;
+      margin-top: -0.75em;
+      z-index: 2;
+      border-radius: 1em;
+      border: 3px solid $lightGreen;
+      background: url('img/mug.svg') center/60% 60% no-repeat $lightGreen;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $greyE;
+      }
+    }
+
+    &::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 0.5em;
+      background: $darkGreen;
+      border-radius: 0.25em;
+      cursor: pointer;
+    }
+
+    &::-ms-track {
+      width: 100%;
+      cursor: pointer;
+      background: transparent;
+      border-color: transparent;
+      color: transparent;
+    }
+  }
+}
