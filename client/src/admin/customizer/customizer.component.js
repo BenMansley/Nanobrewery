@@ -8,11 +8,13 @@ class Customizer extends Component {
     super(props)
   
     this.state = {
-       bitter: 50,
-       fruity: 50,
-       volume: 4,
-       colour: 0,
-       rgb: [55,8,10]
+      volume: 4,
+      colour: 0,
+      hoppy: 50,
+      malty: 50,
+      rgb: [55,8,10],
+      firstWildcard: 0,
+      secondWildcard: 0
     }
   }
 
@@ -34,14 +36,18 @@ class Customizer extends Component {
         <h1 className="page-title">Customize Your Beer</h1>
         <div className="customizer">
           <div className="customizer-sliders card">
-            <label>Bitterness - {this.state.bitter}%</label>
-            <input type="range" min="0" max="100" value={this.state.bitter} onChange={(event) => this.setState({bitter: Number(event.target.value)})}/>
-            <label>Fruityness - {this.state.fruity}%</label>
-            <input type="range" min="0" max="100" value={this.state.fruity} onChange={(event) => this.setState({fruity: Number(event.target.value)})}/>
             <label>Volume - {this.state.volume}% ABV</label>            
             <input type="range" min="0" max="8" step="0.1" value={this.state.volume} onChange={(event) => this.setState({volume: Number(event.target.value)})}/>
             <label>Colour - {this.state.colour}%</label>            
             <input type="range" min="0" max="100" value={this.state.colour} onChange={(event) => this.setColour(event.target.value)}/>
+            <label>Hoppiness - {this.state.hoppy}</label>
+            <input type="range" min="0" max="100" value={this.state.hoppy} onChange={(event) => this.setState({hoppy: Number(event.target.value)})}/>
+            <label>Malt Flavour - {this.state.malty}%</label>
+            <input type="range" min="0" max="100" value={this.state.malty} onChange={(event) => this.setState({malty: Number(event.target.value)})}/>
+            <label>Wildcard 1 - {this.state.firstWildcard}%</label>
+            <input type="range" min="0" max="100" value={this.state.firstWildcard} onChange={(event) => this.setState({firstWildcard: Number(event.target.value)})}/>
+            <label>Wildcard 2 - {this.state.secondWildcard}%</label>
+            <input type="range" min="0" max="100" value={this.state.secondWildcard} onChange={(event) => this.setState({secondWildcard: Number(event.target.value)})}/>
           </div>
           <div className="customizer-image card">
             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 48 48">

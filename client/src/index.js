@@ -11,7 +11,7 @@ import './index.css';
 
 const { persistor, store } = configureStore();
 
-const appShell = (
+const AppShell = (
   <Provider store={store}>
     <PersistGate persistor={persistor}>
       <Router>
@@ -21,7 +21,7 @@ const appShell = (
   </Provider>
 );
 
-ReactDOM.render(appShell, document.getElementById('root'));
+ReactDOM.render(AppShell, document.getElementById('root'));
 registerServiceWorker();
 
-export default appShell;
+export default AppShell;
