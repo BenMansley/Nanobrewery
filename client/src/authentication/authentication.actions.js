@@ -38,14 +38,24 @@ const authenticate = (url, data) => {
           res.json()
           .then(error => {
             dispatch(authResponseFail(error));
+          })
+          .catch(error => {
+            dispatch(authResponseFail("Error parsing data from server"))
           });
         } else if (res.status === 200) {
           res.json()
           .then(data => {
             dispatch(authResponseSuccess(data));
+          })
+          .catch(error => {
+            dispatch(authResponseFail("Error parsing data from server"))
           });
         }
       })
+      .catch(error => {
+        dispatch(authResponseFail("Error retrieving data from server"));
+      })
+
   }
 }
 
