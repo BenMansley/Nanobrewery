@@ -36,16 +36,24 @@ button {
   text-transform: uppercase;
   font-size: 1em;
   font-family: inherit;
-  padding: 0.5em 1em 0.5em;
+  padding: 0.25em 0.5em;
   border-radius: 2px;
   border: none;
-  background: #2B7A78;
-  color: #FFFFFF;
-  margin: 2em 0 1em;
+  color: #2B7A78;
   letter-spacing: 0.5px;
   cursor: pointer; }
-  button:hover, button:focus {
+  button:not(.inline) {
+    background: #2B7A78;
+    color: #FFFFFF;
+    padding: 0.5em 1em;
+    margin: 2em 0 1em; }
+  button:disabled {
+    color: #666666;
+    cursor: default; }
+  button:not(:disabled):hover, button:not(:disabled):focus {
     background: #3AAFA9; }
+    button:not(:disabled):hover.inline, button:not(:disabled):focus.inline {
+      background: #DEF2F1; }
 
 .auth {
   padding: 2em; }
@@ -75,10 +83,33 @@ button {
 .page-content.customize .page-title {
   margin: 1em 0; }
 
+.editable-slider {
+  margin-top: 1em; }
+  .editable-slider .slider-label {
+    display: flex;
+    justify-content: space-between; }
+    .editable-slider .slider-label .customize-btn {
+      color: #2B7A78;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-radius: 2px; }
+      .editable-slider .slider-label .customize-btn:hover, .editable-slider .slider-label .customize-btn:focus {
+        background: #DEF2F1; }
+  .editable-slider form {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 1em;
+    transition: max-height 0.3s ease; }
+    .editable-slider form.active {
+      max-height: 32em; }
+  .editable-slider .submit-btn {
+    display: block;
+    margin-top: 1.5em; }
+
 .customizer {
   flex: 1;
   display: grid;
-  grid-template: 1fr 1fr / 0.75fr 1fr;
+  grid-template: 1fr 0.5fr / 0.75fr 1fr;
   grid-gap: 1em 1em;
   justify-items: stretch;
   align-items: stretch;
@@ -94,8 +125,7 @@ button {
   .customizer > .card {
     margin: 0;
     width: 100%;
-    flex: 1 0 auto; }
-  .customizer .customizer-sliders {
+    flex: 1 0 auto;
     display: flex;
     flex-direction: column;
     justify-content: center; }
@@ -103,7 +133,7 @@ button {
     display: block;
     -webkit-appearance: none;
     width: 100%;
-    height: 3em;
+    height: 2.5em;
     background: transparent;
     font-size: 1em; }
     .customizer input[type=range]:focus {

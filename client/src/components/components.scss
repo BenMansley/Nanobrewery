@@ -50,14 +50,19 @@ button {
   text-transform: uppercase;
   font-size: 1em;
   font-family: inherit;
-  padding: 0.5em 1em 0.5em;
+  padding: 0.25em 0.5em;
   border-radius: 2px;
   border: none;
-  background: $darkGreen;
-  color: $white;
-  margin: 2em 0 1em;
+  color: $darkGreen;
   letter-spacing: 0.5px;
   cursor: pointer;
+
+  &:not(.inline) {
+    background: $darkGreen;
+    color: $white;
+    padding: 0.5em 1em;
+    margin: 2em 0 1em;
+  }
 
   // .material-icons {
   //   vertical-align: top;
@@ -65,7 +70,17 @@ button {
   //   color: $pink;
   // }
 
-  &:hover, &:focus {
+  &:disabled {
+    color: $grey6;
+    cursor: default;
+  }
+  
+
+  &:not(:disabled):hover, &:not(:disabled):focus {
     background: $lightGreen; 
+    
+    &.inline {
+      background: $lightestGreen;
+    }
   }
 }

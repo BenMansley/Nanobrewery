@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 
-const MaterialInput = ({type, id, labelText, active, inline, onChange}) => {
+const MaterialInput = ({type, id, labelText, active, inline, onChange, value}) => {
   return (
     <div className={"material-input" + (inline ? " inline" : "")}>
-      <input type={type} id={id} onChange={(event) => onChange(event)} className={active ? "active" : ""}/>
+      <input type={type} id={id} onChange={(event) => onChange(event)} className={active ? "active" : ""} value={value}/>
       <label htmlFor={id}>{labelText}</label>
     </div>
   )

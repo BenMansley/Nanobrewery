@@ -40,9 +40,8 @@ class SignIn extends Component {
             <MaterialInput labelText="Password *" type="password" id="password" onChange={(event) => this.setState({password: event.target.value})}
               value={this.state.password} active={this.state.password !== ''} inline={false}/>
             <div className="auth-base">
-              { (this.props.error) ? 
-                <p className="error"><span className="material-icons">error</span>{this.props.error}</p>
-              : null }
+              <p className="error">{this.props.error !== '' && <span className="material-icons">error</span>}
+                {this.props.error}</p>
               <button type="submit">Sign In</button>
             </div>
           </form>

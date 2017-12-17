@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Slider from './slider/slider.component'
+import EditableSlider from './slider/editable-slider.component';
 
-class Customizer extends Component {
+class Dashboard extends Component {
 
   constructor(props) {
     super(props)
@@ -34,15 +34,15 @@ class Customizer extends Component {
     const rgb = this.state.rgb;
     return (
       <div className="page-content customize">
-        <h1 className="page-title">Customize Your Beer</h1>
+        <h1 className="page-title">Admin Dashboard - Customizer</h1>
         <div className="customizer">
           <div className="customizer-sliders card">
-            <Slider name="Volume" value={this.state.volume} min={0} max={8} step={0.1} suffix=" ABV" onChange={(volume) => this.setState({volume})}/>
-            <Slider name="Colour" value={this.state.colour} min={0} max={100} onChange={(colour) => this.setState({colour})}/>
-            <Slider name="Hoppiness" value={this.state.hoppy} min={0} max={100} onChange={(hoppy) => this.setState({hoppy})}/>
-            <Slider name="Malt Flavour" value={this.state.malty} min={0} max={100} onChange={(malty) => this.setState({malty})}/>            
-            <Slider name="Wildcard 1" value={this.state.firstWildcard} min={0} max={100} onChange={(firstWildcard) => this.setState({firstWildcard})}/>
-            <Slider name="Wildcard 2" value={this.state.secondWildcard} min={0} max={100} onChange={(secondWildcard) => this.setState({secondWildcard})}/>            
+            <EditableSlider name="Volume" value={this.state.volume} min={0} max={8} step={0.1} suffix=" ABV" onChange={(volume) => this.setState({volume})}/>
+            <EditableSlider name="Colour" value={this.state.colour} min={0} max={100} onChange={(colour) => this.setColour(colour)} disabled/>
+            <EditableSlider name="Hoppiness" value={this.state.hoppy} min={0} max={100} onChange={(hoppy) => this.setState({hoppy})}/>
+            <EditableSlider name="Malt Flavour" value={this.state.malty} min={0} max={100} onChange={(malty) => this.setState({malty})}/>            
+            <EditableSlider name="Wildcard 1" value={this.state.firstWildcard} min={0} max={100} onChange={(firstWildcard) => this.setState({firstWildcard})}/>
+            <EditableSlider name="Wildcard 2" value={this.state.secondWildcard} min={0} max={100} onChange={(secondWildcard) => this.setState({secondWildcard})}/>            
           </div>
           <div className="customizer-image card">
             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 48 48">
@@ -58,13 +58,10 @@ class Customizer extends Component {
             </svg>
           </div>
           <div className="customizer-facts card">
-            {/* <ul>
-              <li>Color: Brown</li>
-              <li>Volume: {this.state.volume}%</li>
-            </ul> */}
+            <p>A factsheet will generate here</p>
           </div>
           <div className="customizer-description card">
-            {/* <p>This is a description of the final product. There are hops.</p> */}
+            <p>The description will show here</p>
           </div>
         </div>
       </div>
@@ -72,7 +69,7 @@ class Customizer extends Component {
   }
 }
 
-Customizer.propTypes = {
+Dashboard.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.number,
     email: PropTypes.string,
@@ -85,4 +82,4 @@ const mapStateToProps = state => {
   return { user: state.auth.user }
 }
 
-export default connect(mapStateToProps)(Customizer); 
+export default connect(mapStateToProps)(Dashboard); 

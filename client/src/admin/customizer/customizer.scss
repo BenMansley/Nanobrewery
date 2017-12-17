@@ -2,10 +2,12 @@
   margin: 1em 0;
 }
 
+@import 'slider/editable-slider';
+
 .customizer {
   flex: 1;
   display: grid;
-  grid-template: 1fr 1fr / 0.75fr 1fr;
+  grid-template: 1fr 0.5fr / 0.75fr 1fr;
   grid-gap: 1em 1em;
   justify-items: stretch;
   align-items: stretch;
@@ -28,9 +30,6 @@
     margin: 0;
     width: 100%;
     flex: 1 0 auto;
-  }
-
-  .customizer-sliders {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -40,7 +39,7 @@
     display: block;
     -webkit-appearance: none;
     width: 100%;
-    height: 3em;
+    height: 2.5em;
     background: transparent;
     font-size: 1em;
 

@@ -1,0 +1,35 @@
+.editable-slider {
+  margin-top: 1em;
+
+  .slider-label {
+    display: flex;
+    justify-content: space-between;
+
+    .customize-btn {
+      color: $darkGreen;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-radius: 2px;
+
+      &:hover, &:focus {
+        background: $lightestGreen;
+      }
+    }
+  }
+
+  form {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 1em;
+    transition: max-height 0.3s ease;
+
+    &.active {
+      max-height: 32em;
+    }
+  }
+
+  .submit-btn {
+    display: block;
+    margin-top: 1.5em;
+  }
+}

@@ -9,6 +9,7 @@ import SignUp from './authentication/signup/signup.component';
 import Account from './admin/user/account.component';
 import Welcome from './admin/user/welcome.component';
 import Customizer from './admin/customizer/customizer.component';
+import Dashboard from './admin/customizer/dashboard.component';
 import NoMatch from './no-match';
 import { signout, changeRoute } from './authentication/authentication.actions';
 
@@ -42,9 +43,10 @@ class App extends Component {
           <Route exact path='/' component={Home}/>
           <Route exact path='/authentication/signin' component={SignIn}/>
           <Route exact path='/authentication/signup' component={SignUp}/>
-          <PrivateRoute exact path='/admin/user/account' isLoggedIn={isLoggedIn} component={Account}/>
-          <PrivateRoute exact path='/admin/user/welcome' isLoggedIn={isLoggedIn} component={Welcome}/>
-          <PrivateRoute exact path='/admin/customizer' isLoggedIn={isLoggedIn} component={Customizer}/>             
+          <PrivateRoute exact path='/admin/user/account' allowAccess={isLoggedIn} component={Account}/>
+          <PrivateRoute exact path='/admin/user/welcome' allowAccess={isLoggedIn} component={Welcome}/>
+          <PrivateRoute exact path='/admin/customizer' allowAccess={isLoggedIn} component={Customizer}/>          
+          <PrivateRoute exact path='/admin/dashboard' allowAccess={isLoggedIn} component={Dashboard}/>
           <Route exact component={NoMatch}/>
         </Switch>
       </div>
