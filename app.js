@@ -9,6 +9,7 @@ const mysql = require('mysql');
 
 const index = require('./routes/index');
 const users = require('./routes/users');
+const customizer = require('./routes/customizer');
 
 const app = express();
 
