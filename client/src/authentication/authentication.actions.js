@@ -34,28 +34,20 @@ const authenticate = (url, data) => {
       body: JSON.stringify(data)
     })
       .then(res => {
-        if (res.status === 400) {
-          res.json()
-          .then(error => {
-            dispatch(authResponseFail(error));
-          })
-          .catch(error => {
-            dispatch(authResponseFail("Error parsing data from server"))
-          });
-        } else if (res.status === 200) {
-          res.json()
-          .then(data => {
+        res.json().then(data => {
+          if (res.status === 400) {
+            dispatch(authResponseFail(data));
+          } else if (res.status === 200) {
             dispatch(authResponseSuccess(data));
-          })
-          .catch(error => {
-            dispatch(authResponseFail("Error parsing data from server"))
-          });
-        }
+          }
+        })
+        .catch(error => {
+          dispatch(authResponseFail("Error parsing data from server"))
+        });
       })
       .catch(error => {
         dispatch(authResponseFail("Error retrieving data from server"));
       })
-
   }
 }
 

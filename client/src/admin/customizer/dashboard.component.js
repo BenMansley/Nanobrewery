@@ -3,24 +3,37 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import EditableSlider from './slider/editable-slider.component';
 
+import { getVariables } from './customizer.actions';
+
 class Dashboard extends Component {
 
   constructor(props) {
     super(props)
   
     this.state = {
-      volume: 4,
-      colour: 0,
-      hoppy: 50,
-      malty: 50,
+      variables: [],
       rgb: [55,8,10],
-      firstWildcard: 0,
-      secondWildcard: 0
     }
   }
 
+  componentDidMount() {
+    this.props.getVariables();
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState(prevState => {
+      if (prevState.variables.length === 0 && props.variables.length !== 0) {
+        return {variables: props.variables};
+      }
+      return prevState;
+    })
+  }
+
   setColour(value) {
-    this.setState({colour: value}, _ => {
+    let variables = this.state.variables;
+    variables[1].value = value;
+    
+    this.setState({variables}, _ => {
       const minRGB = [55, 8, 10];
       const step = [2, 2.22, 1.43];
       const rgb = minRGB.map((colour, i) => {
@@ -32,17 +45,37 @@ class Dashboard extends Component {
 
   render() {
     const rgb = this.state.rgb;
+    const variables = this.state.variables;
+    
+    let sliders;
+    
+    if (variables.length > 0) {
+      sliders = variables.map((v, i) => {
+        if (v.name === 'Colour') {
+          return <EditableSlider key={i} name={v.name} min={v.min} max={v.max} step={v.step} suffix={v.suffix} value={v.value} disabled
+                  onChange={(value) => this.setColour(value)}/>
+        }
+        return <EditableSlider key={i} name={v.name} min={v.min} max={v.max} step={v.step} suffix={v.suffix} value={v.value}
+                  onChange={(value) => {
+                    let variables = this.state.variables;
+                    variables[i].value = value;
+                    this.setState({variables});
+                  }}/>
+      });
+    }
+
     return (
       <div className="page-content customize">
         <h1 className="page-title">Admin Dashboard - Customizer</h1>
         <div className="customizer">
           <div className="customizer-sliders card">
-            <EditableSlider name="Volume" value={this.state.volume} min={0} max={8} step={0.1} suffix=" ABV" onChange={(volume) => this.setState({volume})}/>
+            { this.props.isLoading ? <span className="loading">Loading...</span> : sliders }
+            {/* <EditableSlider name="Volume" value={this.state.volume} min={0} max={8} step={0.1} suffix=" ABV" onChange={(volume) => this.setState({volume})}/>
             <EditableSlider name="Colour" value={this.state.colour} min={0} max={100} onChange={(colour) => this.setColour(colour)} disabled/>
             <EditableSlider name="Hoppiness" value={this.state.hoppy} min={0} max={100} onChange={(hoppy) => this.setState({hoppy})}/>
             <EditableSlider name="Malt Flavour" value={this.state.malty} min={0} max={100} onChange={(malty) => this.setState({malty})}/>            
             <EditableSlider name="Wildcard 1" value={this.state.firstWildcard} min={0} max={100} onChange={(firstWildcard) => this.setState({firstWildcard})}/>
-            <EditableSlider name="Wildcard 2" value={this.state.secondWildcard} min={0} max={100} onChange={(secondWildcard) => this.setState({secondWildcard})}/>            
+            <EditableSlider name="Wildcard 2" value={this.state.secondWildcard} min={0} max={100} onChange={(secondWildcard) => this.setState({secondWildcard})}/>             */}
           </div>
           <div className="customizer-image card">
             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 48 48">
@@ -75,11 +108,30 @@ Dashboard.propTypes = {
     email: PropTypes.string,
     name: PropTypes.string,
     companyName: PropTypes.string    
-  }).isRequired
+  }).isRequired,
+  getVariables: PropTypes.func.isRequired,
+  variables: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      min: PropTypes.number,
+      max: PropTypes.number,
+      step: PropTypes.number,
+      default: PropTypes.number,
+      suffix: PropTypes.string,
+    })
+  ),
+  isLoading: PropTypes.bool.isRequired
 }
 
 const mapStateToProps = state => {
-  return { user: state.auth.user }
+  return { user: state.auth.user, variables: state.customizer.variables, isLoading: state.customizer.isLoading }
 }
 
-export default connect(mapStateToProps)(Dashboard); 
+const mapDispatchToProps = dispatch => {
+  return {
+    getVariables: () => dispatch(getVariables())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard); 

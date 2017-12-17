@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 /* GET users listing. */
 router.get('/all', function(req, res, next) {
-  req.app.settings.conn.query('SELECT * FROM users', (error, results, fields) => {
+  req.app.settings.conn.query('SELECT * FROM Users', (error, results, fields) => {
     if (error) throw error;
     res.json(results);
   });

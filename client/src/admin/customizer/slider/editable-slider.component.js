@@ -41,10 +41,7 @@ export default class EditableSlider extends Component {
           <MaterialInput type="number" id="max" labelText="Maximum *" active={max !== ""} value={max}
             onChange={(event) => this.setState({max: event.target.value})}/>
           <MaterialInput type="number" id="step" labelText="Increment *" active={step !== ""} value={step}
-            onChange={(event) => {
-              console.log(event.target.value);
-              this.setState({step: event.target.value})
-            }}/>
+            onChange={(event) => this.setState({step: event.target.value})}/>
           <MaterialInput type="text" id="suffix" labelText="Suffix (after %)" active={suffix !== ""} value={suffix}
             onChange={(event) => this.setState({suffix: event.target.value})}/>
           <button type="submit" className="submit-btn">Save</button>

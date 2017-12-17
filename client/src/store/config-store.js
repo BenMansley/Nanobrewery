@@ -3,13 +3,14 @@ import thunk from 'redux-thunk';
 import { persistStore, persistCombineReducers } from 'redux-persist';
 import storage from 'redux-persist/es/storage';
 import { default as auth } from '../authentication/authentication.reducer';
+import { default as customizer } from '../admin/customizer/customizer.reducer';
 
 const config = {
   key: 'root',
   storage
 };
 
-const reducer = persistCombineReducers(config, {auth});
+const reducer = persistCombineReducers(config, {auth, customizer});
 
 const configureStore = preloadedState => {
   let store = createStore(reducer, preloadedState, applyMiddleware(thunk));
