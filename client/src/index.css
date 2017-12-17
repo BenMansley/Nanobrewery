@@ -101,10 +101,13 @@ button {
     padding: 0 1em;
     transition: max-height 0.3s ease; }
     .editable-slider form.active {
-      max-height: 32em; }
-  .editable-slider .submit-btn {
-    display: block;
-    margin-top: 1.5em; }
+      max-height: 40em; }
+  .editable-slider .slider-buttons {
+    text-align: right; }
+    .editable-slider .slider-buttons > button {
+      margin-top: 1.5em; }
+      .editable-slider .slider-buttons > button:first-of-type {
+        margin-right: 1.5em; }
 
 .customizer {
   flex: 1;

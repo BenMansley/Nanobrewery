@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import MaterialInput from '../../../components/material-input';
+import { updateVariable } from '../customizer.actions';
 
-export default class EditableSlider extends Component {
+class EditableSlider extends Component {
   
   constructor(props) {
     super(props);
@@ -12,6 +14,7 @@ export default class EditableSlider extends Component {
       min: props.min,
       max: props.max,
       step: props.step,
+      defaultVal: props.defaultVal,
       suffix: props.suffix,
       active: false
     }
@@ -22,8 +25,22 @@ export default class EditableSlider extends Component {
     this.setState({active: false});
   }
 
+  onReset(event) {
+    event.preventDefault();
+    const { name, min, max, step, defaultVal, suffix, onChange } = this.props;
+
+    this.setState({name, min, max, step, defaultVal, suffix});
+
+    onChange(defaultVal);
+  }
+
+  onDefaultChange(val) {
+    this.setState({defaultVal: val});
+    this.props.onChange(val);
+  }
+
   render() {
-    const { name, min, max, step, suffix, active } = this.state;
+    const { name, min, max, step, defaultVal, suffix, active } = this.state;
     const { value, disabled, onChange } = this.props;
 
     return (
@@ -42,9 +59,14 @@ export default class EditableSlider extends Component {
             onChange={(event) => this.setState({max: event.target.value})}/>
           <MaterialInput type="number" id="step" labelText="Increment *" active={step !== ""} value={step}
             onChange={(event) => this.setState({step: event.target.value})}/>
+          <MaterialInput type="number" id="defaultVal" labelText="Default *" active={defaultVal !== ""} value={defaultVal}
+            onChange={(event) => this.onDefaultChange(event.target.value)}/>
           <MaterialInput type="text" id="suffix" labelText="Suffix (after %)" active={suffix !== ""} value={suffix}
             onChange={(event) => this.setState({suffix: event.target.value})}/>
-          <button type="submit" className="submit-btn">Save</button>
+          <div className="slider-buttons">
+            <button onClick={(event) => this.onReset(event)}>Reset</button>
+            <button type="submit">Save</button>
+          </div>
         </form>
         <input type="range" min={min} max={max} step={step || 1} value={value} onChange={(event) => onChange(Number(event.target.value))}/>
       </div>
@@ -53,12 +75,22 @@ export default class EditableSlider extends Component {
 }
 
 EditableSlider.propTypes = {
+  id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   value: PropTypes.number.isRequired,
   min: PropTypes.number.isRequired,
   max: PropTypes.number.isRequired,
   step: PropTypes.number,
+  defaultVal: PropTypes.number.isRequired,
   suffix: PropTypes.string,
   disabled: PropTypes.bool,
   onChange: PropTypes.func.isRequired
 }
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateVariable: (id, name, min, max, step, value, suffix) => dispatch(updateVariable({id, name, min, max, step, value, suffix}))
+  }
+}
+
+export default connect(mapDispatchToProps)(EditableSlider);

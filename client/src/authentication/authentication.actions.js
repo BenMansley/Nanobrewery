@@ -1,7 +1,9 @@
+import asyncAction from '../utils/async-action';
+
 export const actionTypes = {
   SEND_AUTH_REQUEST: 'SEND_AUTH_REQUEST',
-  AUTH_RESPONSE_FAIL: 'AUTH_RESPONSE_FAIL',
   AUTH_RESPONSE_SUCCESS: 'AUTH_RESPONSE_SUCCESS',
+  AUTH_RESPONSE_FAIL: 'AUTH_RESPONSE_FAIL',
   AUTH_FORM_ERROR: 'AUTH_FORM_ERROR',
   AUTH_SIGNOUT: 'AUTH_SIGNOUT',
   ROUTE_CHANGE: 'ROUTE_CHANGE'
@@ -24,45 +26,23 @@ export const authFormError = (error) => {
 }
 
 const authenticate = (url, data) => {
-  return dispatch => {
-    dispatch(sendAuthRequest());
 
-    const headers = new Headers({'Content-Type': 'application/json'});
-    fetch(url, { 
-      method: 'POST',
-      headers: headers, 
-      body: JSON.stringify(data)
-    })
-      .then(res => {
-        res.json().then(data => {
-          if (res.status === 400) {
-            dispatch(authResponseFail(data));
-          } else if (res.status === 200) {
-            dispatch(authResponseSuccess(data));
-          }
-        })
-        .catch(error => {
-          dispatch(authResponseFail("Error parsing data from server"))
-        });
-      })
-      .catch(error => {
-        dispatch(authResponseFail("Error retrieving data from server"));
-      })
-  }
+  return asyncAction(url, { method: 'POST', body: JSON.stringify(data) }, 
+    sendAuthRequest, authResponseSuccess, authResponseFail, 400);
 }
 
 export const authenticateSignIn = (email, password) => {
   if (!email || !password) {
     return authFormError('All Fields Required');
   }
-  return authenticate('/api/users', {email, password});
+  return authenticate('/api/users', { email, password });
 }
 
 export const authenticateSignUp = (email, name, password, companyName) => {
   if (!email || !name || !password) {
     return authFormError('Required fields left blank')
   }
-  return authenticate('/api/users/new', {email, name, password, companyName});
+  return authenticate('/api/users/new', { email, name, password, companyName });
 }
 
 export const signout = () => {

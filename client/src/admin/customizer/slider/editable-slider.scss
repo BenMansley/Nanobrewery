@@ -24,12 +24,19 @@
     transition: max-height 0.3s ease;
 
     &.active {
-      max-height: 32em;
+      max-height: 40em;
     }
   }
 
-  .submit-btn {
-    display: block;
-    margin-top: 1.5em;
+  .slider-buttons { 
+    text-align: right;
+
+    > button {
+      margin-top: 1.5em;
+  
+      &:first-of-type {
+        margin-right: 1.5em;
+      }
+    }
   }
 }

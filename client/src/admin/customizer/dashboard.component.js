@@ -23,6 +23,9 @@ class Dashboard extends Component {
   componentWillReceiveProps(props) {
     this.setState(prevState => {
       if (prevState.variables.length === 0 && props.variables.length !== 0) {
+        for (let variable of props.variables) {
+          variable.default = variable.value;
+        }
         return {variables: props.variables};
       }
       return prevState;
@@ -32,7 +35,7 @@ class Dashboard extends Component {
   setColour(value) {
     let variables = this.state.variables;
     variables[1].value = value;
-    
+
     this.setState({variables}, _ => {
       const minRGB = [55, 8, 10];
       const step = [2, 2.22, 1.43];
@@ -52,15 +55,17 @@ class Dashboard extends Component {
     if (variables.length > 0) {
       sliders = variables.map((v, i) => {
         if (v.name === 'Colour') {
-          return <EditableSlider key={i} name={v.name} min={v.min} max={v.max} step={v.step} suffix={v.suffix} value={v.value} disabled
-                  onChange={(value) => this.setColour(value)}/>
+          return <EditableSlider key={v.id} id={v.id} name={v.name} min={v.min} max={v.max} step={v.step} suffix={v.suffix} 
+                  value={v.value} defaultVal={v.default} disabled onChange={(value) => this.setColour(value)}/>
         }
-        return <EditableSlider key={i} name={v.name} min={v.min} max={v.max} step={v.step} suffix={v.suffix} value={v.value}
-                  onChange={(value) => {
-                    let variables = this.state.variables;
-                    variables[i].value = value;
-                    this.setState({variables});
-                  }}/>
+        return <EditableSlider key={v.id} id={v.id} name={v.name} min={v.min} max={v.max} step={v.step} suffix={v.suffix} 
+                value={v.value} defaultVal={v.default}
+                onChange={(value) => {
+                  let variables = this.state.variables;
+                  variables[i].value = value;
+                  this.setState({variables});
+                }}
+               />
       });
     }
 
