@@ -33,8 +33,6 @@ const conn = mysql.createPool({
   database: 'heroku_1010cad54f61316'
 });
 
-conn.connect();
-
 app.set('conn', conn);
 
 // catch 404 and forward to error handler
