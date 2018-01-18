@@ -56,7 +56,6 @@
     "build": "npm run build-css && node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom"
   },
-  "proxy": "http://localhost:3001",
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,mjs}"

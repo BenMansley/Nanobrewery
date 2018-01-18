@@ -12,6 +12,14 @@ process.on('unhandledRejection', err => {
   throw err;
 });
 
+const fs = require('fs');
+
+fs.readdir('../', (err, files) => {
+  files.forEach(file => {
+    console.log(file);
+  });
+})
+
 // Ensure environment variables are read.
 require('../config/env');
 
