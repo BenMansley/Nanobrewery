@@ -24,9 +24,9 @@ class Dashboard extends Component {
     this.setState(prevState => {
       if (prevState.variables.length === 0 && props.variables.length !== 0) {
         console.log(props.variables);
-        for (let variable of props.variables) {
-          variable.default = variable.value;
-        }
+        // for (let variable of props.variables) {
+        //   variable.default = variable.value;
+        // }
         return {variables: props.variables};
       }
       return prevState;
