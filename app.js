@@ -38,7 +38,7 @@ app.set('conn', conn);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+  res.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
 });
 
 // error handler
