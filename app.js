@@ -25,7 +25,8 @@ app.use(express.static(path.join(__dirname, './client/build')));
 app.use('/api/users', users);
 app.use('/api/customizer', customizer);
 
-const conn = mysql.createConnection({
+const conn = mysql.createPool({
+  connectionLimit: 10,
   host: 'us-cdbr-iron-east-05.cleardb.net',
   user: 'bc48e570cd9b85',
   password: '4744d44d',

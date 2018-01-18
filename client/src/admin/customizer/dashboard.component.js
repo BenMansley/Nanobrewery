@@ -75,12 +75,6 @@ class Dashboard extends Component {
         <div className="customizer">
           <div className="customizer-sliders card">
             { this.props.isLoading ? <span className="loading">Loading...</span> : sliders }
-            {/* <EditableSlider name="Volume" value={this.state.volume} min={0} max={8} step={0.1} suffix=" ABV" onChange={(volume) => this.setState({volume})}/>
-            <EditableSlider name="Colour" value={this.state.colour} min={0} max={100} onChange={(colour) => this.setColour(colour)} disabled/>
-            <EditableSlider name="Hoppiness" value={this.state.hoppy} min={0} max={100} onChange={(hoppy) => this.setState({hoppy})}/>
-            <EditableSlider name="Malt Flavour" value={this.state.malty} min={0} max={100} onChange={(malty) => this.setState({malty})}/>            
-            <EditableSlider name="Wildcard 1" value={this.state.firstWildcard} min={0} max={100} onChange={(firstWildcard) => this.setState({firstWildcard})}/>
-            <EditableSlider name="Wildcard 2" value={this.state.secondWildcard} min={0} max={100} onChange={(secondWildcard) => this.setState({secondWildcard})}/>             */}
           </div>
           <div className="customizer-image card">
             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 48 48">
