@@ -19,6 +19,7 @@ const asyncAction = (url, reqInfo, onSend, onSuccess, onFailure, errCode) => {
           if (res.status === 400) {
             dispatch(onFailure(data));
           } else if (res.status === 200) {
+            console.log(data);
             dispatch(onSuccess(data));
           }
         })
