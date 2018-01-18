@@ -1,7 +1,7 @@
 import asyncAction from '../../utils/async-action'; 
 
 export const actionTypes = {
-  SEND_GET_VARIABLES_REQUEST: 'SEND_GET_VARIABLES_REQUEST',
+  SEND_VARIABLE_REQUEST: 'SEND_VARIABLE_REQUEST',
   GET_VARIABLES_SUCCESS: 'GET_VARIABLES_SUCCESS',
   GET_VARIABLES_FAIL: 'GET_VARIABLES_FAIL',
   SEND_UPDATE_VARIABLE_REQUEST: 'SEND_UPDATE_VARIABLE_REQUEST',
@@ -17,16 +17,12 @@ const getVariablesFail = (error) => {
   return { type: actionTypes.GET_VARIABLES_FAIL, error }
 } 
 
-const sendGetVariablesRequest = () => {
-  return { type: actionTypes.SEND_GET_VARIABLES_REQUEST }
+const sendVariableRequest = () => {
+  return { type: actionTypes.SEND_VARIABLE_REQUEST }
 }
 
 export const getVariables = () => {
-  return asyncAction('/api/customizer/variables', {}, sendGetVariablesRequest, getVariablesSuccess, getVariablesFail, 500);
-}
-
-const sendUpdateVariableRequest = () => {
-  return { type: actionTypes.SEND_UPDATE_VARIABLE_REQUEST };
+  return asyncAction('/api/customizer/variables', {}, sendVariableRequest, getVariablesSuccess, getVariablesFail, 500);
 }
 
 const updateVariableSuccess = (data) => {
@@ -40,5 +36,5 @@ const updateVariableFail = (error) => {
 export const updateVariable = (id, name, min, max, step, value, suffix) => {
   const data = { id, name, min, max, step, value, suffix };
   return asyncAction('/api/customizer/variables', { method: 'POST', body: JSON.stringify(data) }, 
-    sendUpdateVariableRequest, updateVariableSuccess, updateVariableFail, 500);
+    sendVariableRequest, updateVariableSuccess, updateVariableFail, 500);
 }

@@ -38,7 +38,7 @@ class Customizer extends Component {
         <div className="customizer">
           <div className="customizer-sliders card">
             <Slider name="Volume" value={this.state.volume} min={0} max={8} step={0.1} suffix=" ABV" onChange={(volume) => this.setState({volume})}/>
-            <Slider name="Colour" value={this.state.colour} min={0} max={100} onChange={(colour) => this.setState({colour})}/>
+            <Slider name="Colour" value={this.state.colour} min={0} max={100} onChange={(colour) => this.setColour(colour)}/>
             <Slider name="Hoppiness" value={this.state.hoppy} min={0} max={100} onChange={(hoppy) => this.setState({hoppy})}/>
             <Slider name="Malt Flavour" value={this.state.malty} min={0} max={100} onChange={(malty) => this.setState({malty})}/>            
             <Slider name="Wildcard 1" value={this.state.firstWildcard} min={0} max={100} onChange={(firstWildcard) => this.setState({firstWildcard})}/>

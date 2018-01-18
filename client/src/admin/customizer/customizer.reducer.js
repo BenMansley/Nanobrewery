@@ -8,7 +8,7 @@ const customizerReducer =
   action
 ) => {
   switch(action.type) {
-    case actionTypes.SEND_VARIABLES_REQUEST:
+    case actionTypes.SEND_VARIABLE_REQUEST:
       return Object.assign({}, state, {
         isLoading: true
       });
