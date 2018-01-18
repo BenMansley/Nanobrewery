@@ -27,9 +27,9 @@ app.use('/api/customizer', customizer);
 
 const conn = mysql.createConnection({
   host: 'us-cdbr-iron-east-05.cleardb.net',
-  user: 'b525df7ee32469',
-  password: 'c3dabc9d',
-  database: 'heroku_71b5ba0b6335ed4'
+  user: 'bc48e570cd9b85',
+  password: '4744d44d',
+  database: 'heroku_1010cad54f61316'
 });
 
 conn.connect();
