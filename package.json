@@ -7,6 +7,10 @@
     "test": "node client/scripts/test.js --env=jsdom",
     "heroku-postbuild": "cd client/ && ls && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
+  "cacheDirectories": [
+    "node_modules",
+    "client/node_modules"
+  ],
   "dependencies": {
     "bcrypt": "^1.0.3",
     "body-parser": "~1.18.2",
