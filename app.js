@@ -26,10 +26,10 @@ app.use('/api/users', users);
 app.use('/api/customizer', customizer);
 
 const conn = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'password',
-  database: 'Nanobrewery'
+  host: 'us-cdbr-iron-east-05.cleardb.net',
+  user: 'b525df7ee32469',
+  password: 'c3dabc9d',
+  database: 'heroku_71b5ba0b6335ed4'
 });
 
 conn.connect();
