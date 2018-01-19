@@ -22,15 +22,14 @@ class EditableSlider extends Component {
 
   onSubmit(event) {
     event.preventDefault();
-    this.setState({active: false});
+    const { name, min, max, step, defaultVal, suffix } = this.state;
+    this.props.updateVariable(this.props.id, name, min, max, step, defaultVal, suffix);
   }
 
   onReset(event) {
     event.preventDefault();
     const { name, min, max, step, defaultVal, suffix, onChange } = this.props;
-
     this.setState({name, min, max, step, defaultVal, suffix});
-
     onChange(defaultVal);
   }
 
@@ -67,6 +66,7 @@ class EditableSlider extends Component {
             <button onClick={(event) => this.onReset(event)}>Reset</button>
             <button type="submit">Save</button>
           </div>
+          <p className="slider-response">{this.props.response}</p>
         </form>
         <input type="range" min={min} max={max} step={step || 1} value={value} onChange={(event) => onChange(Number(event.target.value))}/>
       </div>
@@ -87,10 +87,14 @@ EditableSlider.propTypes = {
   onChange: PropTypes.func.isRequired
 }
 
+const mapStateToProps = state => {
+  return { response: state.customizer.updateVariableResponse }
+}
+
 const mapDispatchToProps = dispatch => {
   return {
-    updateVariable: (id, name, min, max, step, value, suffix) => dispatch(updateVariable({id, name, min, max, step, value, suffix}))
+    updateVariable: (id, name, min, max, step, defaultVal, suffix) => dispatch(updateVariable(id, name, min, max, step, defaultVal, suffix))
   }
 }
 
-export default connect(mapDispatchToProps)(EditableSlider);
+export default connect(mapStateToProps, mapDispatchToProps)(EditableSlider);

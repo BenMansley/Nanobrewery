@@ -25,7 +25,7 @@ class Dashboard extends Component {
       if (prevState.variables.length === 0 && props.variables.length !== 0) {
         console.log(props.variables);
         for (let variable of props.variables) {
-          variable.value = variable.default;
+          variable.value = variable.defaultVal;
         }
         return {variables: props.variables};
       }
@@ -60,7 +60,7 @@ class Dashboard extends Component {
                   value={v.value} defaultVal={0} disabled onChange={(value) => this.setColour(value)}/>
         }
         return <EditableSlider key={v.id} id={v.id} name={v.name} min={v.min} max={v.max} step={v.step} suffix={v.suffix} 
-                value={v.value} defaultVal={v.default}
+                value={v.value} defaultVal={v.defaultVal}
                 onChange={(value) => {
                   let variables = this.state.variables;
                   variables[i].value = value;
@@ -117,7 +117,7 @@ Dashboard.propTypes = {
       min: PropTypes.number,
       max: PropTypes.number,
       step: PropTypes.number,
-      default: PropTypes.number,
+      defaultVal: PropTypes.number,
       suffix: PropTypes.string,
     })
   ),
