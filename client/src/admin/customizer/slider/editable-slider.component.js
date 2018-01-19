@@ -47,7 +47,7 @@ class EditableSlider extends Component {
         <label className="slider-label"><span>{name} - {value}%{suffix}</span>
           <button className="inline" disabled={disabled} onClick={() => this.setState((prevState) => {
             return { active: !prevState.active }
-          })}>Customize</button>
+          })}>Edit Variable</button>
         </label>
         <form onSubmit={(event) => this.onSubmit(event)} className={active ? "active" : ""}>
           <MaterialInput type="text" id="name" labelText="Name *" active={name !== ""} value={name}

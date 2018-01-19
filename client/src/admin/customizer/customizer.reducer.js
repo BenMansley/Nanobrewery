@@ -17,7 +17,8 @@ const customizerReducer =
       return Object.assign({}, state, {
         variables: action.variables,
         error: '',
-        isLoading: false
+        isLoading: false,
+        updateVariableResponse: ''
       });
     case actionTypes.GET_VARIABLES_FAIL:
       return Object.assign({}, state, {

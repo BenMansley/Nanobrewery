@@ -8,9 +8,9 @@ $grey6: #666666;
 $grey3: #333333;
 $black: #000000;
 $darkGrey: #17252A;
-$lightestGreen: #DEF2F1;
-$lightGreen: #3AAFA9;
-$darkGreen: #2B7A78;
+$lightestGreen: $greyE;
+$lightGreen: #03A9F4;
+$darkGreen: #0D47A1;
 
 @import 'components/components';
 @import 'authentication/authentication';
@@ -27,9 +27,10 @@ html {
 
 body {
   @extend html;
-  font-family: 'Bitter', sans-serif;
+  font-family: 'Rajdhani', sans-serif;
   background: $greyE;
   color: $darkGrey;
+  font-weight: 500;
 }
 
 .root {
@@ -51,11 +52,16 @@ header {
     max-width: 1000px;
     margin: 0 auto;
     padding: 1.5em 0;
-
+    
     .site-title {
+      font-weight: 700;
       margin: 0;
+      
+      > .header-link {
+        text-transform: uppercase;
+      }
     }
-
+    
     .header-link {
       color: inherit;
       cursor: pointer;
