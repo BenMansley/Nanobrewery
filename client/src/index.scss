@@ -27,7 +27,7 @@ html {
 
 body {
   @extend html;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Bitter', sans-serif;
   background: $greyE;
   color: $darkGrey;
 }
@@ -60,7 +60,7 @@ header {
       color: inherit;
       cursor: pointer;
       white-space: nowrap;
-      font-weight: 500;
+      font-weight: 700;
 
       &:not(:first-of-type) {
         margin-left: 1em;

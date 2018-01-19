@@ -215,7 +215,7 @@ html, body {
   padding: 0; }
 
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Bitter', sans-serif;
   background: #EAEAEA;
   color: #17252A; }
 
@@ -241,7 +241,7 @@ header {
       color: inherit;
       cursor: pointer;
       white-space: nowrap;
-      font-weight: 500; }
+      font-weight: 700; }
       header .site-header .header-link:not(:first-of-type) {
         margin-left: 1em; }
       header .site-header .header-link:hover {
