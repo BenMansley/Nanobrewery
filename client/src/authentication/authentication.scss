@@ -4,28 +4,6 @@
   .auth-form {
     max-width: 500px;
     margin: 0 auto;
-
-    .auth-base {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 1em;
-
-      .error {
-        margin: 0 0.5em 0 0;
-        color: #E53935;
-
-        .material-icons {
-          vertical-align: middle;
-          margin-right: 0.25em;
-        }
-      }
-
-      button {
-        flex: 0 0 auto;
-        margin: 1em 0 0;
-      }
-    }
   }
 
   .auth-link {
@@ -33,7 +11,7 @@
     font-size: 0.9em;
 
     a {
-      color: $darkGreen;
+      color: $darkTheme;
     }
   }
 }

@@ -10,8 +10,8 @@
     list-style: none;
     padding-bottom: 5px;
     // padding-top: 0.4em;
-    // box-shadow: inset 0px 4px 8px $darkGreen, 0px 4px 8px fade_out($darkGreen, 0.2);
-    background-color: $lightGreen;
+    // box-shadow: inset 0px 4px 8px $darkTheme, 0px 4px 8px fade_out($darkTheme, 0.2);
+    background-color: $lightTheme;
 
     li {
       padding: 0.5em 2vw 0.5em;
@@ -25,8 +25,8 @@
       transition-timing-function: ease;
 
       &:hover {
-        border-bottom-color: $lightestGreen;
-        color: $lightestGreen;
+        border-bottom-color: $lightestTheme;
+        color: $lightestTheme;
 
         a {
           color: inherit;
@@ -44,14 +44,20 @@
   }
 }
 
+.loading {
+  margin-top: 0.4em;
+}
+
 .account-actions {
   text-align: right;
 
   button {
     margin-bottom: 0;
-
-    &:first-of-type {
-      margin-right: 1em;
+    
+    &:nth-of-type(2) {
+      margin-left: 1em;
     }
   }
 }
+
+@import "./welcome.scss";

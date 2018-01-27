@@ -25,7 +25,7 @@
     font-size: 1.1em;
     
     &:focus, &:hover {
-      border-color: $darkGreen;
+      border-color: $darkTheme;
       outline: none;
     }
 
@@ -52,12 +52,12 @@ button {
   padding: 0.25em 0.5em;
   border-radius: 2px;
   border: none;
-  color: $darkGreen;
+  color: $darkTheme;
   letter-spacing: 0.5px;
   cursor: pointer;
 
   &:not(.inline) {
-    background: $darkGreen;
+    background: $darkTheme;
     color: $white;
     padding: 0.5em 1em;
     margin: 2em 0 1em;
@@ -76,10 +76,32 @@ button {
   
 
   &:not(:disabled):hover, &:not(:disabled):focus {
-    background: $lightGreen; 
+    background: $lightTheme; 
     
     &.inline {
-      background: $lightestGreen;
+      background: $lightestTheme;
     }
+  }
+}
+
+.form-base {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1em;
+
+  .error {
+    margin: 0 0.5em 0 0;
+    color: #E53935;
+
+    .material-icons {
+      vertical-align: middle;
+      margin-right: 0.25em;
+    }
+  }
+
+  button {
+    flex: 0 0 auto;
+    margin: 1em 0 0;
   }
 }

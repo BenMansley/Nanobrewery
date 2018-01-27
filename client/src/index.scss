@@ -8,9 +8,9 @@ $grey6: #666666;
 $grey3: #333333;
 $black: #000000;
 $darkGrey: #17252A;
-$lightestGreen: $greyE;
-$lightGreen: #03A9F4;
-$darkGreen: #0D47A1;
+$lightestTheme: $greyE;
+$lightTheme: #03A9F4;
+$darkTheme: #0D47A1;
 
 @import 'components/components';
 @import 'authentication/authentication';
@@ -41,7 +41,7 @@ body {
 
 
 header {
-  background: $lightGreen;
+  background: $lightTheme;
   color: $darkGrey;
 
   .site-header {
@@ -60,6 +60,17 @@ header {
       > .header-link {
         text-transform: uppercase;
       }
+
+      &.mobile {
+        display: none;
+      }
+
+      @media all and (max-width: 450px) {
+        display: none;
+        &.mobile {
+          display: block;
+        }
+      }
     }
     
     .header-link {
@@ -74,7 +85,7 @@ header {
 
       &:hover {
         text-decoration: none;
-        color: $lightestGreen;
+        color: $grey3;
       }
     }
   }
@@ -87,10 +98,6 @@ header {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-
-  .page-title {
-    margin-top: 0;
-  }
 }
 
 a {
@@ -110,4 +117,26 @@ a {
   background: $greyF;
   border-radius: 2px;
   box-shadow: 0px 4px 10px rgba(210, 210, 210, 0.5);
+
+  .page-title {
+    margin-top: 0;
+  }
+}
+
+.loading {
+  font-size: 2.5em;
+
+  &.spin {
+    animation: spin 1.2s linear infinite;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }

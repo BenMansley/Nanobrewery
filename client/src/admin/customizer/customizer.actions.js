@@ -40,6 +40,6 @@ const sendUpdateVariableRequest = () => {
 export const updateVariable = (id, name, min, max, step, defaultVal, suffix) => {
   const data = { id, name, min, max, step, defaultVal, suffix };
   console.log(data);
-  return asyncAction('/api/customizer/variables', { method: 'POST', body: JSON.stringify(data) }, 
+  return asyncAction('/api/customizer/variables', { method: 'PUT', body: JSON.stringify(data) }, 
     sendUpdateVariableRequest, updateVariableSuccess, updateVariableFail, 500);
 }
