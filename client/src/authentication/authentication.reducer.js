@@ -12,7 +12,6 @@ const authenticationReducer =
     case actionTypes.SEND_AUTH_REQUEST:
       return Object.assign({}, state, {
         isLoading: true,
-        redirect: false
       });
     case actionTypes.AUTH_RESPONSE_SUCCESS:
       return Object.assign({}, state, {

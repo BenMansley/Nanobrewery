@@ -54,4 +54,14 @@ router.post('/new', function(req, res, next) {
   })
 });
 
+router.put('/edit', function(req, res, next) {
+  const { id, email, name, companyName } = req.body;
+  const queryString = `UPDATE Users SET email='${email}', name='${name}', companyName='${companyName}' WHERE id=${id}`;
+  req.app.settings.conn.query(queryString, (error, results, fields) => {
+    console.log(error);
+    if (error) return res.status(400).json(error.sqlMessage);
+    return res.status(200).json(req.body);
+  });
+});
+
 module.exports = router;

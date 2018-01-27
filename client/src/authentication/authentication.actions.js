@@ -25,9 +25,9 @@ export const authFormError = (error) => {
   return { type: actionTypes.AUTH_FORM_ERROR, error }
 }
 
-const authenticate = (url, data) => {
+const authenticate = (url, data, method) => {
 
-  return asyncAction(url, { method: 'POST', body: JSON.stringify(data) }, 
+  return asyncAction(url, { method, body: JSON.stringify(data) }, 
     sendAuthRequest, authResponseSuccess, authResponseFail, 400);
 }
 
@@ -35,18 +35,26 @@ export const authenticateSignIn = (email, password) => {
   if (!email || !password) {
     return authFormError('All Fields Required');
   }
-  return authenticate('/api/users', { email, password });
+  return authenticate('/api/users', { email, password }, 'POST');
 }
 
 export const authenticateSignUp = (email, name, password, companyName) => {
   if (!email || !name || !password) {
     return authFormError('Required fields left blank')
   }
-  return authenticate('/api/users/new', { email, name, password, companyName });
+  return authenticate('/api/users/new', { email, name, password, companyName }, 'POST');
 }
 
 export const signout = () => {
   return { type: actionTypes.AUTH_SIGNOUT }
+}
+
+export const editUser = (id, email, name, companyName) => {
+  if (!email || !name) {
+    return authFormError('Required fields left blank')
+  }
+  const body = JSON.stringify({id, email, name, companyName});
+  return asyncAction('/api/users/edit', { method: 'PUT', body }, sendAuthRequest, authResponseSuccess, authResponseFail);
 }
 
 export const changeRoute = (location, action) => {

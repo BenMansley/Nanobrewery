@@ -3,23 +3,36 @@ import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
+import MaterialInput from '../../components/material-input';
+import { editUser } from '../../authentication/authentication.actions';
+
 class Account extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email: props.user.email,
       name: props.user.name,
-      companyName: props.user.companyName
+      companyName: props.user.companyName,
+      isEditing: false
     }
   }
 
-  onRevertClick() {
+  onCancelClick() {
     const { email, name, companyName } = this.props.user;
-    this.setState({email, name, companyName});
+    this.setState({email, name, companyName, isEditing: false});
   }
   
-  render() {
+  onSubmit(event) {
+    event.preventDefault();
     const { email, name, companyName } = this.state;
+    console.log('submit');
+    this.props.editUser(this.props.user.id, email, name, companyName);
+    this.setState({isEditing: false});
+  }
+
+  render() {
+    const { isEditing, email, name, companyName } = this.state;
+    const { isLoading, error } = this.props;
 
     return (
       <div>
@@ -35,16 +48,42 @@ class Account extends Component {
         <div className="page-content">
           <div className="card">
             <h1 className="page-title">Your Account</h1>
-            <div className="account-details">
-              <p><span>Email: </span>{email}</p>
-              <p><span>Name: </span>{name}</p>
-              { companyName ? <p><span>Company Name: </span>{companyName}</p> : null }
-              <p><span>Password: </span>*********</p>
+            { !isEditing && !isLoading ? 
+            <div>
+              <div className="account-details">
+                <p><span>Email: </span>{email}</p>
+                <p><span>Name: </span>{name}</p>
+                { companyName ? <p><span>Company Name: </span>{companyName}</p> : null }
+              </div>
+              <div className="form-base">
+                <p className="error">{!!error ? <span className="material-icons">error</span> : null }
+                  {error}</p>
+                <div className="account-actions">
+                  <button onClick={() => this.setState({isEditing: true})}>Edit</button>
+                </div>
+              </div>
             </div>
-            <div className="account-actions">
-              <button>Save</button>
-              <button onClick={() => this.onRevertClick()}>Revert</button>
-            </div>
+            :
+            <form onSubmit={(event) => this.onSubmit(event)}>
+              <div className="account-details">
+                <MaterialInput type="email" id="email" labelText="Email" active={!!email} value={email}
+                  onChange={(event) => this.setState({email: event.target.value})}/>
+                <MaterialInput type="text" id="name" labelText="Name" active={!!name} value={name}
+                  onChange={(event) => this.setState({name: event.target.value})}/>
+                <MaterialInput type="text" id="company-name" labelText="Company Name" active={!!companyName} value={companyName}
+                  onChange={(event) => this.setState({companyName: event.target.value})}/>                
+              </div>
+              <div className="form-base">
+                <p className="error">{!!error ? <span className="material-icons">error</span> : null }
+                  {error}</p>
+                { isLoading ? <span className="material-icons loading spin">toys</span> : null }
+                <div className="account-actions">
+                  <button type="submit">Save</button>
+                  <button type="reset" onClick={() => this.onCancelClick()}>Cancel</button>
+                </div>
+              </div>
+            </form>
+            }
           </div>
         </div>
       </div>
@@ -62,7 +101,13 @@ Account.propTypes = {
 };
 
 const mapStateToProps = state => {
-  return { user: state.auth.user }
+  return { user: state.auth.user, error: state.auth.error, isLoading: state.auth.isLoading }
 }
 
-export default withRouter(connect(mapStateToProps)(Account));
+const mapDispatchToProps = dispatch => {
+  return {
+    editUser: (id, email, name, companyName) => dispatch(editUser(id, email, name, companyName))
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Account));
