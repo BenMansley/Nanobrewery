@@ -36,10 +36,10 @@ class SignIn extends Component {
           <h1 className="page-title">Sign In to Your Account</h1>
           <form onSubmit={(event) => this.onSubmit(event)}>
             <MaterialInput labelText="Email *" type="email" id="email" onChange={(event) => this.setState({email: event.target.value})}
-              value={this.state.email} active={this.state.email !== ''} inline={false}/>
+              value={this.state.email} active={!!this.state.email}/>
             <MaterialInput labelText="Password *" type="password" id="password" onChange={(event) => this.setState({password: event.target.value})}
-              value={this.state.password} active={this.state.password !== ''} inline={false}/>
-            <div className="auth-base">
+              value={this.state.password} active={!!this.state.password}/>
+            <div className="form-base">
               <p className="error">{this.props.error !== '' && <span className="material-icons">error</span>}
                 {this.props.error}</p>
               <button type="submit">Sign In</button>

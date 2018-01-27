@@ -36,15 +36,15 @@ class SignUp extends Component {
           <h1 className="page-title">Create an Account</h1>
           <form onSubmit={(event) => this.onSubmit(event)}>
             <MaterialInput labelText="Email *" type="email" id="email" onChange={(event) => this.setState({email: event.target.value})}
-              value={this.state.email} active={this.state.email !== ''} inline={false}/>
+              value={this.state.email} active={!!this.state.email}/>
             <MaterialInput labelText="Password *" type="password" id="password" onChange={(event) => this.setState({password: event.target.value})}
-              value={this.state.password} active={this.state.password !== ''} inline={false}/>
+              value={this.state.password} active={!!this.state.password}/>
             <MaterialInput labelText="Name *" type="text" id="name" onChange={(event) => this.setState({name: event.target.value})}
-              value={this.state.name} active={this.state.name !== ''} inline={false}/>
+              value={this.state.name} active={!!this.state.name}/>
             <MaterialInput labelText="Company" type="text" id="company" onChange={(event) => this.setState({companyName: event.target.value})}
-              value={this.state.companyName} active={this.state.companyName !== ''} inline={false}/>
-            <div className="auth-base">
-              <p className="error">{this.props.error !== '' && <span className="material-icons">error</span>}
+              value={this.state.companyName} active={!!this.state.companyName}/>
+            <div className="form-base">
+              <p className="error">{!!this.props.error ? <span className="material-icons">error</span> : null }
                 {this.props.error}</p>
               <button type="submit">Sign Up</button>
             </div>

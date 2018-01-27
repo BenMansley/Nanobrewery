@@ -10,6 +10,7 @@ import Account from './admin/user/account.component';
 import Welcome from './admin/user/welcome.component';
 import Customizer from './admin/customizer/customizer.component';
 import Dashboard from './admin/customizer/dashboard.component';
+import Basket from './admin/shop/basket/basket.component';
 import NoMatch from './no-match';
 import { signout, changeRoute } from './authentication/authentication.actions';
 
@@ -31,11 +32,15 @@ class App extends Component {
         <header>
           <div className='site-header'>
             <h1 className='site-title'><Link to='/' className='header-link'>The Nanobrewery Company</Link></h1>
+            <h1 className='site-title mobile'><Link to='/' className='header-link'>Nanobrewery</Link></h1>            
             <div>
               { isLoggedIn ? <Link to='/admin/user/account' className='header-link'><span>{this.props.user.name}</span></Link> : null }
               { isLoggedIn ? <a className="header-link" href="" onClick={() => this.props.signout()}>Sign Out</a> : null }
               { !isLoggedIn ? <Link to='/authentication/signin' className='header-link'><span>Sign In</span></Link> : null }
-              { !isLoggedIn ? <Link to='/authentication/signup' className='header-link'><span>Sign Up</span></Link> : null }                       
+              { !isLoggedIn ? <Link to='/authentication/signup' className='header-link'><span>Sign Up</span></Link> : null }
+              { isLoggedIn ? <Link to='/admin/basket' className='header-link'>
+                Basket {this.props.basketItems.length ? this.props.basketItems.length : '' }
+              </Link> : null }                     
             </div>
           </div>
         </header>
@@ -47,6 +52,7 @@ class App extends Component {
           <PrivateRoute exact path='/admin/user/welcome' allowAccess={isLoggedIn} component={Welcome}/>
           <PrivateRoute exact path='/admin/customizer' allowAccess={isLoggedIn} component={Customizer}/>          
           <PrivateRoute exact path='/admin/dashboard' allowAccess={isLoggedIn} component={Dashboard}/>
+          <PrivateRoute exact path='/admin/basket' allowAccess={isLoggedIn} component={Basket}/>
           <Route exact component={NoMatch}/>
         </Switch>
       </div>
@@ -65,7 +71,10 @@ App.propTypes = {
 };
 
 const mapStateToProps = state => {
-  return { user: state.auth.user }
+  return { 
+    user: state.auth.user,
+    basketItems: state.shop.basket
+  }
 }
 
 const mapDispatchToProps = dispatch => {
