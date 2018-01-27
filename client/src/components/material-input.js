@@ -16,7 +16,8 @@ MaterialInput.propTypes = {
   labelText: PropTypes.string.isRequired,
   active: PropTypes.bool.isRequired,
   inline: PropTypes.bool,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired
 };
 
 export default MaterialInput;
