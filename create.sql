@@ -17,3 +17,17 @@ CREATE TABLE `Variables` (
   `suffix` varchar(255) DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `Customizations` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `userid` int(11) unsigned NOT NULL,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `variable1` int(11) NOT NULL,
+  `variable2` int(11) NOT NULL,
+  `variable3` int(11) NOT NULL,
+  `variable4` int(11) NOT NULL,
+  `variable5` int(11),
+  `variable6` int(11),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `userid` (`userid`),
+  CONSTRAINT `customizations_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
