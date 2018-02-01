@@ -33,7 +33,7 @@ body {
   font-weight: 500;
 }
 
-.root {
+.app-root {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -65,7 +65,7 @@ header {
         display: none;
       }
 
-      @media all and (max-width: 450px) {
+      @media all and (max-width: 480px) {
         display: none;
         &.mobile {
           display: block;

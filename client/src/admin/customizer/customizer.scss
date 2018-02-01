@@ -10,7 +10,7 @@
   justify-content: stretch;
   padding-bottom: 2em;
 
-  @media all and (max-width: 600px) {
+  @media all and (max-width: 700px) {
     grid-template: 1fr 1fr 1fr 1fr / 1fr;
 
     .customizer-description {

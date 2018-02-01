@@ -75,6 +75,7 @@ button {
     max-width: 500px;
     margin: 0 auto; }
   .auth .auth-link {
+    margin-top: 1em;
     text-align: center;
     font-size: 0.9em; }
     .auth .auth-link a {
@@ -115,7 +116,7 @@ button {
   align-items: stretch;
   justify-content: stretch;
   padding-bottom: 2em; }
-  @media all and (max-width: 600px) {
+  @media all and (max-width: 700px) {
     .customizer {
       grid-template: 1fr 1fr 1fr 1fr / 1fr; }
       .customizer .customizer-description {
@@ -210,7 +211,7 @@ button {
 p {
   margin: 0; }
 
-.welcome-steps {
+.intro-steps {
   display: grid;
   grid-template: 1fr / 1fr 2em 1fr 2em 1fr;
   grid-gap: 1em 1em;
@@ -219,61 +220,61 @@ p {
   margin: 0 auto 2em;
   align-items: center; }
   @media all and (max-width: 880px) and (min-width: 551px) {
-    .welcome-steps {
+    .intro-steps {
       grid-template: 1fr 1fr/repeat(4, 1fr);
       grid-gap: 2em 2em; }
-      .welcome-steps .step {
+      .intro-steps .step {
         grid-row: 1; }
-        .welcome-steps .step.hardware {
+        .intro-steps .step.hardware {
           grid-column: 1 / span 2; }
-        .welcome-steps .step.make {
+        .intro-steps .step.make {
           grid-column: 3 / span 2; }
-        .welcome-steps .step.brand {
+        .intro-steps .step.brand {
           grid-row: 2;
           grid-column: 2 / 4; }
-      .welcome-steps .step-next {
+      .intro-steps .step-next {
         display: none; } }
   @media all and (max-width: 550px) {
-    .welcome-steps {
+    .intro-steps {
       grid-template: repeat(3, 1fr)/1fr;
       max-width: 20em; }
-      .welcome-steps .step-next {
+      .intro-steps .step-next {
         display: none; } }
-  .welcome-steps .step {
+  .intro-steps .step {
     width: 100%;
     min-width: 15em;
     margin: 0; }
-    .welcome-steps .step > .step-flex {
+    .intro-steps .step > .step-flex {
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center; }
-      .welcome-steps .step > .step-flex .step-image {
+      .intro-steps .step > .step-flex .step-image {
         height: 12em;
         width: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
         border-radius: 0.4em; }
-        .welcome-steps .step > .step-flex .step-image .step-complete, .welcome-steps .step > .step-flex .step-image .step-incomplete {
+        .intro-steps .step > .step-flex .step-image .step-complete, .intro-steps .step > .step-flex .step-image .step-incomplete {
           color: #0D960D;
           font-size: 4em; }
-        .welcome-steps .step > .step-flex .step-image .step-incomplete {
+        .intro-steps .step > .step-flex .step-image .step-incomplete {
           color: red; }
-    .welcome-steps .step.hardware .step-image {
+    .intro-steps .step.hardware .step-image {
       background: #c91d1d; }
-    .welcome-steps .step.make .step-image {
+    .intro-steps .step.make .step-image {
       background: darkblue; }
-    .welcome-steps .step.brand .step-image {
+    .intro-steps .step.brand .step-image {
       background: darkorange; }
-    .welcome-steps .step.inactive .step-image {
+    .intro-steps .step.inactive .step-image {
       background: #AAAAAA; }
-    .welcome-steps .step .step-title {
+    .intro-steps .step .step-title {
       margin-top: 1em;
       text-align: center;
       font-weight: 700;
       font-size: 1.15em; }
-  .welcome-steps .step-next {
+  .intro-steps .step-next {
     font-size: 2em; }
 
 * {
@@ -289,7 +290,7 @@ body {
   color: #17252A;
   font-weight: 500; }
 
-.root {
+.app-root {
   display: flex;
   flex-direction: column;
   min-height: 100vh; }
@@ -312,7 +313,7 @@ header {
         text-transform: uppercase; }
       header .site-header .site-title.mobile {
         display: none; }
-      @media all and (max-width: 450px) {
+      @media all and (max-width: 480px) {
         header .site-header .site-title {
           display: none; }
           header .site-header .site-title.mobile {
