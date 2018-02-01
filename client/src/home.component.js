@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+
+import Intro from './admin/user/intro/intro.component';
 
 const Home = ({user}) => {
 
@@ -10,7 +12,7 @@ const Home = ({user}) => {
   return (
     <div className="page-content">
       <h1>Nanobrewery Home Page</h1>
-      { isLoggedIn ? <Link to='/admin/customizer' className='header-link'><span>Customize</span></Link> : null }
+      { isLoggedIn ? <Intro/> : null }
     </div>
   )
 }
