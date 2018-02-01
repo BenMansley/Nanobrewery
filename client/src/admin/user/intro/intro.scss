@@ -1,0 +1,101 @@
+.intro-steps {
+  display: grid;
+  grid-template: 1fr / 1fr 2em 1fr 2em 1fr;
+  grid-gap: 1em 1em;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto 2em;
+  align-items: center;
+
+  @media all and (max-width: 880px) and (min-width: 551px) {
+    grid-template: 1fr 1fr / repeat(4, 1fr);
+    grid-gap: 2em 2em;
+
+    .step {
+      grid-row: 1;
+
+      &.hardware {
+        grid-column: 1 / span 2;
+      }
+      &.make {
+        grid-column: 3 / span 2;
+      }
+      &.brand {
+        grid-row: 2;
+        grid-column: 2 / 4;
+      }
+    }
+
+    .step-next {
+      display: none;
+    }
+  }
+
+  @media all and (max-width: 550px) {
+    grid-template: repeat(3, 1fr) / 1fr;
+    max-width: 20em;
+
+    .step-next {
+      display: none;
+    }
+  }
+
+  .step {
+    width: 100%;
+    min-width: 15em;
+    margin: 0;
+    
+    > .step-flex {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .step-image {
+        height: 12em;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 0.4em;
+  
+        .step-complete {
+          color: #0D960D;
+          font-size: 4em;
+        }
+        
+        .step-incomplete {
+          @extend .step-complete;
+          color: red;
+        }
+      }
+    }
+
+    &.hardware .step-image {
+      background: #c91d1d;
+    }
+
+    &.make .step-image {
+      background: darkblue;
+    }
+
+    &.brand .step-image {
+      background: darkorange;
+    }
+
+    &.inactive .step-image {
+      background: #AAAAAA;
+    }
+
+    .step-title {
+      margin-top: 1em;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.15em;
+    }
+  }
+
+  .step-next {
+    font-size: 2em;
+  }
+}
