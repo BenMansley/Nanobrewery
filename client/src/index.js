@@ -3,21 +3,18 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import App from './app.component';
-import configureStore from './store/config-store';
-import { PersistGate } from 'redux-persist/es/integration/react'; 
+import store from './store/config-store';
 import registerServiceWorker from './registerServiceWorker';
 
 import './index.css';
 
-const { persistor, store } = configureStore();
+console.log(store);
 
 const AppShell = (
   <Provider store={store}>
-    <PersistGate persistor={persistor}>
-      <Router>
-        <App/>
-      </Router>
-    </PersistGate>
+    <Router>
+      <App/>
+    </Router>
   </Provider>
 );
 
