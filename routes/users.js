@@ -17,14 +17,32 @@ router.get('/email/:email', function(req, res, next) {
   });
 });
 
+router.post('/from-token', function(req, res, next) {
+  const { id, token } = req.body;
+
+  req.app.settings.conn.query(`SELECT * FROM Tokens WHERE userid=${id} AND token='${token}'`, (error, results, fields) => {
+    if (error) return res.status(500).json(error);
+    if (results.length === 0) {
+      return res.status(400).json('Invalid Token');
+    }
+    // Check expiry date of token
+    if (Date.parse(results[0].expiry) < new Date()) {
+      return res.status(400).json('Expired Token');
+    }
+    req.app.settings.conn.query(`SELECT id, email, name, companyName FROM Users WHERE id=${id}`, (error, results, fields) => {
+      if (error) return res.status(500).json(error);
+      return res.status(200).json(results[0]);
+    });
+  });
+});
+
 router.post('/', function(req, res, next) {
   const { email, password } = req.body;
   
   req.app.settings.conn.query(`SELECT * FROM Users WHERE email='${email}'`, (error, results, fields) => {
     if (error) return res.status(500).json(error);
-    if (results.length === 0) return res.status(400).json('User not found with that email');
     bcrypt.compare(password, results[0].password, (err, match) => {
-      if (!match) return res.status(400).json('Password Incorrect');
+      if (!match) return res.status(400).json('Invalid Email or Password');
       delete results[0].password;
       return res.json(results[0]);
     });

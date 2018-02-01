@@ -2,17 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, Route, Switch, withRouter } from 'react-router-dom'; 
-import PrivateRoute from './private-route/private-route';
+import PrivateRoute from './utils/private-route';
 import Home from './home.component';
 import SignIn from './authentication/signin/signin.component';
 import SignUp from './authentication/signup/signup.component';
-import Account from './admin/user/account.component';
-import Welcome from './admin/user/welcome.component';
-import Customizer from './admin/customizer/customizer.component';
-import Dashboard from './admin/customizer/dashboard.component';
-import Basket from './admin/shop/basket/basket.component';
+import Admin from './admin/admin.component';
 import NoMatch from './no-match';
-import { signout, changeRoute } from './authentication/authentication.actions';
+import { checkTokenAndSignIn, signout, changeRoute } from './authentication/authentication.actions';
 
 class App extends Component {
 
@@ -24,16 +20,26 @@ class App extends Component {
     });
   }
 
+  componentDidMount() {
+    let id = window.localStorage.getItem('id');
+    const token = window.localStorage.getItem('sessiontoken');
+    if (id && token) {
+      id = Number(id);
+      console.log(`${id}, ${token}`);
+      this.props.checkToken(id, token);
+    }
+  }
+
   render() {
     const isLoggedIn = this.props.user.hasOwnProperty('id');
   
     return (
-      <div className='root'>
+      <div className='app-root'>
         <header>
           <div className='site-header'>
             <h1 className='site-title'><Link to='/' className='header-link'>The Nanobrewery Company</Link></h1>
             <h1 className='site-title mobile'><Link to='/' className='header-link'>Nanobrewery</Link></h1>            
-            <div>
+            <nav>
               { isLoggedIn ? <Link to='/admin/user/account' className='header-link'><span>{this.props.user.name}</span></Link> : null }
               { isLoggedIn ? <a className="header-link" href="" onClick={() => this.props.signout()}>Sign Out</a> : null }
               { !isLoggedIn ? <Link to='/authentication/signin' className='header-link'><span>Sign In</span></Link> : null }
@@ -41,18 +47,14 @@ class App extends Component {
               { isLoggedIn ? <Link to='/admin/basket' className='header-link'>
                 Basket {this.props.basketItems.length ? this.props.basketItems.length : '' }
               </Link> : null }                     
-            </div>
+            </nav>
           </div>
         </header>
         <Switch>
           <Route exact path='/' component={Home}/>
           <Route exact path='/authentication/signin' component={SignIn}/>
           <Route exact path='/authentication/signup' component={SignUp}/>
-          <PrivateRoute exact path='/admin/user/account' allowAccess={isLoggedIn} component={Account}/>
-          <PrivateRoute exact path='/admin/user/welcome' allowAccess={isLoggedIn} component={Welcome}/>
-          <PrivateRoute exact path='/admin/customizer' allowAccess={isLoggedIn} component={Customizer}/>          
-          <PrivateRoute exact path='/admin/dashboard' allowAccess={isLoggedIn} component={Dashboard}/>
-          <PrivateRoute exact path='/admin/basket' allowAccess={isLoggedIn} component={Basket}/>
+          <PrivateRoute path='/admin' allowAccess={isLoggedIn} component={Admin}/>
           <Route exact component={NoMatch}/>
         </Switch>
       </div>
@@ -78,9 +80,10 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return { 
+  return {
+    checkToken: (id, token) => dispatch(checkTokenAndSignIn(id, token)),
     signout: () => dispatch(signout()),
-    changeRoute: (location, action) => dispatch(changeRoute(location, action)) 
+    changeRoute: (location, action) => dispatch(changeRoute(location, action)),
   };
 }
 

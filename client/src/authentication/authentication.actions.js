@@ -18,6 +18,7 @@ const authResponseSuccess = (user) => {
 }
 
 const authResponseFail = (error) => {
+  console.log(error);
   return { type: actionTypes.AUTH_RESPONSE_FAIL, error }
 }
 
@@ -36,6 +37,10 @@ export const authenticateSignIn = (email, password) => {
     return authFormError('All Fields Required');
   }
   return authenticate('/api/users', { email, password }, 'POST');
+}
+
+export const checkTokenAndSignIn = (id, token) => {
+  return authenticate('/api/users/from-token', { id, token }, 'POST');
 }
 
 export const authenticateSignUp = (email, name, password, companyName) => {
