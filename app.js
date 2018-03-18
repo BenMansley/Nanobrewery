@@ -13,8 +13,6 @@ const customizer = require('./routes/customizer');
 
 const app = express();
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(helmet());
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -24,6 +22,8 @@ app.use(express.static(path.join(__dirname, './client/build')));
 
 app.use('/api/users', users);
 app.use('/api/customizer', customizer);
+
+const PORT = process.env.PORT || 3001;
 
 const conn = mysql.createPool({
   connectionLimit: 10,
@@ -36,12 +36,12 @@ const conn = mysql.createPool({
 app.set('conn', conn);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   res.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -50,5 +50,9 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.sendFile(__dirname + '/error.view.html');
 });
+
+// app.listen(PORT, () => {
+//   console.log(`Nanobrewery listening on port: ${PORT}`);
+// })
 
 module.exports = app;
