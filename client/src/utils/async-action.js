@@ -2,14 +2,13 @@ const headers = new Headers({'Content-Type': 'application/json'});
 
 /**
  * Sends an asynchronous JSON request to the server, dispatching actions on Send, Success and Failure
- * @param {string} url 
- * @param {Object} reqInfo 
- * @param {function} onSend 
- * @param {function} onSuccess 
- * @param {function} onFailure 
- * @param {number} errCode 
+ * @param {string}   url       API URL to be called
+ * @param {Object}   reqInfo   Additional info to be added to the request
+ * @param {function} onSend    Callback function on request send
+ * @param {function} onSuccess Callback function on success
+ * @param {function} onFailure Callback function on failure
  */
-const asyncAction = (url, reqInfo, onSend, onSuccess, onFailure, errCode) => {
+const asyncAction = (url, reqInfo, onSend, onSuccess, onFailure) => {
   return dispatch => {
     dispatch(onSend());
 

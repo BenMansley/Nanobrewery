@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import EditableSlider from './slider/editable-slider.component';
 
 import { getVariables } from './customizer.actions';
+import EditableSlider from './slider/editable-slider.component';
 
 class Dashboard extends Component {
 

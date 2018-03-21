@@ -23,9 +23,9 @@ class App extends Component {
   componentDidMount() {
     let id = window.localStorage.getItem('id');
     const token = window.localStorage.getItem('sessiontoken');
+    console.log(id);
     if (id && token) {
       id = Number(id);
-      console.log(`${id}, ${token}`);
       this.props.checkToken(id, token);
     }
   }

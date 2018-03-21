@@ -9,31 +9,31 @@ export const actionTypes = {
   UPDATE_VARIABLE_FAIL: 'UPDATE_VARIABLE_FAIL'
 };
 
-const getVariablesSuccess = (variables) => {
+const getVariablesSuccess = variables => {
   return { type: actionTypes.GET_VARIABLES_SUCCESS, variables }
 }
 
-const getVariablesFail = (error) => {
+const getVariablesFail = error => {
   return { type: actionTypes.GET_VARIABLES_FAIL, error }
 } 
 
-const sendGetVariableRequest = () => {
+const sendGetVariableRequest = _ => {
   return { type: actionTypes.SEND_GET_VARIABLE_REQUEST }
 }
 
-export const getVariables = () => {
+export const getVariables = _ => {
   return asyncAction('/api/customizer/variables', {}, sendGetVariableRequest, getVariablesSuccess, getVariablesFail, 500);
 }
 
-const updateVariableSuccess = (data) => {
+const updateVariableSuccess = data => {
   return { type: actionTypes.UPDATE_VARIABLE_SUCCESS }  
 }
 
-const updateVariableFail = (error) => {
+const updateVariableFail = error => {
   return { type: actionTypes.UPDATE_VARIABLE_FAIL, error }    
 }
 
-const sendUpdateVariableRequest = () => {
+const sendUpdateVariableRequest = _ => {
   return { type: actionTypes.SEND_UPDATE_VARIABLE_REQUEST }
 }
 
