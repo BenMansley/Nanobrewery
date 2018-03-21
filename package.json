@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "PORT=3001 node app.js",
     "test": "node client/scripts/test.js --env=jsdom",
     "heroku-postbuild": "cd client/ && ls && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
