@@ -1,13 +1,11 @@
 const express = require('express');
 const path = require('path');
 const logger = require('morgan');
-const html = require('html');
 const bodyParser = require('body-parser');
 
 const mysql = require('mysql');
 
 const app = module.exports = express();
-const index = require('./routes/index');
 const users = require('./routes/users');
 const customizer = require('./routes/customizer');
 
@@ -30,7 +28,7 @@ app.set('conn', conn);
 app.use('/api/users', users);
 app.use('/api/customizer', customizer);
 
-app.use(express.static(path.join(__dirname, 'client/build')))
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
