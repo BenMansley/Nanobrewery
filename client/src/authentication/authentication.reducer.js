@@ -14,6 +14,11 @@ const authenticationReducer =
         isLoading: true,
       });
     case actionTypes.AUTH_RESPONSE_SUCCESS:
+    console.log(action.user);
+      if (action.user.token) {
+        localStorage.setItem('sessiontoken', action.user.token);
+        localStorage.setItem('id', action.user.id);
+      }
       return Object.assign({}, state, {
         isLoading: false,
         user: action.user,
