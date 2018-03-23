@@ -6,6 +6,7 @@ import Customizer from './customizer/customizer.component';
 import Dashboard from './customizer/dashboard.component';
 import Branding from './branding/branding.component';
 import Basket from './shop/basket/basket.component';
+import Hardware from './shop/hardware.component';
 
 const Admin = () => {
   return (
@@ -16,6 +17,7 @@ const Admin = () => {
       <Route exact path='/admin/dashboard' component={Dashboard}/>
       <Route exact path='/admin/branding' component={Branding}/>     
       <Route exact path='/admin/basket' component={Basket}/>
+      <Route exact path='/admin/shop/hardware' component={Hardware}/>
     </Switch>
   );
 }

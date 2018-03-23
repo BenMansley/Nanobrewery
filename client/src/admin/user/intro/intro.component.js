@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const Intro = () => {
   return (
     <div className="intro-steps">
-      <Link to="/shop/hardware" className="card step hardware">
+      <Link to="/admin/shop/hardware" className="card step hardware">
         <div className="step-flex">
           <div className="step-image"><span className="step-complete material-icons">done</span></div>
           <span className="step-title">Get the Hardware</span>
