@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "PORT=3001 node app.js",
+    "start": "node app.js",
     "test": "node client/scripts/test.js --env=jsdom",
     "heroku-postbuild": "cd client/ && ls && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
@@ -16,6 +16,7 @@
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
     "debug": "~3.1.0",
+    "dotenv": "^5.0.1",
     "express": "~4.16.2",
     "helmet": "^3.9.0",
     "html": "^1.0.0",
@@ -23,5 +24,10 @@
     "morgan": "~1.9.0",
     "mysql": "^2.15.0",
     "serve-favicon": "~2.4.5"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
+    "sinon": "^4.4.8"
   }
 }

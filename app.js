@@ -6,8 +6,11 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql');
 
 const app = module.exports = express();
-const users = require('./routes/users');
-const customizer = require('./routes/customizer');
+const users = require('./server/users');
+const customizer = require('./server/customizer');
+const shop = require('./server/shop');
+
+require('dotenv').config();
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -17,16 +20,17 @@ const PORT = process.env.PORT || 3001;
 
 const conn = mysql.createPool({
   connectionLimit: 10,
-  host: 'us-cdbr-iron-east-05.cleardb.net',
-  user: 'bc48e570cd9b85',
-  password: '4744d44d',
-  database: 'heroku_1010cad54f61316'
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DATABASE
 });
 
 app.set('conn', conn);
 
 app.use('/api/users', users);
 app.use('/api/customizer', customizer);
+app.use('/api/shop', shop);
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 
