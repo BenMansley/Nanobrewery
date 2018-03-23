@@ -18,15 +18,20 @@ class App extends Component {
     this.props.history.listen((location, action) => {
       this.props.changeRoute(location, action);
     });
+
+    this.state = {
+      validating: true
+    }
   }
 
   componentDidMount() {
     let id = window.localStorage.getItem('id');
     const token = window.localStorage.getItem('sessiontoken');
-    console.log(id);
     if (id && token) {
       id = Number(id);
       this.props.checkToken(id, token);
+    } else {
+      this.setState({ validating: false });
     }
   }
 
@@ -54,8 +59,8 @@ class App extends Component {
           <Route exact path='/' component={Home}/>
           <Route exact path='/authentication/signin' component={SignIn}/>
           <Route exact path='/authentication/signup' component={SignUp}/>
-          <PrivateRoute path='/admin' allowAccess={isLoggedIn} component={Admin}/>
-          <Route exact component={NoMatch}/>
+          { (!this.state.validating || isLoggedIn) ? <PrivateRoute path='/admin' allowAccess={isLoggedIn} component={Admin}/> : null }
+          { (!this.state.validating || isLoggedIn) ? <Route exact component={NoMatch}/> : null }
         </Switch>
       </div>
     );

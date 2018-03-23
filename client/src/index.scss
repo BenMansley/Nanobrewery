@@ -118,7 +118,7 @@ a {
   border-radius: 2px;
   box-shadow: 0px 4px 10px rgba(210, 210, 210, 0.5);
 
-  .page-title {
+  &:first-of-type, .page-title {
     margin-top: 0;
   }
 }
