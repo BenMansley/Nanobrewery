@@ -12,9 +12,14 @@ const newUser = {
   companyName: ""
 };
 
+const login = {
+  email: "test@test.com",
+  password: "password"
+};
+
 describe("Register a new user", _ => {
   it("Can register a user", function(done) {
-    this.timeout(3500);
+    this.timeout(4000);
     chai.request(app).post("/api/users/new").send(newUser).end((_, res) => {
       expect(res).to.have.status(200);
       expect(res.body).to.equal("Success");
@@ -97,20 +102,20 @@ describe("Register a new user", _ => {
     });
   });
 });
-describe("Can log in", _ => {
+
+describe("Logs in", _ => {
   const user = { email: "test@test.com", password: "password" };
   const error = "Invalid Email or Password";
-  // let session;
+  const agent = chai.request.agent(app);
   before(done => {
     chai.request(app).post("/api/users/new").send(newUser).end((_, res) => {
       done();
     });
   });
   it("Can log in with correct details", done => {
-    chai.request(app).post("/api/users/login").send(user).end((_, res) => {
+    agent.post("/api/users/login").send(user).end((_, res) => {
       expect(res).to.have.status(200);
       expect(res).to.have.cookie("session");
-      console.log(res);
       expect(res.body).to.equal("Success");
       done();
     });
@@ -128,6 +133,14 @@ describe("Can log in", _ => {
     chai.request(app).post("/api/users/login").send(badUser).end((_, res) => {
       expect(res).to.have.status(401);
       expect(res.body).to.equal(error);
+      done();
+    });
+  });
+  it("Logs in with current session", done => {
+    agent.get("/api/users/from-cookie").end((_, res) => {
+      expect(res).to.have.status(200);
+      expect(res.body).to.equal("Success");
+      agent.close();
       done();
     });
   });
@@ -173,6 +186,105 @@ describe("Can log in", _ => {
     const conn = app.get("conn");
     const statement = "DELETE FROM Users WHERE email=?;";
     const query = mysql.format(statement, [user.email]);
+    conn.query(query, (err, results, fields) => {
+      if (err) console.error(err);
+      done();
+    });
+  });
+});
+
+describe("Gets user details", _ => {
+  const agent = chai.request.agent(app);
+  const login = {
+    email: "test@test.com",
+    password: "password"
+  };
+  before(done => {
+    agent.post("/api/users/new").send(newUser).end((_, res) => {
+      agent.post("/api/users/login").send(login).end((_, res) => {
+        done();
+      });
+    });
+  });
+  it("Gets details about a logged in user", done => {
+    agent.get("/api/users/details").end((_, res) => {
+      expect(res).to.have.status(200);
+      expect(res.body).to.have.all.keys(["name", "email", "companyName"]);
+      expect(res.body.email).to.equal("test@test.com");
+      expect(res.body.name).to.equal("Test User");
+      expect(res.body.companyName).to.equal("");
+      done();
+    });
+  });
+  it("Rejects if not authorized", done => {
+    chai.request(app).get("/api/users/details").end((_, res) => {
+      expect(res).to.have.status(401);
+      expect(res.body).to.equal("User not authorized");
+      done();
+    });
+  });
+  it("Fails on db failure", done => {
+    const sqlStub = sinon.stub(app.get("conn"), "query");
+    sqlStub.onSecondCall().callsArgWith(1, new Error());
+    sqlStub.callThrough();
+    agent.get("/api/users/details").end((_, res) => {
+      sqlStub.restore();
+      expect(res).to.have.status(500);
+      expect(res.body).to.equal("Error retrieving user details");
+      done();
+    });
+  });
+  after(done => {
+    const conn = app.get("conn");
+    const statement = "DELETE FROM Users WHERE email=?;";
+    const query = mysql.format(statement, [newUser.email]);
+    conn.query(query, (err, results, fields) => {
+      if (err) console.error(err);
+      done();
+    });
+  });
+});
+
+describe("Edits user details", _ => {
+  const agent = chai.request.agent(app);
+  const changes = { companyName: "Test Company" };
+  const user = Object.assign({}, login, changes);
+  before(function(done) {
+    this.timeout(3000);
+    agent.post("/api/users/new").send(newUser).end((_, res) => {
+      agent.post("/api/users/login").send(login).end((_, res) => {
+        done();
+      });
+    });
+  });
+  it("Can edit user details", done => {
+    agent.put("/api/users/edit").send(user).end((_, res) => {
+      expect(res).to.have.status(200);
+      done();
+    });
+  });
+  it("Has changed details successfully", done => {
+    agent.get("/api/users/details").end((_, res) => {
+      expect(res).to.have.status(200);
+      expect(res.body.companyName).to.equal(changes.companyName);
+      done();
+    });
+  });
+  it("Fails on db failure", done => {
+    const sqlStub = sinon.stub(app.get("conn"), "query");
+    sqlStub.onSecondCall().callsArgWith(1, new Error());
+    sqlStub.callThrough();
+    agent.put("/api/users/edit").send(user).end((_, res) => {
+      sqlStub.restore();
+      expect(res).to.have.status(500);
+      expect(res.body).to.equal("Error editing user");
+      done();
+    });
+  });
+  after(done => {
+    const conn = app.get("conn");
+    const statement = "DELETE FROM Users WHERE email=?;";
+    const query = mysql.format(statement, [newUser.email]);
     conn.query(query, (err, results, fields) => {
       if (err) console.error(err);
       done();

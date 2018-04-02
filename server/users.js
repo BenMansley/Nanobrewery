@@ -118,7 +118,7 @@ router.get("/details", isLoggedIn, (req, res, next) => {
  * @bodyparam {string} name        User input name
  * @bodyparam {string} companyName User input company name
  */
-router.put("/edit", (req, res, next) => {
+router.put("/edit", isLoggedIn, (req, res, next) => {
   const token = req.cookies.session;
   const { email, name, companyName } = req.body;
   const conn = app.get("conn");
