@@ -37,13 +37,8 @@ router.get("/all-data", (req, res, next) => {
   conn.query(query, (err, results, fields) => {
     if (err) return res.status(500).json(error);
     data.variables = results;
-    try {
-      const filename = path.join(__dirname, "../raw/strings.json");
-      data.templates = JSON.parse(readFileSync(filename, "utf-8"));
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json(err);
-    }
+    const filename = path.join(__dirname, "../raw/strings.json");
+    data.templates = JSON.parse(readFileSync(filename, "utf-8"));
     return res.status(200).json(data);
   });
 });
@@ -60,7 +55,7 @@ router.get("/all-data", (req, res, next) => {
  * @routeparam {number} defaultVal Updated default value
  * @routeparam {string} suffix     Updated suffix
  */
-router.put("/variables", (req, res, next) => {
+router.put("/edit-variable", (req, res, next) => {
   const { id, name, min, max, step, defaultVal, suffix } = req.body;
   const conn = app.get("conn");
   const error = "Error updating variables";
@@ -68,7 +63,7 @@ router.put("/variables", (req, res, next) => {
 
   conn.query(query, (err, results, fields) => {
     if (err) return res.status(500).json(error);
-    return res.status(200).json(results);
+    return res.status(200).json("Success");
   });
 });
 
