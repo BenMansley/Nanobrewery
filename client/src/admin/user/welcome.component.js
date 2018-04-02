@@ -1,19 +1,19 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import React from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
-import Intro from './intro/intro.component';
+import Intro from "./intro/intro.component";
 
-const Welcome = ({user}) => {
+const Welcome = ({ user }) => {
   return (
     <div className="page-content">
       <h1 className="page-title">Welcome to the Nanobrewing Club, {user.name.split(/\s+/)[0]}!</h1>
       <p>You're all ready to get set up.</p>
       <h2>First Steps</h2>
-      <Intro/>
+      <Intro />
     </div>
   );
-}
+};
 
 Welcome.propTypes = {
   user: PropTypes.shape({
@@ -25,7 +25,7 @@ Welcome.propTypes = {
 };
 
 const mapStateToProps = state => {
-  return { user: state.auth.user }
-}
+  return { user: state.auth.user };
+};
 
 export default connect(mapStateToProps)(Welcome);

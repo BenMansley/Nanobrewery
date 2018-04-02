@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 const Intro = () => {
   return (
@@ -13,7 +13,7 @@ const Intro = () => {
       <span className="step-next material-icons">arrow_forward</span>
       <Link to="/admin/customizer" className="card step make">
         <div className="step-flex">
-          <div className="step-image"></div>
+          <div className="step-image" />
           <span className="step-title">Make Your First Beer</span>
         </div>
       </Link>
@@ -26,6 +26,6 @@ const Intro = () => {
       </Link>
     </div>
   );
-}
+};
 
 export default Intro;

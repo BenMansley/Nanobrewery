@@ -1,0 +1,22 @@
+[
+  { 
+    "name": "Volume",
+    "step": 2,
+    "strings": ["Non alcoholic", "Low alcohol", "Normal alcohol", "Strong", "Very Strong"]
+  },
+  {
+    "name": "Colour",
+    "step": 25,
+    "strings": ["Dark", "Dark / Medium", "Light / Medium", "Light"]
+  },
+  { 
+    "name": "Hoppiness",
+    "step": 25,
+    "strings": ["Not hoppy", "Less hoppy", "More hoppy", "Very hoppy"]
+  },
+  { 
+    "name": "Malt Flavour",
+    "step": 25,
+    "strings": ["Not malty", "Less malty", "More malty", "Very malty"]
+  }
+]

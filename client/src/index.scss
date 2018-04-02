@@ -98,6 +98,19 @@ header {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+
+  .title-bar {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .page-title {
+    &.inline {
+      display: inline-block;
+    }
+  }
 }
 
 a {
@@ -118,7 +131,7 @@ a {
   border-radius: 2px;
   box-shadow: 0px 4px 10px rgba(210, 210, 210, 0.5);
 
-  &:first-of-type, .page-title {
+  &:first-of-type, .page-title, h2 {
     margin-top: 0;
   }
 }
@@ -128,6 +141,16 @@ a {
 
   &.spin {
     animation: spin 1.2s linear infinite;
+  }
+}
+
+.error {
+  margin: 0 0.5em 0 0;
+  color: #E53935;
+
+  .material-icons {
+    vertical-align: middle;
+    margin-right: 0.25em;
   }
 }
 

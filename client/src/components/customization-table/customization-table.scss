@@ -1,0 +1,25 @@
+.card.customization-table {
+  padding: 0;
+  width: 100%;
+
+  .customization-line {
+    padding: 1.5em;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+    background: $white;
+
+    h2 {
+      margin: 0;
+    }
+
+    .button {
+      margin: 0 0 0 1em;
+    }
+
+    &:not(:first-of-type) {
+      border-top: 1px solid $greyD;
+    }
+  }
+}

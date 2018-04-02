@@ -1,23 +1,24 @@
 import asyncAction from "../../utils/async-action";
 
 export const actionTypes = {
-  GET_CUSTOMIZATION_REQUEST: 'GET_CUSTOMIZATION_REQUEST',
-  GET_CUSTOMIZATION_SUCCESS: 'GET_CUSTOMIZATION_SUCCESS',
-  GET_CUSTOMIZATION_FAILURE: 'GET_CUSTOMIZATION_FAILURE'
-}
+  GET_CUSTOMIZATIONS_REQUEST: "GET_CUSTOMIZATIONS_REQUEST",
+  GET_CUSTOMIZATIONS_SUCCESS: "GET_CUSTOMIZATIONS_SUCCESS",
+  GET_CUSTOMIZATIONS_FAILURE: "GET_CUSTOMIZATIONS_FAILURE"
+};
 
-const getCustomizationRequest = _ => {
-  return { type: actionTypes.GET_CUSTOMIZATION_REQUEST }
-}
+const getCustomizationsRequest = _ => {
+  return { type: actionTypes.GET_CUSTOMIZATIONS_REQUEST };
+};
 
-const getCustomizationSuccess = beer => {
-  return { type: actionTypes.GET_CUSTOMIZATION_SUCCESS, beer }
-}
+const getCustomizationsSuccess = customizations => {
+  return { type: actionTypes.GET_CUSTOMIZATIONS_SUCCESS, customizations };
+};
 
-const getCustomizationFailure = error => {
-  return { type: actionTypes.GET_CUSTOMIZATION_FAILURE, error }
-}
+const getCustomizationsFailure = error => {
+  return { type: actionTypes.GET_CUSTOMIZATIONS_FAILURE, error };
+};
 
-export const getCustomization = id => {
-  return asyncAction('/api/customizer/id/324', {}, getCustomizationRequest, getCustomizationSuccess, getCustomizationFailure);
-}
+export const getCustomizations = _ => {
+  return asyncAction("/api/customizer/customizations", { method: "GET", credentials: "same-origin" },
+    getCustomizationsRequest, getCustomizationsSuccess, getCustomizationsFailure);
+};

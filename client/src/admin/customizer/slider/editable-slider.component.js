@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import MaterialInput from '../../../components/material-input';
-import { updateVariable } from '../customizer.actions';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import MaterialInput from "../../../components/material-input.component";
+import { updateVariable } from "../customizer.actions";
 
 class EditableSlider extends Component {
-  
   constructor(props) {
     super(props);
 
@@ -17,7 +16,7 @@ class EditableSlider extends Component {
       defaultVal: props.defaultVal,
       suffix: props.suffix,
       active: false
-    }
+    };
   }
 
   onSubmit(event) {
@@ -29,12 +28,12 @@ class EditableSlider extends Component {
   onReset(event) {
     event.preventDefault();
     const { name, min, max, step, defaultVal, suffix, onChange } = this.props;
-    this.setState({name, min, max, step, defaultVal, suffix});
+    this.setState({ name, min, max, step, defaultVal, suffix });
     onChange(defaultVal);
   }
 
   onDefaultChange(val) {
-    this.setState({defaultVal: val});
+    this.setState({ defaultVal: val });
     this.props.onChange(val);
   }
 
@@ -46,31 +45,32 @@ class EditableSlider extends Component {
       <div className="editable-slider">
         <label className="slider-label"><span>{name} - {value}%{suffix}</span>
           <button className="inline" disabled={disabled} onClick={() => this.setState((prevState) => {
-            return { active: !prevState.active }
+            return { active: !prevState.active };
           })}>Edit Variable</button>
         </label>
         <form onSubmit={(event) => this.onSubmit(event)} className={active ? "active" : ""}>
           <MaterialInput type="text" id="name" labelText="Name *" active={!!name} value={name}
-            onChange={(event) => this.setState({name: event.target.value})}/>
+            onChange={(event) => this.setState({ name: event.target.value })} />
           <MaterialInput type="number" id="min" labelText="Minimum *" active={!!min.toString()} value={min}
-            onChange={(event) => this.setState({min: event.target.value})}/>
+            onChange={(event) => this.setState({ min: event.target.value })} />
           <MaterialInput type="number" id="max" labelText="Maximum *" active={!!max.toString()} value={max}
-            onChange={(event) => this.setState({max: event.target.value})}/>
+            onChange={(event) => this.setState({ max: event.target.value })} />
           <MaterialInput type="number" id="step" labelText="Increment *" active={!!step.toString()} value={step}
-            onChange={(event) => this.setState({step: event.target.value})}/>
-          <MaterialInput type="number" id="defaultVal" labelText="Default *" active={!!defaultVal.toString()} value={defaultVal}
-            onChange={(event) => this.onDefaultChange(event.target.value)}/>
+            onChange={(event) => this.setState({ step: event.target.value })} />
+          <MaterialInput type="number" id="defaultVal" labelText="Default *" active={!!defaultVal.toString()}
+            value={defaultVal} onChange={(event) => this.onDefaultChange(event.target.value)} />
           <MaterialInput type="text" id="suffix" labelText="Suffix (after %)" active={!!suffix} value={suffix}
-            onChange={(event) => this.setState({suffix: event.target.value})}/>
+            onChange={(event) => this.setState({ suffix: event.target.value })} />
           <div className="slider-buttons">
             <button onClick={(event) => this.onReset(event)}>Reset</button>
             <button type="submit">Save</button>
           </div>
           <p className="slider-response">{this.props.response}</p>
         </form>
-        <input type="range" min={min} max={max} step={step || 1} value={value} onChange={(event) => onChange(Number(event.target.value))}/>
+        <input type="range" min={min} max={max} step={step || 1} value={value}
+          onChange={(event) => onChange(Number(event.target.value))} />
       </div>
-    )
+    );
   }
 }
 
@@ -84,17 +84,20 @@ EditableSlider.propTypes = {
   defaultVal: PropTypes.number.isRequired,
   suffix: PropTypes.string,
   disabled: PropTypes.bool,
-  onChange: PropTypes.func.isRequired
-}
+  onChange: PropTypes.func.isRequired,
+  response: PropTypes.string,
+  updateVariable: PropTypes.func.isRequired
+};
 
 const mapStateToProps = state => {
-  return { response: state.customizer.updateVariableResponse }
-}
+  return { response: state.customizer.updateVariableResponse };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
-    updateVariable: (id, name, min, max, step, defaultVal, suffix) => dispatch(updateVariable(id, name, min, max, step, defaultVal, suffix))
-  }
-}
+    updateVariable: (id, name, min, max, step, defaultVal, suffix) =>
+      dispatch(updateVariable(id, name, min, max, step, defaultVal, suffix))
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditableSlider);

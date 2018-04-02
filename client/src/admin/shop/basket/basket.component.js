@@ -1,57 +1,94 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
-import { } from '../shop.actions';
+import { getBasketItems, updateQuantity } from "../shop.actions";
 
-const Basket = ({user, items}) => {
-  
-  const basketItems = items.map((item, i) => {
+class Basket extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      quantities: {}
+    };
+  }
+
+  componentDidMount() {
+    this.props.getBasketItems();
+  }
+
+  updateQuantity(quantity, id) {
+    let quantities = this.state.quantities;
+    quantities[id] = Math.max(quantity, 0);
+    this.setState({ quantities });
+  }
+
+  render() {
+    const { items, isLoading, updateQuantity } = this.props;
+    const quantities = this.state.quantities;
+
+    const totalPrice = items.reduce((prev, cur) => { return prev + cur.price * cur.quantity; }, 0);
+    const basketItems = items.map((item, i) => {
+      const quantity = quantities[item.id] !== undefined ? quantities[item.id] : item.quantity;
+      return (
+        <div key={item.id} className="card product">
+          <h2 className="product-name">{item.name}</h2>
+          <p>{item.description}</p>
+          <div className="product-base">
+            <label htmlFor="quantity">Quantity: </label>
+            <input type="number" id="quantity" value={quantity}
+              onChange={(event) => this.updateQuantity(event.target.value, item.id)}
+              onBlur={(event) => updateQuantity(event.target.value, item.id)} />
+            <label>Total Price:</label>
+            <span className="price">£{item.price * quantity}</span>
+          </div>
+        </div>
+      );
+    });
+
     return (
-      <div key={i}>
-        <p>{item.name}</p>
-        <span>{item.quantity}</span> | <span>{item.price}</span>
+      <div className="page-content">
+        <h1 className="page-title">Your Basket</h1>
+        <div className="basket">
+          <div>{basketItems}</div>
+          { !isLoading ? <div className="basket-actions-container">
+            <div className="card basket-actions">
+              <p>Basket Total: <span className="price">${totalPrice}</span></p>
+              <button>Checkout</button>
+            </div>
+          </div> : null }
+        </div>
       </div>
     );
-  })
-
-  return (
-    <div className="page-content">
-      <h1 className="page-title">Your Basket</h1>
-      <div>
-        {basketItems}
-      </div>
-    </div>
-  )
+  }
 }
 
 Basket.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.number,
-    email: PropTypes.string,
-    name: PropTypes.string,
-    companyName: PropTypes.string
-  }).isRequired,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
       name: PropTypes.string,
+      description: PropTypes.string,
       quantity: PropTypes.number,
       price: PropTypes.number
     })
-  ).isRequired
-}
+  ).isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  getBasketItems: PropTypes.func.isRequired,
+  updateQuantity: PropTypes.func.isRequired
+};
 
 const mapStateToProps = state => {
   return {
-    user: state.auth.user,
-    items: state.shop.basket
-  }
-}
+    items: state.shop.basketItems,
+    isLoading: state.shop.isLoading
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
-  }
-}
+    getBasketItems: () => dispatch(getBasketItems()),
+    updateQuantity: (quantity, productId) => dispatch(updateQuantity(quantity, productId))
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Basket);

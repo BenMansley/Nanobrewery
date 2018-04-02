@@ -23,6 +23,7 @@
   },
   "rules": {
     "key-spacing"                 : "off",
+    "quotes"                      : ["error", "double", { "allowTemplateLiterals": true }],
     "jsx-quotes"                  : [2, "prefer-double"],
     "max-len"                     : [2, 120, 2],
     "object-curly-spacing"        : [2, "always"],

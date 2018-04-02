@@ -1,33 +1,60 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-// import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
-import Intro from './admin/user/intro/intro.component';
+// import Intro from "./admin/user/intro/intro.component";
+import { getCustomizations } from "./admin/branding/branding.actions";
+import CustomizationTable from "./components/customization-table/customization-table.component";
 
-const Home = ({user}) => {
+class Home extends Component {
+  componentDidMount() {
+    const { isLoggedIn, getCustomizations } = this.props;
+    if (isLoggedIn) {
+      getCustomizations();
+    }
+  }
 
-  const isLoggedIn = user.hasOwnProperty('id');
+  componentDidUpdate(prevProps) {
+    const { isLoggedIn, getCustomizations } = this.props;
+    if (isLoggedIn && !prevProps.isLoggedIn) {
+      getCustomizations();
+    }
+  }
 
-  return (
-    <div className="page-content">
-      <h1>Nanobrewery Home Page</h1>
-      { isLoggedIn ? <Intro/> : null }
-    </div>
-  )
+  render() {
+    const { isLoggedIn, customizations } = this.props;
+
+    return (
+      <div className="page-content">
+        <h1>Nanobrewery Home Page</h1>
+        { isLoggedIn
+          ? <React.Fragment>
+            <CustomizationTable customizations={customizations} />
+            {/* { customizations.length === 0 ? <Intro/> : <div>{customizations}</div> } */}
+          </React.Fragment>
+          : null }
+      </div>
+    );
+  }
 }
 
 Home.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.number,
-    email: PropTypes.string,
-    name: PropTypes.string,
-    companyName: PropTypes.string    
-  }).isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
+  customizations: PropTypes.array,
+  getCustomizations: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {
-  return { user: state.auth.user }
-}
+  return {
+    isLoggedIn: state.auth.isLoggedIn,
+    customizations: state.branding.customizations
+  };
+};
 
-export default connect(mapStateToProps)(Home);
+const mapDispatchToProps = dispatch => {
+  return {
+    getCustomizations: () => dispatch(getCustomizations())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

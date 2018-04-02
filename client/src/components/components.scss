@@ -39,14 +39,19 @@
     display: inline-block;
     margin: 2em 1em 0;
 
-    .input {
-      max-width: 200px;    
+    input {
+      max-width: 200px;   
     }
+  }
+
+  &.large > input {
+    font-size: 1.25em;
+    font-weight: 700;
   }
 }
 
 
-button {
+button:not(.select-dropdown), .button {
   text-transform: uppercase;
   font: inherit;
   padding: 0.25em 0.5em;
@@ -82,26 +87,98 @@ button {
       background: $lightestTheme;
     }
   }
+
+  &.large {
+    font-size: 1.2em;
+  }
 }
 
 .form-base {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
   margin-top: 1em;
-
-  .error {
-    margin: 0 0.5em 0 0;
-    color: #E53935;
-
-    .material-icons {
-      vertical-align: middle;
-      margin-right: 0.25em;
-    }
-  }
 
   button {
     flex: 0 0 auto;
-    margin: 1em 0 0;
+    margin: 1em 0 0 1em;
+  }
+
+  .success {
+    width: 100%;
+    text-align: center;
+    margin-top: 1em;
+    font-size: 1.25em;
+
+    .button {
+      font-size: 0.8em;
+      margin-left: 1em;
+    }
   }
 }
+
+.material-select {
+  position: relative;
+  font-size: 1.1em;
+  min-width: 150px;
+  
+  .select-dropdown {
+    width: 100%;
+    padding: 0.5em 2em 0.5em 0;
+    background: none;
+    border: none;
+    border-bottom: 2px solid $lightTheme;
+    font: inherit;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+      color: $darkTheme;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .select-options {
+    position: absolute;
+    display: none;
+    width: 100%;
+    top: 0;
+    margin: 0;
+    padding: 0.4em 0;
+    border: 1px solid $greyD;
+    border-radius: 2px;
+    box-shadow: 0px 3px 4px rgba(50, 50, 50, 0.5);
+    list-style: none;
+    background: $white;
+    cursor: pointer;
+
+    .select-option {
+      padding: 0.5em 0.25em 0.5em 1em;
+
+      &.selected {
+        color: $darkTheme;
+      }
+
+      &:hover {
+        background: $greyE;
+      }
+    }
+
+    &.visible {
+      display: block;
+    }
+  }
+
+  .material-icons {
+    position: absolute;
+    right: 0;
+    top: 0.35em;
+    vertical-align: middle;
+  }
+}
+
+@import 'customization-table/customization-table';

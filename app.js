@@ -1,20 +1,21 @@
-const express = require('express');
-const path = require('path');
-const logger = require('morgan');
-const bodyParser = require('body-parser');
-
-const mysql = require('mysql');
+const express = require("express");
+const path = require("path");
+const logger = require("morgan");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const mysql = require("mysql");
 
 const app = module.exports = express();
-const users = require('./server/users');
-const customizer = require('./server/customizer');
-const shop = require('./server/shop');
-
-require('dotenv').config();
-
-app.use(logger('dev'));
+app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+const users = require("./server/users");
+const customizer = require("./server/customizer");
+const shop = require("./server/shop");
+
+require("dotenv").config();
 
 const PORT = process.env.PORT || 3001;
 
@@ -26,17 +27,17 @@ const conn = mysql.createPool({
   database: process.env.MYSQL_DATABASE
 });
 
-app.set('conn', conn);
+app.set("conn", conn);
 
-app.use('/api/users', users);
-app.use('/api/customizer', customizer);
-app.use('/api/shop', shop);
+app.use("/api/users", users);
+app.use("/api/customizer", customizer);
+app.use("/api/shop", shop);
 
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, "client/build")));
 
 // catch 404 and forward to error handler
-app.use((req, res, next) => {
-  res.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
+app.use((req, res) => {
+  res.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
 });
 
 app.listen(PORT, () => {

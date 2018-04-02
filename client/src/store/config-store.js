@@ -8,11 +8,8 @@ import { default as branding } from '../admin/branding/branding.reducer';
 const reducer = combineReducers({auth, customizer, shop, branding});
 
 const configStore = _ => { 
-  let store = createStore(reducer, applyMiddleware(thunk));
-  console.log(store.getState());
+  const store = createStore(reducer, applyMiddleware(thunk));
   return store;
 }
 
-const store = configStore();
-
-export default store;
+export default configStore();

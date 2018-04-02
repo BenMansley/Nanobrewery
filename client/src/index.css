@@ -29,10 +29,13 @@
   .material-input.inline {
     display: inline-block;
     margin: 2em 1em 0; }
-    .material-input.inline .input {
+    .material-input.inline input {
       max-width: 200px; }
+  .material-input.large > input {
+    font-size: 1.25em;
+    font-weight: 700; }
 
-button {
+button:not(.select-dropdown), .button {
   text-transform: uppercase;
   font: inherit;
   padding: 0.25em 0.5em;
@@ -41,33 +44,99 @@ button {
   color: #0D47A1;
   letter-spacing: 0.5px;
   cursor: pointer; }
-  button:not(.inline) {
+  button:not(.select-dropdown):not(.inline), .button:not(.inline) {
     background: #0D47A1;
     color: #FFFFFF;
     padding: 0.5em 1em;
     margin: 2em 0 1em; }
-  button:disabled {
+  button:not(.select-dropdown):disabled, .button:disabled {
     color: #666666;
     cursor: default; }
-  button:not(:disabled):hover, button:not(:disabled):focus {
+  button:not(.select-dropdown):not(:disabled):hover, button:not(.select-dropdown):not(:disabled):focus, .button:not(:disabled):hover, .button:not(:disabled):focus {
     background: #03A9F4; }
-    button:not(:disabled):hover.inline, button:not(:disabled):focus.inline {
+    button:not(.select-dropdown):not(:disabled):hover.inline, button:not(.select-dropdown):not(:disabled):focus.inline, .button:not(:disabled):hover.inline, .button:not(:disabled):focus.inline {
       background: #EAEAEA; }
+  button:not(.select-dropdown).large, .button.large {
+    font-size: 1.2em; }
 
 .form-base {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
   margin-top: 1em; }
-  .form-base .error {
-    margin: 0 0.5em 0 0;
-    color: #E53935; }
-    .form-base .error .material-icons {
-      vertical-align: middle;
-      margin-right: 0.25em; }
   .form-base button {
     flex: 0 0 auto;
-    margin: 1em 0 0; }
+    margin: 1em 0 0 1em; }
+  .form-base .success {
+    width: 100%;
+    text-align: center;
+    margin-top: 1em;
+    font-size: 1.25em; }
+    .form-base .success .button {
+      font-size: 0.8em;
+      margin-left: 1em; }
+
+.material-select {
+  position: relative;
+  font-size: 1.1em;
+  min-width: 150px; }
+  .material-select .select-dropdown {
+    width: 100%;
+    padding: 0.5em 2em 0.5em 0;
+    background: none;
+    border: none;
+    border-bottom: 2px solid #03A9F4;
+    font: inherit;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer; }
+    .material-select .select-dropdown:hover {
+      color: #0D47A1; }
+    .material-select .select-dropdown:focus {
+      outline: none; }
+  .material-select .select-options {
+    position: absolute;
+    display: none;
+    width: 100%;
+    top: 0;
+    margin: 0;
+    padding: 0.4em 0;
+    border: 1px solid #DDDDDD;
+    border-radius: 2px;
+    box-shadow: 0px 3px 4px rgba(50, 50, 50, 0.5);
+    list-style: none;
+    background: #FFFFFF;
+    cursor: pointer; }
+    .material-select .select-options .select-option {
+      padding: 0.5em 0.25em 0.5em 1em; }
+      .material-select .select-options .select-option.selected {
+        color: #0D47A1; }
+      .material-select .select-options .select-option:hover {
+        background: #EAEAEA; }
+    .material-select .select-options.visible {
+      display: block; }
+  .material-select .material-icons {
+    position: absolute;
+    right: 0;
+    top: 0.35em;
+    vertical-align: middle; }
+
+.card.customization-table {
+  padding: 0;
+  width: 100%; }
+  .card.customization-table .customization-line {
+    padding: 1.5em;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+    background: #FFFFFF; }
+    .card.customization-table .customization-line h2 {
+      margin: 0; }
+    .card.customization-table .customization-line .button {
+      margin: 0 0 0 1em; }
+    .card.customization-table .customization-line:not(:first-of-type) {
+      border-top: 1px solid #DDDDDD; }
 
 .auth {
   padding: 2em; }
@@ -110,18 +179,30 @@ button {
 .customizer {
   flex: 1;
   display: grid;
-  grid-template: 1fr 0.5fr / 0.75fr 1fr;
+  grid-template: 1fr 0.5fr/repeat(7, 1fr);
   grid-gap: 1em 1em;
   justify-items: stretch;
   align-items: stretch;
   justify-content: stretch;
   padding-bottom: 2em; }
+  .customizer .customizer-sliders {
+    grid-column: 1 / 4; }
+  .customizer .customizer-image {
+    grid-column: 4 / 8; }
+  .customizer .customizer-description {
+    grid-column: 1 / 6; }
+  .customizer .customizer-actions {
+    grid-column: 6 / 8; }
+    .customizer .customizer-actions h2 {
+      margin: 0; }
   @media all and (max-width: 700px) {
     .customizer {
-      grid-template: 1fr 1fr 1fr 1fr / 1fr; }
+      grid-template: 1fr 1.5fr 0.8fr 0.5fr / 1fr; }
+      .customizer > .customizer-sliders, .customizer .customizer-image, .customizer .customizer-description, .customizer .customizer-actions {
+        grid-column: 1 / 2; }
       .customizer .customizer-description {
         grid-row: 3 / 4; }
-      .customizer .customizer-facts {
+      .customizer .customizer-actions {
         grid-row: 4 / 5; } }
   .customizer > .card {
     margin: 0;
@@ -165,33 +246,6 @@ button {
       background: transparent;
       border-color: transparent;
       color: transparent; }
-
-.account-header {
-  width: 100%; }
-  .account-header ul {
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    padding-bottom: 5px;
-    background-color: #03A9F4; }
-    .account-header ul li {
-      padding: 0.5em 2vw 0.5em;
-      flex: 0 1 auto;
-      text-align: center;
-      color: #17252A;
-      cursor: pointer;
-      border-bottom: 3px solid #17252A;
-      transition-property: border-bottom-color, color;
-      transition-duration: 0.1s;
-      transition-timing-function: ease; }
-      .account-header ul li:hover {
-        border-bottom-color: #EAEAEA;
-        color: #EAEAEA; }
-        .account-header ul li:hover a {
-          color: inherit; }
 
 .account-details p {
   margin: 0 0 1em; }
@@ -284,13 +338,48 @@ p {
 .product .product-base {
   display: flex;
   justify-content: flex-end;
-  align-items: center; }
-  .product .product-base .product-price {
-    font-size: 1.5em;
-    font-weight: 700;
-    border-bottom: 3px solid #03A9F4; }
+  align-items: center;
+  font-size: 1.1em; }
+  .product .product-base label {
+    margin: 0 0.4em 0 1.25em; }
+  .product .product-base input {
+    border: 2px solid transparent;
+    border-bottom-color: #03A9F4;
+    padding: 0 0.2em;
+    width: 2em;
+    font-family: inherit;
+    font-size: 1.4em;
+    font-weight: bold; }
+    .product .product-base input:focus {
+      outline: none;
+      border-color: #03A9F4; }
   .product .product-base .product-add {
     margin: 1em 0 1em 1.5em; }
+
+.price {
+  font-size: 1.4em;
+  font-weight: 700;
+  color: #0D47A1; }
+
+.basket .basket-actions-container {
+  display: flex;
+  justify-content: flex-end;
+  width: 90%;
+  max-width: 900px;
+  margin: 0 auto; }
+  .basket .basket-actions-container .basket-actions {
+    width: auto;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    font-size: 1.1em; }
+    .basket .basket-actions-container .basket-actions p {
+      margin: 0;
+      display: inline-block; }
+      .basket .basket-actions-container .basket-actions p .price {
+        margin-left: 0.2em; }
+    .basket .basket-actions-container .basket-actions button {
+      margin: 0 0 0 1.5em; }
 
 * {
   box-sizing: border-box; }
@@ -351,6 +440,13 @@ header {
   margin: 0 auto;
   display: flex;
   flex-direction: column; }
+  .page-content .title-bar {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-between; }
+  .page-content .page-title.inline {
+    display: inline-block; }
 
 a {
   text-decoration: none;
@@ -366,13 +462,20 @@ a {
   background: #FEFFFF;
   border-radius: 2px;
   box-shadow: 0px 4px 10px rgba(210, 210, 210, 0.5); }
-  .card:first-of-type, .card .page-title {
+  .card:first-of-type, .card .page-title, .card h2 {
     margin-top: 0; }
 
 .loading {
   font-size: 2.5em; }
   .loading.spin {
     animation: spin 1.2s linear infinite; }
+
+.error {
+  margin: 0 0.5em 0 0;
+  color: #E53935; }
+  .error .material-icons {
+    vertical-align: middle;
+    margin-right: 0.25em; }
 
 @keyframes spin {
   from {

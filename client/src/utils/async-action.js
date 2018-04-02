@@ -1,4 +1,4 @@
-const headers = new Headers({'Content-Type': 'application/json'});
+const headers = new Headers({ "Content-Type": "application/json" });
 
 /**
  * Sends an asynchronous JSON request to the server, dispatching actions on Send, Success and Failure
@@ -12,24 +12,26 @@ const asyncAction = (url, reqInfo, onSend, onSuccess, onFailure) => {
   return dispatch => {
     dispatch(onSend());
 
-    fetch(url, {...reqInfo, headers})
+    fetch(url, { ...reqInfo, headers })
       .then(res => {
         res.json().then(data => {
-          if (res.status === 400) {
+          console.log(data);
+          if (res.status === 400 || res.status === 500) {
             dispatch(onFailure(data));
           } else if (res.status === 200) {
-            console.log(data);
             dispatch(onSuccess(data));
           }
         })
-        .catch(error => {
-          dispatch(onFailure("Error parsing data from server"))
-        });
+          .catch(error => {
+            console.error(error);
+            dispatch(onFailure("Error parsing data from server"));
+          });
       })
       .catch(error => {
+        console.error(error);
         dispatch(onFailure("Error retrieving data from server"));
       });
-  }
-}
+  };
+};
 
 export default asyncAction;
