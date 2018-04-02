@@ -199,7 +199,6 @@ describe("Gets user details", _ => {
     email: "test@test.com",
     password: "password"
   };
-  const sqlStub = sinon.stub(app.get("conn"), "query");
   before(done => {
     agent.post("/api/users/new").send(newUser).end((_, res) => {
       agent.post("/api/users/login").send(login).end((_, res) => {
@@ -225,15 +224,17 @@ describe("Gets user details", _ => {
     });
   });
   it("Fails on middleware db failure", done => {
+    const sqlStub = sinon.stub(app.get("conn"), "query");
     sqlStub.yields(new Error());
     agent.get("/api/users/details").end((_, res) => {
-      sqlStub.reset();
+      sqlStub.restore();
       expect(res).to.have.status(500);
       expect(res.body).to.equal("Error checking token");
       done();
     });
   });
   it("Fails on db failure", done => {
+    const sqlStub = sinon.stub(app.get("conn"), "query");
     sqlStub.onSecondCall().callsArgWith(1, new Error());
     sqlStub.callThrough();
     agent.get("/api/users/details").end((_, res) => {
