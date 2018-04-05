@@ -85,23 +85,6 @@ router.get("/customizations", isLoggedIn, (req, res, next) => {
 });
 
 /**
- * Gets basic info about customizations from a given user
- * @name getBasicCustomizations
- * @route       {POST} /api/customizer/customizations
- */
-router.get("/customizations-basic", isLoggedIn, (req, res, next) => {
-  const token = req.cookies.session;
-  const conn = app.get("conn");
-  const error = "Error retrieving customizations";
-  const query = SQL.getCustomizationsBasic(token);
-
-  conn.query(query, (err, results, fields) => {
-    if (err) return res.status(500).json(error);
-    return res.status(200).json(results);
-  });
-});
-
-/**
  * Creates a new customization
  * @name newCustomization
  * @route       {POST} /api/customizer/new
@@ -117,7 +100,7 @@ router.post("/new", isLoggedIn, (req, res, next) => {
   const token = req.cookies.session;
   const conn = app.get("conn");
   let error = "Your beer needs a name!";
-  if (!name) return res.status(500).json(error);
+  if (!name) return res.status(400).json(error);
   error = "Error saving new customization";
   const query = SQL.newCustomization(token, name, description, volume, colour, hoppiness, maltFlavour);
 

@@ -16,9 +16,9 @@ const asyncAction = (url, reqInfo, onSend, onSuccess, onFailure) => {
       .then(res => {
         res.json().then(data => {
           console.log(data);
-          if (res.status === 400 || res.status === 500) {
+          if (res.status !== 200) {
             dispatch(onFailure(data));
-          } else if (res.status === 200) {
+          } else {
             dispatch(onSuccess(data));
           }
         })

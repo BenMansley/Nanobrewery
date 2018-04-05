@@ -86,3 +86,69 @@ describe("Updates a variable", _ => {
     });
   });
 });
+
+const newUser = {
+  email: "test@test.com",
+  password: "password",
+  name: "Test User",
+  companyName: ""
+};
+
+const login = {
+  email: "test@test.com",
+  password: "password"
+};
+
+describe("Creates a new customization", _ => {
+  const agent = chai.request.agent(app);
+  const customization = {
+    name: "Test Customization",
+    description: "Test Description",
+    volume: 4,
+    colour: 70,
+    hoppiness: 80,
+    maltFlavour: 20
+  };
+  before(done => {
+    agent.post("/api/users/new").send(newUser).end((_, res) => {
+      agent.post("/api/users/login").send(login).end((_, res) => {
+        done();
+      });
+    });
+  });
+  it("Can create a new customization", done => {
+    agent.post("/api/customizer/new").send(customization).end((_, res) => {
+      expect(res).to.have.status(200);
+      expect(res.body).to.be.a("number");
+      done();
+    });
+  });
+  it("Rejects on no name", done => {
+    const badCustomization = Object.assign({}, customization, { name: "" });
+    agent.post("/api/customizer/new").send(badCustomization).end((_, res) => {
+      expect(res).to.have.status(400);
+      expect(res.body).to.equal("Your beer needs a name!");
+      done();
+    });
+  });
+  it("Rejects on db error", done => {
+    const sqlStub = sinon.stub(app.get("conn"), "query");
+    sqlStub.onSecondCall().callsArgWith(1, new Error());
+    sqlStub.callThrough();
+    agent.post("/api/customizer/new").send(customization).end((_, res) => {
+      sqlStub.restore();
+      expect(res).to.have.status(500);
+      expect(res.body).to.equal("Error saving new customization");
+      done();
+    });
+  });
+  after(done => {
+    const conn = app.get("conn");
+    const statement = "DELETE FROM Users WHERE email=?;";
+    const query = mysql.format(statement, [newUser.email]);
+    conn.query(query, (err, results, fields) => {
+      if (err) console.error(err);
+      done();
+    });
+  });
+});
