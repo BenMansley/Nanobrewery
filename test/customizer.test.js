@@ -109,7 +109,8 @@ describe("Creates a new customization", _ => {
     hoppiness: 80,
     maltFlavour: 20
   };
-  before(done => {
+  before(function(done) {
+    this.timeout(3000);
     agent.post("/api/users/new").send(newUser).end((_, res) => {
       agent.post("/api/users/login").send(login).end((_, res) => {
         done();
@@ -139,6 +140,81 @@ describe("Creates a new customization", _ => {
       sqlStub.restore();
       expect(res).to.have.status(500);
       expect(res.body).to.equal("Error saving new customization");
+      done();
+    });
+  });
+  after(done => {
+    const conn = app.get("conn");
+    const statement = "DELETE FROM Users WHERE email=?;";
+    const query = mysql.format(statement, [newUser.email]);
+    conn.query(query, (err, results, fields) => {
+      if (err) console.error(err);
+      done();
+    });
+  });
+});
+
+describe("Can get customizations", _ => {
+  const agent = chai.request.agent(app);
+  const customization = {
+    name: "Test Customization",
+    description: "Test Description",
+    volume: 4,
+    colour: 70,
+    hoppiness: 80,
+    maltFlavour: 20
+  };
+  let id;
+  before(function(done) {
+    this.timeout(3500);
+    agent.post("/api/users/new").send(newUser).end((_, res) => {
+      agent.post("/api/users/login").send(login).end((_, res) => {
+        agent.post("/api/customizer/new").send(customization).end((_, res) => {
+          done();
+        });
+      });
+    });
+  });
+  it("Can get all customizations", function(done) {
+    this.timeout(3000);
+    agent.get("/api/customizer/customizations").end((_, res) => {
+      expect(res).to.have.status(200);
+      expect(res.body).to.be.an("array");
+      expect(res.body[0]).to.have.all.keys(
+        ["id", "name", "description", "volume", "colour", "hoppiness", "maltFlavour"]
+      );
+      id = res.body[0].id;
+      done();
+    });
+  });
+  it("Can get a customization by id", done => {
+    agent.get("/api/customizer/from-id/" + id).end((_, res) => {
+      expect(res).to.have.status(200);
+      expect(res.body).to.have.all.keys(
+        ["id", "name", "description", "volume", "colour", "hoppiness", "maltFlavour"]
+      );
+      done();
+    });
+  });
+  it("Rejects on db error getting all customizations", done => {
+    const sqlStub = sinon.stub(app.get("conn"), "query");
+    sqlStub.onSecondCall().callsArgWith(1, new Error());
+    sqlStub.callThrough();
+    agent.get("/api/customizer/customizations").end((_, res) => {
+      sqlStub.restore();
+      expect(res).to.have.status(500);
+      expect(res.body).to.equal("Error getting customizations");
+      done();
+    });
+  });
+  it("Rejects on db error getting a customization", done => {
+    const sqlStub = sinon.stub(app.get("conn"), "query");
+    sqlStub.onSecondCall().callsArgWith(1, new Error());
+    sqlStub.callThrough();
+    agent.get("/api/customizer/from-id/" + id).end((_, res) => {
+      sqlStub.restore();
+      expect(res).to.have.status(500);
+      expect(res.body).to.equal("Error getting customization");
       done();
     });
   });

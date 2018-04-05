@@ -75,7 +75,7 @@ router.put("/edit-variable", (req, res, next) => {
 router.get("/customizations", isLoggedIn, (req, res, next) => {
   const token = req.cookies.session;
   const conn = app.get("conn");
-  const error = "Error retrieving customizations";
+  const error = "Error getting customizations";
   const query = SQL.getCustomizations(token);
 
   conn.query(query, (err, results, fields) => {
@@ -120,7 +120,7 @@ router.get("/from-id/:id", isLoggedIn, (req, res, next) => {
   const token = req.cookies.session;
   const id = req.params.id;
   const conn = app.get("conn");
-  const error = "Could not get customization";
+  const error = "Error getting customization";
   const query = SQL.getCustomizationById(id, token);
   conn.query(query, (err, results, fields) => {
     if (err || results.length === 0) return res.status(500).json(error);

@@ -53,11 +53,6 @@ function getCustomizations(token) {
   return mysql.format(query, [token]);
 }
 
-function getCustomizationsBasic(token) {
-  const query = "SELECT id, name FROM Customizations WHERE userId=" + userId;
-  return mysql.format(query, [token]);
-}
-
 function newCustomization(token, name, description, volume, colour, hoppiness, maltFlavour) {
   const query = "INSERT INTO Customizations (userId, name, description, volume, colour, hoppiness, maltFlavour)" +
                 " VALUES ((SELECT userId FROM Tokens WHERE token=?), ?, ?, ?, ?, ? ,?);";
@@ -115,7 +110,6 @@ module.exports = {
     getVariables,
     editVariable,
     getCustomizations,
-    getCustomizationsBasic,
     newCustomization,
     getCustomizationById
   },
