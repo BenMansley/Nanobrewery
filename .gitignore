@@ -23,3 +23,4 @@ yarn-error.log*
 
 *.sql
 /.nyc_output
+/client/.eslintrc
