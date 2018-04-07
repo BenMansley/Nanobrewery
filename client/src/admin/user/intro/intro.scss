@@ -52,35 +52,32 @@
       align-items: center;
 
       .step-image {
-        height: 12em;
+        height: 10em;
         width: 100%;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
+        justify-content: space-around;
         align-items: center;
         border-radius: 0.4em;
+
+        img {
+          height: 0.9em;
+        }
   
         .step-complete {
           color: #0D960D;
-          font-size: 4em;
+          font-size: 6em;
         }
         
         .step-incomplete {
           @extend .step-complete;
-          color: red;
+          color: #FF0000;
+        }
+
+        span {
+          font-size: 2em;
         }
       }
-    }
-
-    &.hardware .step-image {
-      background: #c91d1d;
-    }
-
-    &.make .step-image {
-      background: darkblue;
-    }
-
-    &.brand .step-image {
-      background: darkorange;
     }
 
     &.inactive .step-image {

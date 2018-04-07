@@ -304,23 +304,22 @@ p {
       flex-direction: column;
       align-items: center; }
       .intro-steps .step > .step-flex .step-image {
-        height: 12em;
+        height: 10em;
         width: 100%;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
+        justify-content: space-around;
         align-items: center;
         border-radius: 0.4em; }
+        .intro-steps .step > .step-flex .step-image img {
+          height: 0.9em; }
         .intro-steps .step > .step-flex .step-image .step-complete, .intro-steps .step > .step-flex .step-image .step-incomplete {
           color: #0D960D;
-          font-size: 4em; }
+          font-size: 6em; }
         .intro-steps .step > .step-flex .step-image .step-incomplete {
-          color: red; }
-    .intro-steps .step.hardware .step-image {
-      background: #c91d1d; }
-    .intro-steps .step.make .step-image {
-      background: darkblue; }
-    .intro-steps .step.brand .step-image {
-      background: darkorange; }
+          color: #FF0000; }
+        .intro-steps .step > .step-flex .step-image span {
+          font-size: 2em; }
     .intro-steps .step.inactive .step-image {
       background: #AAAAAA; }
     .intro-steps .step .step-title {
