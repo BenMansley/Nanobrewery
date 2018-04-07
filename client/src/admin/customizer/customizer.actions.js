@@ -9,10 +9,7 @@ export const actionTypes = {
   GET_DATA_FAILURE: "GET_DATA_FAILURE",
   SEND_UPDATE_VARIABLE_REQUEST: "SEND_UPDATE_VARIABLE_REQUEST",
   UPDATE_VARIABLE_SUCCESS: "UPDATE_VARIABLE_SUCCESS",
-  UPDATE_VARIABLE_FAILURE: "UPDATE_VARIABLE_FAILURE",
-  SEND_NEW_CUSTOMIZATION_REQUEST: "SEND_NEW_CUSTOMIZATION_REQUEST",
-  NEW_CUSTOMIZATION_SUCCESS: "NEW_CUSTOMIZATION_SUCCESS",
-  NEW_CUSTOMIZATION_FAILURE: "NEW_CUSTOMIZATION_FAILURE"
+  UPDATE_VARIABLE_FAILURE: "UPDATE_VARIABLE_FAILURE"
 };
 
 const sendGetVariablesRequest = _ => {
@@ -64,22 +61,4 @@ export const updateVariable = (id, name, min, max, step, defaultVal, suffix) => 
   const data = { id, name, min, max, step, defaultVal, suffix };
   return asyncAction("/api/customizer/edit-variable", { method: "PUT", body: JSON.stringify(data) },
     sendUpdateVariableRequest, updateVariableSuccess, updateVariableFailure, 500);
-};
-
-const sendNewCustomizationRequest = _ => {
-  return { type: actionTypes.SEND_NEW_CUSTOMIZATION_REQUEST };
-};
-
-const newCustomizationSuccess = customizationId => {
-  return { type: actionTypes.NEW_CUSTOMIZATION_SUCCESS, customizationId };
-};
-
-const newCustomizationFailure = error => {
-  return { type: actionTypes.NEW_CUSTOMIZATION_FAILURE, error };
-};
-
-export const newCustomization = (name, description, volume, colour, hoppiness, maltFlavour) => {
-  const data = { name, description, volume, colour, hoppiness, maltFlavour };
-  return asyncAction("/api/customizer/new", { method: "POST", body: JSON.stringify(data), credentials: "same-origin" },
-    sendNewCustomizationRequest, newCustomizationSuccess, newCustomizationFailure);
 };

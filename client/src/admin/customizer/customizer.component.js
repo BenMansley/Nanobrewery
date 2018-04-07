@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import Slider from "./slider/slider.component";
-import { getCustomizerData, newCustomization } from "./customizer.actions";
+import { getCustomizerData } from "./customizer.actions";
 import MaterialInput from "../../components/material-input.component";
-import { getCustomizations } from "../branding/branding.actions";
+import { getCustomizations, newCustomization } from "../branding/branding.actions";
 
 class Customizer extends Component {
   constructor(props) {
@@ -95,7 +95,7 @@ class Customizer extends Component {
 
   render() {
     const { rgb, variables, description, name } = this.state;
-    const { variables:variableSchema, error, newCustomizationId } = this.props;
+    const { variables:variableSchema, customizationError, newCustomizationId } = this.props;
 
     let sliders = [];
     sliders = variableSchema.map((v, i) => {
@@ -138,7 +138,8 @@ class Customizer extends Component {
             { newCustomizationId !== 0 ? <p>Beer Saved!
               <Link to={{ pathname: "/admin/branding", search:`?id=${newCustomizationId}` }}>Brand It</Link></p>
               : <button className="large" onClick={() => this.saveCustomization()}>Save</button> }
-            <p className="error">{error ? <span className="material-icons">error</span> : null }{error}</p>
+            <p className="error">{customizationError ? <span className="material-icons">error</span> : null }
+              {customizationError}</p>
           </div>
         </div>
       </div>
@@ -176,8 +177,9 @@ Customizer.propTypes = {
       maltFlavour: PropTypes.number
     })
   ),
-  newCustomizationId: PropTypes.number.isRequired,
-  error: PropTypes.string.isRequired,
+  newCustomizationId: PropTypes.number,
+  // dataError: PropTypes.string.isRequired,
+  customizationError: PropTypes.string.isRequired,
   getData: PropTypes.func.isRequired,
   getCustomizations: PropTypes.func.isRequired,
   newCustomization: PropTypes.func.isRequired,
@@ -190,8 +192,9 @@ const mapStateToProps = state => {
     variables: state.customizer.variables,
     templates: state.customizer.templates,
     customizations: state.branding.customizations,
-    newCustomizationId: state.customizer.newCustomizationId,
-    error: state.customizer.error
+    newCustomizationId: state.branding.newCustomizationId,
+    dataError: state.customizer.error,
+    customizationError: state.branding.error
   };
 };
 
