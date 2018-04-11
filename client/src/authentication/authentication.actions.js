@@ -60,10 +60,6 @@ export const getSessionFromCookie = _ => {
     sendAuthRequest, cookieSignInSuccess, authResponseFailure);
 };
 
-// export const checkTokenAndSignIn = (id, token) => {
-//   return authenticate("/api/users/from-token", { id, token }, "POST");
-// };
-
 export const signout = () => {
   return { type: actionTypes.AUTH_SIGNOUT };
 };

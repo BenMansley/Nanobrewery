@@ -46,14 +46,14 @@ router.get("/all-data", (req, res, next) => {
 /**
  * Updates a customizer variable (ADMIN)
  * @name editVariable
- * @route       {PUT}   /api/customizer/edit-variable
- * @routeparam {number} id         ID of variable to edit
- * @routeparam {string} name       Updated variable name
- * @routeparam {number} min        Updated minimum value
- * @routeparam {number} max        Updated maximum value
- * @routeparam {number} step       Updated step (increment)
- * @routeparam {number} defaultVal Updated default value
- * @routeparam {string} suffix     Updated suffix
+ * @route      {PUT}   /api/customizer/edit-variable
+ * @bodyparam {number} id         ID of variable to edit
+ * @bodyparam {string} name       Updated variable name
+ * @bodyparam {number} min        Updated minimum value
+ * @bodyparam {number} max        Updated maximum value
+ * @bodyparam {number} step       Updated step (increment)
+ * @bodyparam {number} defaultVal Updated default value
+ * @bodyparam {string} suffix     Updated suffix
  */
 router.put("/edit-variable", (req, res, next) => {
   const { id, name, min, max, step, defaultVal, suffix } = req.body;
@@ -70,7 +70,7 @@ router.put("/edit-variable", (req, res, next) => {
 /**
  * Gets all customizations from a given user
  * @name getCustomizations
- * @route       {POST} /api/customizer/customizations
+ * @route {POST} /api/customizer/customizations
  */
 router.get("/customizations", isLoggedIn, (req, res, next) => {
   const token = req.cookies.session;
@@ -107,6 +107,46 @@ router.post("/new", isLoggedIn, (req, res, next) => {
   conn.query(query, (err, results, fields) => {
     if (err) return res.status(500).json(error);
     return res.status(200).json(results.insertId);
+  });
+});
+
+router.put("/update", isLoggedIn, (req, res, next) => {
+  const { id, name, description, volume, colour, hoppiness, maltFlavour } = req.body;
+  const conn = app.get("conn");
+  let error = "Your beer needs a name!";
+  if (!name) return res.status(400).json(error);
+  error = "Error updating customization";
+  const query = SQL.updateCustomization(name, description, volume, colour, hoppiness, maltFlavour, id);
+
+  conn.query(query, (err, results, fields) => {
+    if (err) return res.status(500).json(error);
+    return res.status(200).json(id);
+  });
+});
+
+/**
+ * Deletes a customization
+ * @name deleteCustomization
+ * @route     {DELETE} /api/customizer/delete
+ * @bodyparam {number} id ID of customization to delete
+*/
+router.delete("/delete", isLoggedIn, (req, res, next) => {
+  const id = req.body.id;
+  const token = req.cookies.session;
+  const conn = app.get("conn");
+  let error = "Error deleting customization";
+  let query = SQL.deleteCustomization(id, token);
+  console.log(query);
+
+  conn.query(query, (err, results, fields) => {
+    if (err) return res.status(500).json(error);
+    error = "Error getting customizations";
+    query = SQL.getCustomizations(token);
+
+    conn.query(query, (err, results, fields) => {
+      if (err) return res.status(500).json(error);
+      return res.status(200).json(results);
+    });
   });
 });
 

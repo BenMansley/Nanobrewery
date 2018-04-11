@@ -10,11 +10,11 @@
   margin-top: 0.4em;
 }
 
-.account-actions {
+.form-base .account-actions {
   text-align: right;
 
   button {
-    margin-bottom: 0;
+    margin: 0;
     
     &:nth-of-type(2) {
       margin-left: 1em;

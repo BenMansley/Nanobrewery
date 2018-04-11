@@ -3,8 +3,9 @@ import PropTypes from "prop-types";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import Slider from "./slider/slider.component";
-import { getCustomizerData } from "./customizer.actions";
 import MaterialInput from "../../components/material-input.component";
+import MaterialSelect from "../../components/material-select.component";
+import { getCustomizerData } from "./customizer.actions";
 import { getCustomizations, newCustomization } from "../branding/branding.actions";
 
 class Customizer extends Component {
@@ -29,7 +30,9 @@ class Customizer extends Component {
     const id = /\?id=(\d+)/.exec(searchString)[1];
     const index = customizations.findIndex(c => c.id === Number(id));
     if (index !== -1) {
-      this.setState({ index });
+      this.setActiveBeer(customizations[index], index);
+    } else {
+      this.setState({ index: customizations.length });
     }
   }
 
@@ -59,8 +62,12 @@ class Customizer extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { location, customizations } = this.props;
-    if (location.search && (customizations.length === 0 && nextProps.customizations.length !== 0)) {
-      this.setIndex(location.search, nextProps.customizations);
+    if (customizations.length === 0 && nextProps.customizations.length !== 0) {
+      if (location.search) {
+        this.setIndex(location.search, nextProps.customizations);
+      } else {
+        this.setState({ index: nextProps.customizations.length });
+      }
     }
   }
 
@@ -93,9 +100,58 @@ class Customizer extends Component {
     newCustomization(name, description, volume, colour, hoppiness, maltFlavour);
   }
 
+  setActiveBeer(beer, index) {
+    let variables;
+    const { volume:Volume, colour:Colour, hoppiness:Hoppiness, name, description } = beer;
+    variables = { "Malt Flavour": beer.maltFlavour, Volume, Colour, Hoppiness };
+    const minRGB = [55, 8, 10];
+    const step = [2, 2.25, 1.45];
+    const rgb = minRGB.map((colour, i) => {
+      return Math.round(colour + step[i] * beer.colour);
+    });
+    this.setState({ rgb, index, name, description, variables });
+  }
+
+  onNewBeerClick() {
+    this.setState({
+      index: this.props.customizations.length,
+      variables: {
+        "Volume": 0,
+        "Colour": 0,
+        "Hoppiness": 50,
+        "Malt Flavour": 50
+      },
+      rgb: [55, 8, 10],
+      description: "",
+      name: ""
+    }, _ => this.makeDescription());
+  }
+
+  onBeerSelect(i) {
+    console.log(`Selected: ${i}`);
+    console.log(this.props.customizations);
+    const { Volume:volume, Colour:colour, Hoppiness:hoppiness, "Malt Flavour":maltFlavour } = this.state.variables;
+    let { name, description, index } = this.state;
+    const { customizations } = this.props;
+    if (name) {
+      customizations[index] = Object.assign({}, customizations[index], {
+        name, description, volume, colour, hoppiness, maltFlavour
+      });
+    }
+    this.setActiveBeer(customizations[i], i);
+  }
+
   render() {
-    const { rgb, variables, description, name } = this.state;
-    const { variables:variableSchema, customizationError, newCustomizationId } = this.props;
+    const { rgb, variables, name, description, index } = this.state;
+    const { variables:variableSchema, customizations, customizationError, newCustomizationId } = this.props;
+
+    let options = [];
+
+    if (customizations && customizations.length > 0) {
+      options = customizations.map((c, i) => {
+        return { value: i, text: c.name };
+      });
+    }
 
     let sliders = [];
     sliders = variableSchema.map((v, i) => {
@@ -109,7 +165,16 @@ class Customizer extends Component {
 
     return (
       <div className="page-content customize">
-        <h1 className="page-title">Customize Your Beer</h1>
+        <div className="title-bar">
+          <h1 className="page-title inline">Customize Your Beer</h1>
+          { options.length !== 0
+            ? <div className="title-actions">
+              <MaterialSelect options={options} selected={index} placeholder="Select a Beer"
+                onSelect={(i) => this.onBeerSelect(i)} />
+              <button onClick={() => this.onNewBeerClick()}>Create a New Beer</button>
+            </div>
+            : null }
+        </div>
         <div className="customizer">
           <div className="customizer-sliders card">
             { sliders }
@@ -135,7 +200,7 @@ class Customizer extends Component {
             <h2>One more thing...</h2>
             <MaterialInput className="large" type="text" id="name" labelText="Name your beer" active={!!name}
               value={name} onChange={(event) => this.setState({ name: event.target.value })} />
-            { newCustomizationId !== 0 ? <p>Beer Saved!
+            { newCustomizationId ? <p>Beer Saved!
               <Link to={{ pathname: "/admin/branding", search:`?id=${newCustomizationId}` }}>Brand It</Link></p>
               : <button className="large" onClick={() => this.saveCustomization()}>Save</button> }
             <p className="error">{customizationError ? <span className="material-icons">error</span> : null }

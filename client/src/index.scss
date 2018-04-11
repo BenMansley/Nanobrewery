@@ -1,5 +1,6 @@
 $blue: #0277BD;
 $pink: #FF4081;
+$red: #D32F2F;
 $white: #FFFFFF;
 $greyF: #FEFFFF;
 $greyE: #EAEAEA;
@@ -104,6 +105,15 @@ header {
     flex-flow: row wrap;
     align-items: center;
     justify-content: space-between;
+
+    .title-actions {
+      display: flex;
+      align-items: center;
+      
+      > button {
+        margin: 0 0 0 1em;
+      }
+    }
   }
 
   .page-title {
@@ -138,6 +148,7 @@ a {
 
 .loading {
   font-size: 2.5em;
+  text-align: center;
 
   &.spin {
     animation: spin 1.2s linear infinite;
@@ -146,7 +157,7 @@ a {
 
 .error {
   margin: 0 0.5em 0 0;
-  color: #E53935;
+  color: $red;
 
   .material-icons {
     vertical-align: middle;

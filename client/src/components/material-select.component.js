@@ -16,7 +16,8 @@ class MaterialSelect extends Component {
   }
 
   render() {
-    const { options, selected } = this.props;
+    const { options, selected, placeholder } = this.props;
+    const buttonText = selected >= options.length ? placeholder : options[selected].text;
 
     const items = options.map((item, i) =>
       <li key={i} className={"select-option" + (selected === i ? " selected" : "")}
@@ -25,7 +26,7 @@ class MaterialSelect extends Component {
 
     return (
       <div className="material-select">
-        <button className="select-dropdown" onClick={() => this.setState({ open: true })}>{options[selected].text}
+        <button className="select-dropdown" onClick={() => this.setState({ open: true })}>{buttonText}
           <span className="material-icons">keyboard_arrow_down</span>
         </button>
         <ul className={"select-options" + (this.state.open ? " visible" : "")}>{items}</ul>
@@ -42,6 +43,7 @@ MaterialSelect.propTypes = {
     })
   ),
   selected: PropTypes.number.isRequired,
+  placeholder: PropTypes.string,
   onSelect: PropTypes.func.isRequired
 };
 

@@ -154,6 +154,67 @@ describe("Creates a new customization", _ => {
   });
 });
 
+describe("Updates a customization", _ => {
+  const agent = chai.request.agent(app);
+  const customization = {
+    name: "Test Customization",
+    description: "Test Description",
+    volume: 4,
+    colour: 70,
+    hoppiness: 80,
+    maltFlavour: 20
+  };
+  let id;
+  let updated;
+  before(function(done) {
+    this.timeout(3500);
+    agent.post("/api/users/new").send(newUser).end((_, res) => {
+      agent.post("/api/users/login").send(login).end((_, res) => {
+        agent.post("/api/customizer/new").send(customization).end((_, res) => {
+          id = res.body;
+          updated = Object.assign({}, customization, { id, volume: 5 });
+          done();
+        });
+      });
+    });
+  });
+  it("Can update a customization", done => {
+    agent.put("/api/customizer/update").send(updated).end((_, res) => {
+      expect(res).to.have.status(200);
+      expect(res.body).to.be.a("number").and.to.equal(id);
+      done();
+    });
+  });
+  it("Rejects on no name", done => {
+    const badCustomization = Object.assign({}, customization, { id, name: "" });
+    agent.put("/api/customizer/update").send(badCustomization).end((_, res) => {
+      expect(res).to.have.status(400);
+      expect(res.body).to.equal("Your beer needs a name!");
+      done();
+    });
+  });
+  it("Rejects on db error", done => {
+    const sqlStub = sinon.stub(app.get("conn"), "query");
+    sqlStub.onSecondCall().callsArgWith(1, new Error());
+    sqlStub.callThrough();
+    agent.put("/api/customizer/update").send(updated).end((_, res) => {
+      sqlStub.restore();
+      expect(res).to.have.status(500);
+      expect(res.body).to.equal("Error updating customization");
+      done();
+    });
+  });
+  after(done => {
+    const conn = app.get("conn");
+    const statement = "DELETE FROM Users WHERE email=?;";
+    const query = mysql.format(statement, [newUser.email]);
+    conn.query(query, (err, results, fields) => {
+      if (err) console.error(err);
+      done();
+    });
+  });
+});
+
 describe("Can get customizations", _ => {
   const agent = chai.request.agent(app);
   const customization = {

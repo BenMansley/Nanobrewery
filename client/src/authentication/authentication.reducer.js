@@ -53,6 +53,7 @@ const authenticationReducer =
       case actionTypes.AUTH_SIGNOUT:
         return Object.assign({}, state, {
           userDetails: {},
+          isLoggedIn: false,
           redirect: false,
         });
       case actionTypes.ROUTE_CHANGE:

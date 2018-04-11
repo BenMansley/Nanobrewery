@@ -29,7 +29,7 @@ class Home extends Component {
         <h1>Nanobrewery Home Page</h1>
         { isLoggedIn
           ? <React.Fragment>
-            { isLoadingCustomizations ? <span />
+            { isLoadingCustomizations ? <span className="loading spin material-icons">toys</span>
               : customizations.length === 0 ? <Intro />
                 : <div>
                   <h2>Your Beers</h2>

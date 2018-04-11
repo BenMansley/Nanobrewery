@@ -18,6 +18,19 @@
       margin: 0 0 0 1em;
     }
 
+    .delete {
+      margin-left: 0.5em;
+      font-size: 2em;
+      line-height: 0.7em;
+      vertical-align: middle;
+      color: $red;
+      cursor: pointer;
+    }
+
+    .delete-btn {
+      background: $red;
+    }
+
     &:not(:first-of-type) {
       border-top: 1px solid $greyD;
     }

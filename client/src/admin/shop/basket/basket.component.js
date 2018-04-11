@@ -48,15 +48,17 @@ class Basket extends Component {
     return (
       <div className="page-content">
         <h1 className="page-title">Your Basket</h1>
-        <div className="basket">
-          <div>{basketItems}</div>
-          { !isLoading ? <div className="basket-actions-container">
-            <div className="card basket-actions">
-              <p>Basket Total: <span className="price">${totalPrice}</span></p>
-              <button>Checkout</button>
+        { isLoading ? <span className="loading spin material-icons">toys</span>
+          : <div className="basket">
+            <div>{basketItems}</div>
+            <div className="basket-actions-container">
+              <div className="card basket-actions">
+                <p>Basket Total: <span className="price">${totalPrice}</span></p>
+                <button>Checkout</button>
+              </div>
             </div>
-          </div> : null }
-        </div>
+          </div>
+        }
       </div>
     );
   }

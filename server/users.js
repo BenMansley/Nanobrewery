@@ -29,7 +29,6 @@ function generateToken() {
 router.post("/new", (req, res, next) => {
   const { email, name, password, companyName } = req.body;
   let error = "Error creating user";
-  const success = "Success";
   const conn = app.get("conn");
   let query = SQL.getUserByEmail(email);
   conn.query(query, (err, results, fields) => {
@@ -49,7 +48,7 @@ router.post("/new", (req, res, next) => {
           if (err) {
             return res.status(500).json(error);
           }
-          return res.status(200).json(success);
+          return res.status(200).json("Success");
         });
       });
     });
@@ -127,6 +126,17 @@ router.put("/edit", isLoggedIn, (req, res, next) => {
   conn.query(query, (err, results, fields) => {
     if (err) return res.status(500).json(error);
     return res.status(200).json(req.body);
+  });
+});
+
+router.get("/signout", isLoggedIn, (req, res, next) => {
+  const token = req.cookies.session;
+  const conn = app.get("conn");
+  const error = "Error deleting token";
+  const query = SQL.deleteToken(token);
+  conn.query(query, (err, results, fields) => {
+    if (err) return res.status(500).json(error);
+    return res.status(200).json("Success");
   });
 });
 

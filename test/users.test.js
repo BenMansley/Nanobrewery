@@ -301,3 +301,42 @@ describe("Edits user details", _ => {
     });
   });
 });
+
+describe("Signs out", _ => {
+  const agent = chai.request.agent(app);
+  before(function(done) {
+    this.timeout(3000);
+    agent.post("/api/users/new").send(newUser).end((_, res) => {
+      agent.post("/api/users/login").send(login).end((_, res) => {
+        done();
+      });
+    });
+  });
+  it("Fails on db failure", done => {
+    const sqlStub = sinon.stub(app.get("conn"), "query");
+    sqlStub.onSecondCall().callsArgWith(1, new Error());
+    sqlStub.callThrough();
+    agent.get("/api/users/signout").end((_, res) => {
+      sqlStub.restore();
+      expect(res).to.have.status(500);
+      expect(res.body).to.equal("Error deleting token");
+      done();
+    });
+  });
+  it("Can sign out", done => {
+    agent.get("/api/users/signout").end((_, res) => {
+      expect(res).to.have.status(200);
+      expect(res.body).to.be.a("string").and.to.equal("Success");
+      done();
+    });
+  });
+  after(done => {
+    const conn = app.get("conn");
+    const statement = "DELETE FROM Users WHERE email=?;";
+    const query = mysql.format(statement, [newUser.email]);
+    conn.query(query, (err, results, fields) => {
+      if (err) console.error(err);
+      done();
+    });
+  });
+});

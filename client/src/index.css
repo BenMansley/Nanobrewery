@@ -135,6 +135,15 @@ button:not(.select-dropdown), .button {
       margin: 0; }
     .card.customization-table .customization-line .button {
       margin: 0 0 0 1em; }
+    .card.customization-table .customization-line .delete {
+      margin-left: 0.5em;
+      font-size: 2em;
+      line-height: 0.7em;
+      vertical-align: middle;
+      color: #D32F2F;
+      cursor: pointer; }
+    .card.customization-table .customization-line .delete-btn {
+      background: #D32F2F; }
     .card.customization-table .customization-line:not(:first-of-type) {
       border-top: 1px solid #DDDDDD; }
 
@@ -255,17 +264,20 @@ button:not(.select-dropdown), .button {
 .loading {
   margin-top: 0.4em; }
 
-.account-actions {
+.form-base .account-actions {
   text-align: right; }
-  .account-actions button {
-    margin-bottom: 0; }
-    .account-actions button:nth-of-type(2) {
+  .form-base .account-actions button {
+    margin: 0; }
+    .form-base .account-actions button:nth-of-type(2) {
       margin-left: 1em; }
 
 p {
   margin: 0; }
 
-.intro-steps {
+.intro h2 {
+  margin-top: 0; }
+
+.intro .intro-steps {
   display: grid;
   grid-template: 1fr / 1fr 2em 1fr 2em 1fr;
   grid-gap: 1em 1em;
@@ -274,36 +286,36 @@ p {
   margin: 0 auto 2em;
   align-items: center; }
   @media all and (max-width: 880px) and (min-width: 551px) {
-    .intro-steps {
+    .intro .intro-steps {
       grid-template: 1fr 1fr/repeat(4, 1fr);
       grid-gap: 2em 2em; }
-      .intro-steps .step {
+      .intro .intro-steps .step {
         grid-row: 1; }
-        .intro-steps .step.hardware {
+        .intro .intro-steps .step.hardware {
           grid-column: 1 / span 2; }
-        .intro-steps .step.make {
+        .intro .intro-steps .step.make {
           grid-column: 3 / span 2; }
-        .intro-steps .step.brand {
+        .intro .intro-steps .step.brand {
           grid-row: 2;
           grid-column: 2 / 4; }
-      .intro-steps .step-next {
+      .intro .intro-steps .step-next {
         display: none; } }
   @media all and (max-width: 550px) {
-    .intro-steps {
+    .intro .intro-steps {
       grid-template: repeat(3, 1fr)/1fr;
       max-width: 20em; }
-      .intro-steps .step-next {
+      .intro .intro-steps .step-next {
         display: none; } }
-  .intro-steps .step {
+  .intro .intro-steps .step {
     width: 100%;
     min-width: 15em;
     margin: 0; }
-    .intro-steps .step > .step-flex {
+    .intro .intro-steps .step > .step-flex {
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center; }
-      .intro-steps .step > .step-flex .step-image {
+      .intro .intro-steps .step > .step-flex .step-image {
         height: 10em;
         width: 100%;
         display: flex;
@@ -311,23 +323,23 @@ p {
         justify-content: space-around;
         align-items: center;
         border-radius: 0.4em; }
-        .intro-steps .step > .step-flex .step-image img {
+        .intro .intro-steps .step > .step-flex .step-image img {
           height: 0.9em; }
-        .intro-steps .step > .step-flex .step-image .step-complete, .intro-steps .step > .step-flex .step-image .step-incomplete {
+        .intro .intro-steps .step > .step-flex .step-image .step-complete, .intro .intro-steps .step > .step-flex .step-image .step-incomplete {
           color: #0D960D;
           font-size: 6em; }
-        .intro-steps .step > .step-flex .step-image .step-incomplete {
-          color: #FF0000; }
-        .intro-steps .step > .step-flex .step-image span {
+        .intro .intro-steps .step > .step-flex .step-image .step-incomplete {
+          color: #D32F2F; }
+        .intro .intro-steps .step > .step-flex .step-image span {
           font-size: 2em; }
-    .intro-steps .step.inactive .step-image {
+    .intro .intro-steps .step.inactive .step-image {
       background: #AAAAAA; }
-    .intro-steps .step .step-title {
+    .intro .intro-steps .step .step-title {
       margin-top: 1em;
       text-align: center;
       font-weight: 700;
       font-size: 1.15em; }
-  .intro-steps .step-next {
+  .intro .intro-steps .step-next {
     font-size: 2em; }
 
 .product .product-name {
@@ -444,6 +456,11 @@ header {
     flex-flow: row wrap;
     align-items: center;
     justify-content: space-between; }
+    .page-content .title-bar .title-actions {
+      display: flex;
+      align-items: center; }
+      .page-content .title-bar .title-actions > button {
+        margin: 0 0 0 1em; }
   .page-content .page-title.inline {
     display: inline-block; }
 
@@ -465,13 +482,14 @@ a {
     margin-top: 0; }
 
 .loading {
-  font-size: 2.5em; }
+  font-size: 2.5em;
+  text-align: center; }
   .loading.spin {
     animation: spin 1.2s linear infinite; }
 
 .error {
   margin: 0 0.5em 0 0;
-  color: #E53935; }
+  color: #D32F2F; }
   .error .material-icons {
     vertical-align: middle;
     margin-right: 0.25em; }

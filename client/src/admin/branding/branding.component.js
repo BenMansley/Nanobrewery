@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { getCustomizations } from "./branding.actions";
 import MaterialSelect from "../../components/material-select.component";
@@ -40,7 +40,7 @@ class Branding extends Component {
 
   render() {
     const index = this.state.index;
-    const customizations = this.props.customizations;
+    const { customizations, isLoading } = this.props;
     let beer = null;
     let options = null;
 
@@ -73,6 +73,11 @@ class Branding extends Component {
             </div>
           </div>
           : null }
+        { isLoading
+          ? <span className="loading spin material-icons">toys</span>
+          : customizations.length === 0
+            ? <p className="none-found">You haven't made any beers. <Link to="/admin/customizer">Make one now?</Link>
+            </p> : null}
       </div>
     );
   }
@@ -91,12 +96,14 @@ Branding.propTypes = {
     })
   ),
   getCustomizations: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
   location: PropTypes.object
 };
 
 const mapStateToProps = state => {
   return {
-    customizations: state.branding.customizations
+    customizations: state.branding.customizations,
+    isLoading: state.branding.isLoading
   };
 };
 
