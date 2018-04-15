@@ -139,7 +139,7 @@ describe("Creates a new customization", _ => {
     agent.post("/api/customizer/new").send(customization).end((_, res) => {
       sqlStub.restore();
       expect(res).to.have.status(500);
-      expect(res.body).to.equal("Error saving new customization");
+      expect(res.body).to.equal("Error retrieving customizations");
       done();
     });
   });
