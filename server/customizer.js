@@ -108,7 +108,7 @@ router.post("/new", isLoggedIn, (req, res, next) => {
   conn.query(query, (err, results, fields) => {
     if (err) return res.status(500).json(error);
 
-    error = "You already have a customization with that name";
+    error = "You already have a beer with that name!";
     if (results.length !== 0) return res.status(400).json(error);
 
     error = "Error saving new customization";
