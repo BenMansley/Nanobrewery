@@ -28,6 +28,19 @@
     h2 {
       margin: 0;
     }
+
+    button {
+      margin-top: 1.5em;
+    }
+
+    .success {
+      margin-top: 1em;
+      font-size: 1.2em;
+      
+      .button {
+        margin-left: 1em;
+      }
+    }
   }
 
   @media all and (max-width: 700px) {
@@ -78,8 +91,6 @@
       margin-top: -0.75em;
       z-index: 2;
       border-radius: 1em;
-      border: 3px solid $lightTheme;
-      background: url('img/mug.svg') center/60% 60% no-repeat $lightTheme;
       cursor: pointer;
 
       &:hover {

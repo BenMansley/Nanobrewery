@@ -200,8 +200,9 @@ class Customizer extends Component {
             <h2>One more thing...</h2>
             <MaterialInput className="large" type="text" id="name" labelText="Name your beer" active={!!name}
               value={name} onChange={(event) => this.setState({ name: event.target.value })} />
-            { newCustomizationId ? <p>Beer Saved!
-              <Link to={{ pathname: "/admin/branding", search:`?id=${newCustomizationId}` }}>Brand It</Link></p>
+            { newCustomizationId ? <p className="success">Beer Saved!
+              <Link className="button" to={{ pathname: "/admin/branding", search:`?id=${newCustomizationId}` }}>
+                Brand It</Link></p>
               : <button className="large" onClick={() => this.saveCustomization()}>Save</button> }
             <p className="error">{customizationError ? <span className="material-icons">error</span> : null }
               {customizationError}</p>

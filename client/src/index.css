@@ -47,8 +47,7 @@ button:not(.select-dropdown), .button {
   button:not(.select-dropdown):not(.inline), .button:not(.inline) {
     background: #0D47A1;
     color: #FFFFFF;
-    padding: 0.5em 1em;
-    margin: 2em 0 1em; }
+    padding: 0.5em 1em; }
   button:not(.select-dropdown):disabled, .button:disabled {
     color: #666666;
     cursor: default; }
@@ -204,6 +203,13 @@ button:not(.select-dropdown), .button {
     grid-column: 6 / 8; }
     .customizer .customizer-actions h2 {
       margin: 0; }
+    .customizer .customizer-actions button {
+      margin-top: 1.5em; }
+    .customizer .customizer-actions .success {
+      margin-top: 1em;
+      font-size: 1.2em; }
+      .customizer .customizer-actions .success .button {
+        margin-left: 1em; }
   @media all and (max-width: 700px) {
     .customizer {
       grid-template: 1fr 1.5fr 0.8fr 0.5fr / 1fr; }
@@ -238,8 +244,6 @@ button:not(.select-dropdown), .button {
       margin-top: -0.75em;
       z-index: 2;
       border-radius: 1em;
-      border: 3px solid #03A9F4;
-      background: url("img/mug.svg") center/60% 60% no-repeat #03A9F4;
       cursor: pointer; }
       .customizer input[type=range]::-webkit-slider-thumb:hover {
         background-color: #EAEAEA; }
@@ -255,6 +259,38 @@ button:not(.select-dropdown), .button {
       background: transparent;
       border-color: transparent;
       color: transparent; }
+
+.branding .material-select {
+  margin-bottom: 1em; }
+
+.branding .beer-name {
+  display: inline-block;
+  vertical-align: baseline;
+  margin: 0.8em 2em 1em 0; }
+
+.branding .material-input {
+  margin: 1em 2em 2em 0; }
+
+.branding .beer-flex {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: flex-start; }
+  .branding .beer-flex > .beer-image-options, .branding .beer-flex .custom-image {
+    margin-bottom: 0;
+    flex: 1 1 0; }
+  .branding .beer-flex .custom-image {
+    text-align: center;
+    margin: 1em 0 0 2em;
+    max-width: 100%; }
+    .branding .beer-flex .custom-image > input {
+      font: inherit; }
+    .branding .beer-flex .custom-image > img {
+      margin-top: 20px;
+      max-width: 240px; }
+  .branding .beer-flex .beer-image {
+    flex: 1 1 0;
+    min-width: 240px; }
 
 .account-details p {
   margin: 0 0 1em; }

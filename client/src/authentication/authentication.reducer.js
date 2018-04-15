@@ -5,7 +5,7 @@ const authenticationReducer =
     isLoading: false,
     error: "",
     redirect: false,
-    signUpSuccess: true,
+    signUpSuccess: false,
     isLoggedIn: false,
     userDetails: {
       email: "",
