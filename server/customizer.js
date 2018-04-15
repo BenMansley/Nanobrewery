@@ -115,22 +115,36 @@ router.post("/new", isLoggedIn, (req, res, next) => {
     query = SQL.newCustomization(token, name, description, volume, colour, hoppiness, maltFlavour);
     conn.query(query, (err, results, fields) => {
       if (err) return res.status(500).json(error);
-      return res.status(200).json(results.insertId);
+      const id = results.insertId;
+
+      error = "Error retrieving customizations";
+      query = SQL.getCustomizations(token);
+      conn.query(query, (err, results, fields) => {
+        if (err) return res.status(500).json(error);
+        return res.status(200).json({ customizations: results, id });
+      });
     });
   });
 });
 
 router.put("/update", isLoggedIn, (req, res, next) => {
   const { id, name, description, volume, colour, hoppiness, maltFlavour } = req.body;
+  const token = req.cookies.session;
   const conn = app.get("conn");
   let error = "Your beer needs a name!";
   if (!name) return res.status(400).json(error);
-  error = "Error updating customization";
-  const query = SQL.updateCustomization(name, description, volume, colour, hoppiness, maltFlavour, id);
 
+  error = "Error updating customization";
+  let query = SQL.updateCustomization(name, description, volume, colour, hoppiness, maltFlavour, id);
   conn.query(query, (err, results, fields) => {
     if (err) return res.status(500).json(error);
-    return res.status(200).json(id);
+
+    error = "Error retrieving customizations";
+    query = SQL.getCustomizations(token);
+    conn.query(query, (err, results, fields) => {
+      if (err) return res.status(500).json(error);
+      return res.status(200).json({ customizations: results, id });
+    });
   });
 });
 

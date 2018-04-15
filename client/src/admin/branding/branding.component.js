@@ -53,6 +53,10 @@ class Branding extends Component {
     }
   }
 
+  onBeerSelect(i) {
+    this.setState({ index: i });
+  }
+
   render() {
     const { name, isEditingName, index, image, customImage } = this.state;
     const { customizations, isLoading } = this.props;
@@ -75,7 +79,7 @@ class Branding extends Component {
         <div className="title-bar">
           <h1 className="page-title inline">Brand Your Beer</h1>
           { options
-            ? <MaterialSelect options={options} selected={index} onSelect={(i) => this.setState({ index: i })} />
+            ? <MaterialSelect options={options} selected={index} onSelect={(i) => this.onBeerSelect(i)} />
             : null }
         </div>
         { beer

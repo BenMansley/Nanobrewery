@@ -19,7 +19,8 @@ const brandingReducer =
       case actionTypes.UPDATE_CUSTOMIZATION_SUCCESS:
       case actionTypes.NEW_CUSTOMIZATION_SUCCESS:
         return Object.assign({}, state, {
-          newCustomizationId: action.customizationId,
+          customizations: action.customizations,
+          newCustomizationId: action.id,
           error: "",
           isLoading: false
         });

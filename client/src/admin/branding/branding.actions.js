@@ -36,8 +36,8 @@ const newCustomizationRequest = _ => {
   return { type: actionTypes.NEW_CUSTOMIZATION_REQUEST };
 };
 
-const newCustomizationSuccess = customizationId => {
-  return { type: actionTypes.NEW_CUSTOMIZATION_SUCCESS, customizationId };
+const newCustomizationSuccess = data => {
+  return { type: actionTypes.NEW_CUSTOMIZATION_SUCCESS, customizations: data.customizations, id: data.id };
 };
 
 const newCustomizationFailure = error => {
@@ -54,8 +54,8 @@ const updateCustomizationRequest = _ => {
   return { type: actionTypes.UPDATE_CUSTOMIZATION_REQUEST };
 };
 
-const updateCustomizationSuccess = customizationId => {
-  return { type: actionTypes.UPDATE_CUSTOMIZATION_SUCCESS, customizationId };
+const updateCustomizationSuccess = data => {
+  return { type: actionTypes.UPDATE_CUSTOMIZATION_SUCCESS, customizations: data.customizations, id: data.id };
 };
 
 const updateCustomizationFailure = error => {
