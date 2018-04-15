@@ -11,7 +11,8 @@
     transform: none;
     transform-origin: bottom left;
     transition: color 0.25s ease-out, transform 0.25s ease-out;
-    text-transform: capitalize; }
+    text-transform: capitalize;
+    cursor: text; }
   .material-input input {
     width: 100%;
     border-width: 0 0 2px 0;
@@ -193,39 +194,70 @@ button:not(.select-dropdown), .button {
   align-items: stretch;
   justify-content: stretch;
   padding-bottom: 2em; }
-  .customizer .customizer-sliders {
-    grid-column: 1 / 4; }
-  .customizer .customizer-image {
-    grid-column: 4 / 8; }
-  .customizer .customizer-description {
-    grid-column: 1 / 6; }
-  .customizer .customizer-actions {
-    grid-column: 6 / 8; }
-    .customizer .customizer-actions h2 {
-      margin: 0; }
-    .customizer .customizer-actions button {
-      margin: 1.5em 0 1em; }
-    .customizer .customizer-actions .success {
-      margin-top: 1em;
-      font-size: 1.2em; }
-      .customizer .customizer-actions .success .button {
-        margin-left: 1em; }
-  @media all and (max-width: 700px) {
-    .customizer {
-      grid-template: 1fr 1.5fr 0.8fr 0.5fr / 1fr; }
-      .customizer > .customizer-sliders, .customizer .customizer-image, .customizer .customizer-description, .customizer .customizer-actions {
-        grid-column: 1 / 2; }
-      .customizer .customizer-description {
-        grid-row: 3 / 4; }
-      .customizer .customizer-actions {
-        grid-row: 4 / 5; } }
-  .customizer > .card {
+  .customizer .card {
+    background: #FFEDE5; }
+  .customizer .customizer-element {
     margin: 0;
     width: 100%;
     flex: 1 0 auto;
     display: flex;
     flex-direction: column;
     justify-content: center; }
+  .customizer > .top {
+    grid-column: 1 / 8;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: none; }
+    .customizer > .top .sliders {
+      flex: 1 1 40%; }
+    .customizer > .top .image {
+      flex: 1 1 60%; }
+      .customizer > .top .image .svg-container {
+        position: relative;
+        max-width: 256px;
+        margin: 0 auto; }
+        .customizer > .top .image .svg-container svg {
+          width: 100%; }
+        .customizer > .top .image .svg-container .bubble-filter {
+          position: absolute;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          background: url("img/bubble-filter.png") center/cover no-repeat;
+          opacity: 0.7;
+          will-change: filter; }
+  .customizer .description {
+    grid-column: 1 / 6; }
+  .customizer .actions {
+    grid-column: 6 / 8; }
+    .customizer .actions h2 {
+      margin: 0; }
+    .customizer .actions button {
+      margin: 1.5em 0 1em; }
+    .customizer .actions .success {
+      margin-top: 1em;
+      font-size: 1.25em; }
+      .customizer .actions .success span {
+        margin-right: 1em; }
+      .customizer .actions .success .button {
+        display: inline-block;
+        font-size: 0.8em; }
+  @media all and (max-width: 700px) {
+    .customizer {
+      margin-top: 1em;
+      grid-template: 1fr 0.3fr 0.4fr / 1fr; }
+      .customizer .top {
+        flex-direction: column;
+        grid-column: 1 / 2; }
+        .customizer .top .image {
+          margin-top: 1em; }
+      .customizer .top, .customizer .description, .customizer .actions {
+        grid-column: 1 / 2; }
+      .customizer .description {
+        grid-row: 2 / 3; }
+      .customizer .actions {
+        grid-row: 3 / 4; } }
   .customizer input[type=range] {
     display: block;
     -webkit-appearance: none;
@@ -432,8 +464,14 @@ p {
 
 .homepage .logo-image {
   width: 90%;
-  max-width: 300px;
-  margin: 1.5em auto 1em; }
+  max-width: 320px;
+  margin: 3em auto 1.5em; }
+
+.homepage .admin .title-bar h2 {
+  font-size: 1.7em; }
+
+.homepage .admin .customization-table {
+  margin-top: 1em; }
 
 .homepage .guest {
   display: flex;

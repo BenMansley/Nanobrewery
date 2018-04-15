@@ -10,19 +10,60 @@
   justify-content: stretch;
   padding-bottom: 2em;
 
-  .customizer-sliders {
-    grid-column: 1 / 4;
+  .card {
+    background: #FFEDE5;
   }
 
-  .customizer-image {
-    grid-column: 4 / 8;
+  .customizer-element {
+    margin: 0;
+    width: 100%;
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
-  .customizer-description {
+  > .top {
+    grid-column: 1 / 8;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: none;
+
+    .sliders {
+      flex: 1 1 40%;
+    }
+
+    .image {  
+      flex: 1 1 60%;
+
+      .svg-container {
+        position: relative;
+        max-width: 256px;
+        margin: 0 auto;
+        
+        svg {
+          width: 100%;
+        }
+        
+        .bubble-filter {
+          position: absolute;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          background: url('img/bubble-filter.png') center/cover no-repeat;
+          opacity: 0.7;
+          will-change: filter;
+        }
+      }
+    }
+  }
+
+  .description {
     grid-column: 1 / 6;
   }
 
-  .customizer-actions {
+  .actions {
     grid-column: 6 / 8;
 
     h2 {
@@ -35,37 +76,43 @@
 
     .success {
       margin-top: 1em;
-      font-size: 1.2em;
+      font-size: 1.25em;
+
+      span {
+        margin-right: 1em;
+      }
       
       .button {
-        margin-left: 1em;
+        display: inline-block;
+        font-size: 0.8em;
       }
     }
   }
 
   @media all and (max-width: 700px) {
-    grid-template: 1fr 1.5fr 0.8fr 0.5fr / 1fr;
+    margin-top: 1em;
+    grid-template: 1fr 0.3fr 0.4fr / 1fr;
 
-    > .customizer-sliders, .customizer-image, .customizer-description, .customizer-actions {
+    .top {
+      flex-direction: column;
+      grid-column: 1 / 2;
+
+      .image {
+        margin-top: 1em;
+      }
+    }
+
+    .top, .description, .actions {
       grid-column: 1 / 2;
     }
 
-    .customizer-description {
+    .description {
+      grid-row: 2 / 3;
+    }
+
+    .actions {
       grid-row: 3 / 4;
     }
-
-    .customizer-actions {
-      grid-row: 4 / 5;
-    }
-  }
-
-  > .card {
-    margin: 0;
-    width: 100%;
-    flex: 1 0 auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
   }
 
   input[type=range] {

@@ -2,8 +2,20 @@
   
   .logo-image {
     width: 90%;
-    max-width: 300px;
-    margin: 1.5em auto 1em;
+    max-width: 320px;
+    margin: 3em auto 1.5em;
+  }
+
+  .admin {
+    .title-bar {
+      h2 {
+        font-size: 1.7em;
+      }
+    }
+
+    .customization-table {
+      margin-top: 1em;
+    }
   }
   
   .guest {
