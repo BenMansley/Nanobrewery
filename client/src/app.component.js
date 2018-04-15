@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { withCookies, Cookies } from "react-cookie";
 import { Link, Route, Switch, withRouter } from "react-router-dom";
 import PrivateRoute from "./utils/private-route";
-import Home from "./home.component";
+import Home from "./home/home.component";
 import SignIn from "./authentication/signin/signin.component";
 import SignUp from "./authentication/signup/signup.component";
 import Admin from "./admin/admin.component";

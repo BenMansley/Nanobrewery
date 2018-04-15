@@ -1,0 +1,45 @@
+.homepage {
+  
+  .logo-image {
+    width: 90%;
+    max-width: 300px;
+    margin: 1.5em auto 1em;
+  }
+  
+  .guest {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  
+    .large {
+      font-size: 1.25em;
+      font-weight: bold;
+      margin: 0.8em;
+    }
+
+    .flex-container {
+      display: flex;
+      flex-flow: row wrap;
+
+      > * {
+        flex: 1 1 0;
+        margin: 0 1.5em;
+      }
+
+      > .img {
+        border-radius: 1em;
+        background: $lightTheme;
+      }
+    }
+
+    .button {
+      font-size: 1.25em;
+      margin: 2em 0;
+    }
+
+    .cheers-image {
+      max-width: 320px;
+      margin-bottom: 2em;
+    }
+  }
+}

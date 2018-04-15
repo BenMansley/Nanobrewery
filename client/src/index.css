@@ -204,7 +204,7 @@ button:not(.select-dropdown), .button {
     .customizer .customizer-actions h2 {
       margin: 0; }
     .customizer .customizer-actions button {
-      margin-top: 1.5em; }
+      margin: 1.5em 0 1em; }
     .customizer .customizer-actions .success {
       margin-top: 1em;
       font-size: 1.2em; }
@@ -236,7 +236,7 @@ button:not(.select-dropdown), .button {
     .customizer input[type=range]:focus {
       outline: none; }
       .customizer input[type=range]:focus::-webkit-slider-thumb {
-        background-color: #EAEAEA; }
+        background-color: #03A9F4; }
     .customizer input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
       height: 2em;
@@ -244,9 +244,11 @@ button:not(.select-dropdown), .button {
       margin-top: -0.75em;
       z-index: 2;
       border-radius: 1em;
+      border: 3px solid #03A9F4;
+      background: url("img/mug.svg") center/60% 60% no-repeat #EAEAEA;
       cursor: pointer; }
       .customizer input[type=range]::-webkit-slider-thumb:hover {
-        background-color: #EAEAEA; }
+        background-color: #03A9F4; }
     .customizer input[type=range]::-webkit-slider-runnable-track {
       width: 100%;
       height: 0.5em;
@@ -427,6 +429,35 @@ p {
         margin-left: 0.2em; }
     .basket .basket-actions-container .basket-actions button {
       margin: 0 0 0 1.5em; }
+
+.homepage .logo-image {
+  width: 90%;
+  max-width: 300px;
+  margin: 1.5em auto 1em; }
+
+.homepage .guest {
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
+  .homepage .guest .large {
+    font-size: 1.25em;
+    font-weight: bold;
+    margin: 0.8em; }
+  .homepage .guest .flex-container {
+    display: flex;
+    flex-flow: row wrap; }
+    .homepage .guest .flex-container > * {
+      flex: 1 1 0;
+      margin: 0 1.5em; }
+    .homepage .guest .flex-container > .img {
+      border-radius: 1em;
+      background: #03A9F4; }
+  .homepage .guest .button {
+    font-size: 1.25em;
+    margin: 2em 0; }
+  .homepage .guest .cheers-image {
+    max-width: 320px;
+    margin-bottom: 2em; }
 
 * {
   box-sizing: border-box; }
