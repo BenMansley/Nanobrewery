@@ -99,14 +99,24 @@ router.post("/new", isLoggedIn, (req, res, next) => {
   const { name, description, volume, colour, hoppiness, maltFlavour } = req.body;
   const token = req.cookies.session;
   const conn = app.get("conn");
+
   let error = "Your beer needs a name!";
   if (!name) return res.status(400).json(error);
-  error = "Error saving new customization";
-  const query = SQL.newCustomization(token, name, description, volume, colour, hoppiness, maltFlavour);
 
+  error = "Error retrieving customizations";
+  let query = SQL.getCustomizationByNameAndUser(name, token);
   conn.query(query, (err, results, fields) => {
     if (err) return res.status(500).json(error);
-    return res.status(200).json(results.insertId);
+
+    error = "You already have a customization with that name";
+    if (results.length !== 0) return res.status(400).json(error);
+
+    error = "Error saving new customization";
+    query = SQL.newCustomization(token, name, description, volume, colour, hoppiness, maltFlavour);
+    conn.query(query, (err, results, fields) => {
+      if (err) return res.status(500).json(error);
+      return res.status(200).json(results.insertId);
+    });
   });
 });
 

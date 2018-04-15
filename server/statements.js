@@ -60,13 +60,13 @@ function getCustomizations(token) {
 
 function newCustomization(token, name, description, volume, colour, hoppiness, maltFlavour) {
   const query = "INSERT INTO Customizations (userId, name, description, volume, colour, hoppiness, maltFlavour)" +
-                " VALUES ((SELECT userId FROM Tokens WHERE token=?), ?, ?, ?, ?, ? ,?);";
+  " VALUES ((SELECT userId FROM Tokens WHERE token=?), ?, ?, ?, ?, ? ,?);";
   return mysql.format(query, Object.values(arguments));
 }
 
 function updateCustomization(name, description, volume, colour, hoppiness, maltFlavour, id) {
   const query = "UPDATE Customizations SET name=?, description=?, volume=?, colour=?, hoppiness=?, maltFlavour=?" +
-                " WHERE id=?";
+  " WHERE id=?";
   return mysql.format(query, Object.values(arguments));
 }
 
@@ -77,7 +77,12 @@ function deleteCustomization(id, token) {
 
 function getCustomizationById(id, token) {
   const query = "SELECT id, name, description, volume, colour, hoppiness, maltFlavour" +
-                " FROM Customizations WHERE id=? AND userId=" + userId;
+  " FROM Customizations WHERE id=? AND userId=" + userId;
+  return mysql.format(query, Object.values(arguments));
+}
+
+function getCustomizationByNameAndUser(name, token) {
+  const query = "SELECT id FROM Customizations WHERE name=? AND userId=" + userId;
   return mysql.format(query, Object.values(arguments));
 }
 
@@ -130,7 +135,8 @@ module.exports = {
     newCustomization,
     updateCustomization,
     deleteCustomization,
-    getCustomizationById
+    getCustomizationById,
+    getCustomizationByNameAndUser
   },
   shop: {
     getProductsByCategory,

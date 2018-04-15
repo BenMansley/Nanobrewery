@@ -60,17 +60,22 @@ export const getSessionFromCookie = _ => {
     sendAuthRequest, cookieSignInSuccess, authResponseFailure);
 };
 
-export const signout = () => {
+const signOutSuccess = _ => {
   return { type: actionTypes.AUTH_SIGNOUT };
 };
 
-const getUserDetailsSucces = user => {
+export const signout = () => {
+  return asyncAction("/api/users/signout", { method: "GET", credentials: "same-origin" },
+    sendAuthRequest, signOutSuccess, authResponseFailure);
+};
+
+const getUserDetailsSuccess = user => {
   return { type: actionTypes.GET_USER_DETAILS_SUCCESS, user };
 };
 
 export const getUserDetails = _ => {
   return asyncAction("/api/users/details", { method: "GET", credentials: "same-origin" },
-    sendAuthRequest, getUserDetailsSucces, authResponseFailure);
+    sendAuthRequest, getUserDetailsSuccess, authResponseFailure);
 };
 
 const editUserSuccess = user => {

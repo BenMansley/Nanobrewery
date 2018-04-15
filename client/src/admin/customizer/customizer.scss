@@ -30,7 +30,7 @@
     }
 
     button {
-      margin-top: 1.5em;
+      margin: 1.5em 0 1em;
     }
 
     .success {
@@ -80,7 +80,7 @@
       outline: none;
 
       &::-webkit-slider-thumb {
-        background-color: $greyE;
+        background-color: $lightTheme;
       }
     }
 
@@ -91,10 +91,12 @@
       margin-top: -0.75em;
       z-index: 2;
       border-radius: 1em;
+      border: 3px solid $lightTheme;	
+      background: url('img/mug.svg') center/60% 60% no-repeat $lightestTheme;
       cursor: pointer;
 
       &:hover {
-        background-color: $greyE;
+        background-color: $lightTheme;
       }
     }
 
