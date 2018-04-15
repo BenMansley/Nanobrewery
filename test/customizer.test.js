@@ -120,7 +120,9 @@ describe("Creates a new customization", _ => {
   it("Can create a new customization", done => {
     agent.post("/api/customizer/new").send(customization).end((_, res) => {
       expect(res).to.have.status(200);
-      expect(res.body).to.be.a("number");
+      expect(res.body).to.be.have.all.keys(["customizations", "id"]);
+      expect(res.body.customizations).to.be.an("array");
+      expect(res.body.id).to.be.a("number");
       done();
     });
   });
@@ -171,7 +173,7 @@ describe("Updates a customization", _ => {
     agent.post("/api/users/new").send(newUser).end((_, res) => {
       agent.post("/api/users/login").send(login).end((_, res) => {
         agent.post("/api/customizer/new").send(customization).end((_, res) => {
-          id = res.body;
+          id = res.body.id;
           updated = Object.assign({}, customization, { id, volume: 5 });
           done();
         });
@@ -181,7 +183,9 @@ describe("Updates a customization", _ => {
   it("Can update a customization", done => {
     agent.put("/api/customizer/update").send(updated).end((_, res) => {
       expect(res).to.have.status(200);
-      expect(res.body).to.be.a("number").and.to.equal(id);
+      expect(res.body).to.be.have.all.keys(["customizations", "id"]);
+      expect(res.body.customizations).to.be.an("array");
+      expect(res.body.id).to.be.a("number").and.to.equal(id);
       done();
     });
   });
