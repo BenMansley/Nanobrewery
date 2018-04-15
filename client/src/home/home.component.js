@@ -35,8 +35,11 @@ class Home extends Component {
           ? <React.Fragment>
             { isLoadingCustomizations ? <span className="loading spin material-icons">toys</span>
               : customizations.length === 0 ? <Intro />
-                : <div>
-                  <h2>Your Beers</h2>
+                : <div className="admin">
+                  <div className="title-bar">
+                    <h2>Your Beers</h2>
+                    <Link className="button new" to="/admin/customizer">New Beer</Link>
+                  </div>
                   <CustomizationTable customizations={customizations} />
                 </div>
             }
