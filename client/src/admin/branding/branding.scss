@@ -1,0 +1,48 @@
+.branding {
+
+  .material-select {
+    margin-bottom: 1em;
+  }
+  
+  .beer-name {
+    display: inline-block;
+    vertical-align: baseline;
+    margin: 0.8em 2em 1em 0;
+  }
+
+  .material-input {
+    margin: 1em 2em 2em 0;
+  }
+
+  .beer-flex {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    > .beer-image-options, .custom-image {
+      margin-bottom: 0;
+      flex: 1 1 0;
+    }
+
+    .custom-image {
+      text-align: center;
+      margin: 1em 0 0 2em;
+      max-width: 100%;
+      
+      > input {
+        font: inherit;
+      }
+
+      > img {
+        margin-top: 20px;
+        max-width: 240px;
+      }
+    }
+
+    .beer-image {
+      flex: 1 1 0;
+      min-width: 240px;
+    }
+  }
+}

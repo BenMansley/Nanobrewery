@@ -4,13 +4,21 @@ import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { getCustomizations } from "./branding.actions";
 import MaterialSelect from "../../components/material-select.component";
+import BeerImage from "./beer-image.component";
+import MaterialInput from "../../components/material-input.component";
+const imageOptions = [{ value: 0, text: "Custom" }, { value: 1, text: "Pilsen" }, { value: 2, text: "Ale" }];
+const imageTypes = ["pilsen", "ale"];
 
 class Branding extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      index: 0
+      index: 0,
+      isEditingName: false,
+      name: "",
+      image: 0,
+      customImage: ""
     };
   }
 
@@ -32,14 +40,21 @@ class Branding extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { location, customizations } = this.props;
-    if (location.search && (customizations.length === 0 && nextProps.customizations.length !== 0)) {
+    const location = this.props.location;
+    if (location.search && (nextProps.customizations.length !== 0)) {
       this.setIndex(location.search, nextProps.customizations);
     }
   }
 
+  onCustomImageChange(event) {
+    const file = event.target.files[0];
+    if (file.size < 10485760) {
+      this.setState({ customImage: window.URL.createObjectURL(file) });
+    }
+  }
+
   render() {
-    const index = this.state.index;
+    const { name, isEditingName, index, image, customImage } = this.state;
     const { customizations, isLoading } = this.props;
     let beer = null;
     let options = null;
@@ -65,18 +80,45 @@ class Branding extends Component {
         </div>
         { beer
           ? <div>
-            <div className="card">
-              <h2>{beer.name}</h2>
+            <div className="card beer">
+              { isEditingName
+                ? <div>
+                  <MaterialInput type="text" id="beer-name" labelText="Name" active={name !== ""} inline
+                    onChange={(event) => this.setState({ name: event.target.value })} value={name} />
+                  <button onClick={() => this.setState({ isEditingName: false })}>Done</button>
+                </div>
+                : <div>
+                  <h2 className="beer-name">{beer.name}</h2>
+                  <button onClick={() => this.setState({ isEditingName: true, name: beer.name })}>Edit Name</button>
+                </div>
+              }
               <p>{beer.description}</p>
-              <ul><li>Volume: {beer.volume}</li> <li>Colour: {beer.colour}</li>
-                <li>Hoppiness: {beer.hoppiness}</li> <li>Malt Flavour: {beer.maltFlavour}</li></ul>
+              <ul>
+                <li>Volume: {beer.volume}</li> <li>Colour: {beer.colour}</li>
+                <li>Hoppiness: {beer.hoppiness}</li> <li>Malt Flavour: {beer.maltFlavour}</li>
+              </ul>
+              <hr />
+              <h3>Make a Logo</h3>
+              <div className="beer-flex">
+                <div className="beer-image-options">
+                  <MaterialSelect options={imageOptions} selected={image}
+                    onSelect={(i) => this.setState({ image: i })} />
+                </div>
+                { image === 0
+                  ? <div className="custom-image">
+                    <input type="file" accept="image/*" onChange={(event) => this.onCustomImageChange(event)} />
+                    { customImage ? <img src={customImage} alt={beer.name} /> : null }
+                  </div>
+                  : <BeerImage type={imageTypes[image - 1]} text={beer.name} />
+                }
+              </div>
             </div>
           </div>
           : null }
         { isLoading
           ? <span className="loading spin material-icons">toys</span>
           : customizations.length === 0
-            ? <p className="none-found">You haven't made any beers. <Link to="/admin/customizer">Make one now?</Link>
+            ? <p className="none-found">You haven"t made any beers. <Link to="/admin/customizer">Make one now?</Link>
             </p> : null}
       </div>
     );
