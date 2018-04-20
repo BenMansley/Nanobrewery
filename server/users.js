@@ -3,11 +3,13 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const moment = require("moment");
+const fs = require("fs");
 const router = express.Router();
 
 const app = require("../app");
 const { auth:SQL } = require("./statements");
 const { isLoggedIn } = require("./mw");
+const passwords = fs.readFileSync(`${__dirname}/passwords.txt`, "utf8").split(/\r?\n/);
 
 /**
  * Generate a Session Token
@@ -28,18 +30,26 @@ function generateToken() {
  */
 router.post("/new", (req, res, next) => {
   const { email, name, password, companyName } = req.body;
-  let error = "Error creating user";
   const conn = app.get("conn");
+  let error = "Insecure password";
+  if (passwords.indexOf(password) !== -1 || password.length < 8) {
+    return res.status(401).json(error);
+  }
+
+  error = "Error creating user";
   let query = SQL.getUserByEmail(email);
   conn.query(query, (err, results, fields) => {
     if (err) return res.status(500).json(error);
     if (results.length !== 0) return res.status(401).json(error);
+
     bcrypt.hash(password, 10, function(err, hash) {
       if (err) return res.status(500).json(error);
+
       query = SQL.newUser(email, hash, name, companyName);
       conn.query(query, (err, results, fields) => {
         if (err) return res.status(500).json(error);
         const token = generateToken();
+
         let expiry = moment().add(12, "hours");
         expiry = expiry.format("YYYY-MM-DD HH:MM:ss");
         error = "Error creating token";
