@@ -98,12 +98,6 @@ class Dashboard extends Component {
 }
 
 Dashboard.propTypes = {
-  // user: PropTypes.shape({
-  //   id: PropTypes.number,
-  //   email: PropTypes.string,
-  //   name: PropTypes.string,
-  //   companyName: PropTypes.string
-  // }).isRequired,
   getVariables: PropTypes.func.isRequired,
   variables: PropTypes.arrayOf(
     PropTypes.shape({
@@ -121,7 +115,6 @@ Dashboard.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    // user: state.auth.user,
     variables: state.customizer.variables,
     isLoading: state.customizer.isLoading
   };

@@ -10,8 +10,8 @@ const customizerReducer =
   action
   ) => {
     switch (action.type) {
-      case actionTypes.SEND_GET_DATA_REQUEST:
-      case actionTypes.SEND_GET_VARIABLES_REQUEST:
+      case actionTypes.GET_DATA_REQUEST:
+      case actionTypes.GET_VARIABLES_REQUEST:
         return Object.assign({}, state, {
           isLoading: true
         });
@@ -35,7 +35,7 @@ const customizerReducer =
           error: action.error,
           isLoading: false
         });
-      case actionTypes.SEND_UPDATE_VARIABLE_REQUEST:
+      case actionTypes.UPDATE_VARIABLE_REQUEST:
         return Object.assign({}, state, {
           updateVariableResponse: ""
         });

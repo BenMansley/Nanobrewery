@@ -12,10 +12,10 @@ const shopReducer =
   action
   ) => {
     switch (action.type) {
-      case actionTypes.SEND_GET_BASKET_SIZE_REQUEST:
-      case actionTypes.SEND_GET_BASKET_ITEMS_REQUEST:
-      case actionTypes.SEND_ADD_TO_BASKET_REQUEST:
-      case actionTypes.SEND_UPDATE_QUANTITY_REQUEST:
+      case actionTypes.GET_BASKET_SIZE_REQUEST:
+      case actionTypes.GET_BASKET_ITEMS_REQUEST:
+      case actionTypes.ADD_TO_BASKET_REQUEST:
+      case actionTypes.UPDATE_QUANTITY_REQUEST:
         return Object.assign({}, state, {
           isLoading: true,
           basketError: ""
@@ -40,7 +40,7 @@ const shopReducer =
           isLoading: false,
           basketError: action.error
         });
-      case actionTypes.SEND_GET_PRODUCTS_REQUEST:
+      case actionTypes.GET_PRODUCTS_REQUEST:
         return Object.assign({}, state, {
           isLoading: true,
           productError: ""
