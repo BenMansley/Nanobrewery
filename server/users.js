@@ -31,8 +31,8 @@ function generateToken() {
 router.post("/new", (req, res, next) => {
   const { email, name, password, companyName } = req.body;
   const conn = app.get("conn");
-  let error = "Insecure password";
-  if (passwords.indexOf(password) !== -1 || password.length < 8) {
+  let error = "Insecure Password!";
+  if (passwords.indexOf(password) !== -1 || password.length < 8 || !(/\d+/.test(password))) {
     return res.status(401).json(error);
   }
 

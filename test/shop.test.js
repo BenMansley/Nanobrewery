@@ -7,14 +7,14 @@ const app = require("../app");
 
 const newUser = {
   email: "test@test.com",
-  password: "password",
+  password: "password3114",
   name: "Test User",
   companyName: ""
 };
 
 const login = {
   email: "test@test.com",
-  password: "password"
+  password: "password3114"
 };
 
 describe("Gets product data about a category", _ => {
@@ -51,7 +51,8 @@ describe("Add a product to a user's basket", _ => {
     quantity: 2
   };
   const agent = chai.request.agent(app);
-  before(done => {
+  before(function(done) {
+    this.timeout(3000);
     agent.post("/api/users/new").send(newUser).end((_, res) => {
       agent.post("/api/users/login").send(login).end((_, res) => {
         done();
@@ -212,7 +213,8 @@ describe("Updates the quantity of an item in a user's basket", _ => {
       });
     });
   });
-  it("Updates the quantity of an item and gets updated basket", done => {
+  it("Updates the quantity of an item and gets updated basket", function(done) {
+    this.timeout(3000);
     agent.put("/api/shop/basket/update").send(updated).end((_, res) => {
       expect(res).to.have.status(200);
       expect(res.body).to.be.an("array");

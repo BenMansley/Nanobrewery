@@ -89,14 +89,14 @@ describe("Updates a variable", _ => {
 
 const newUser = {
   email: "test@test.com",
-  password: "password",
+  password: "password3114",
   name: "Test User",
   companyName: ""
 };
 
 const login = {
   email: "test@test.com",
-  password: "password"
+  password: "password3114"
 };
 
 describe("Creates a new customization", _ => {
@@ -110,7 +110,7 @@ describe("Creates a new customization", _ => {
     maltFlavour: 20
   };
   before(function(done) {
-    this.timeout(3000);
+    this.timeout(4000);
     agent.post("/api/users/new").send(newUser).end((_, res) => {
       agent.post("/api/users/login").send(login).end((_, res) => {
         done();
@@ -169,7 +169,7 @@ describe("Updates a customization", _ => {
   let id;
   let updated;
   before(function(done) {
-    this.timeout(3500);
+    this.timeout(4000);
     agent.post("/api/users/new").send(newUser).end((_, res) => {
       agent.post("/api/users/login").send(login).end((_, res) => {
         agent.post("/api/customizer/new").send(customization).end((_, res) => {
@@ -231,7 +231,7 @@ describe("Can get customizations", _ => {
   };
   let id;
   before(function(done) {
-    this.timeout(3500);
+    this.timeout(4000);
     agent.post("/api/users/new").send(newUser).end((_, res) => {
       agent.post("/api/users/login").send(login).end((_, res) => {
         agent.post("/api/customizer/new").send(customization).end((_, res) => {

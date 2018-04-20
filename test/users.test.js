@@ -7,14 +7,14 @@ const app = require("../app");
 
 const newUser = {
   email: "test@test.com",
-  password: "password",
+  password: "password3114",
   name: "Test User",
   companyName: ""
 };
 
 const login = {
   email: "test@test.com",
-  password: "password"
+  password: "password3114"
 };
 
 describe("Register a new user", _ => {
@@ -31,6 +31,33 @@ describe("Register a new user", _ => {
       expect(res).to.have.status(401);
       expect(res.body).to.equal("Error creating user");
       done();
+    });
+  });
+  describe("Password check failures", _ => {
+    const weakPassword = Object.assign({}, newUser, { password: "password" });
+    const shortPassword = Object.assign({}, newUser, { password: "gien" });
+    const noNumberPassword = Object.assign({}, newUser, { password: "geogiergneg" });
+    const error = "Insecure Password!";
+    it("Rejects on weak password", done => {
+      chai.request(app).post("/api/users/new").send(weakPassword).end((_, res) => {
+        expect(res).to.have.status(401);
+        expect(res.body).to.equal(error);
+        done();
+      });
+    });
+    it("Rejects on short password", done => {
+      chai.request(app).post("/api/users/new").send(shortPassword).end((_, res) => {
+        expect(res).to.have.status(401);
+        expect(res.body).to.equal(error);
+        done();
+      });
+    });
+    it("Rejects on password without numbers", done => {
+      chai.request(app).post("/api/users/new").send(noNumberPassword).end((_, res) => {
+        expect(res).to.have.status(401);
+        expect(res.body).to.equal(error);
+        done();
+      });
     });
   });
   describe("Registering fails on db failure", _ => {
@@ -104,7 +131,6 @@ describe("Register a new user", _ => {
 });
 
 describe("Logs in", _ => {
-  const user = { email: "test@test.com", password: "password" };
   const error = "Invalid Email or Password";
   const agent = chai.request.agent(app);
   before(done => {
@@ -113,7 +139,7 @@ describe("Logs in", _ => {
     });
   });
   it("Can log in with correct details", done => {
-    agent.post("/api/users/login").send(user).end((_, res) => {
+    agent.post("/api/users/login").send(login).end((_, res) => {
       expect(res).to.have.status(200);
       expect(res).to.have.cookie("session");
       expect(res.body).to.equal("Success");
@@ -121,7 +147,7 @@ describe("Logs in", _ => {
     });
   });
   it("Rejects unknown email", done => {
-    const badUser = Object.assign({}, user, { email: "bad@test.com" });
+    const badUser = Object.assign({}, login, { email: "bad@test.com" });
     chai.request(app).post("/api/users/login").send(badUser).end((_, res) => {
       expect(res).to.have.status(401);
       expect(res.body).to.equal(error);
@@ -129,7 +155,7 @@ describe("Logs in", _ => {
     });
   });
   it("Rejects on incorrect password", done => {
-    const badUser = Object.assign({}, user, { password: "nopassword" });
+    const badUser = Object.assign({}, login, { password: "nopassword" });
     chai.request(app).post("/api/users/login").send(badUser).end((_, res) => {
       expect(res).to.have.status(401);
       expect(res.body).to.equal(error);
@@ -154,7 +180,7 @@ describe("Logs in", _ => {
     it("Fails on looking up Email & Password", done => {
       sqlStub.reset();
       sqlStub.yields(new Error());
-      chai.request(app).post("/api/users/login").send(user).end((_, res) => {
+      chai.request(app).post("/api/users/login").send(login).end((_, res) => {
         expect(res).to.have.status(500);
         expect(res.body).to.equal(error);
         done();
@@ -164,7 +190,7 @@ describe("Logs in", _ => {
       sqlStub.reset();
       sqlStub.onSecondCall().callsArgWith(1, new Error());
       sqlStub.callThrough();
-      chai.request(app).post("/api/users/login").send(user).end((_, res) => {
+      chai.request(app).post("/api/users/login").send(login).end((_, res) => {
         sqlStub.restore();
         expect(res).to.have.status(500);
         expect(res.body).to.equal(error);
@@ -174,7 +200,7 @@ describe("Logs in", _ => {
     it("Fails on bcrypt error", done => {
       const bcryptStub = sinon.stub(require("bcrypt"), "compare");
       bcryptStub.yields(new Error());
-      chai.request(app).post("/api/users/login").send(user).end((_, res) => {
+      chai.request(app).post("/api/users/login").send(login).end((_, res) => {
         bcryptStub.restore();
         expect(res).to.have.status(500);
         expect(res.body).to.equal(error);
@@ -185,7 +211,7 @@ describe("Logs in", _ => {
   after(done => {
     const conn = app.get("conn");
     const statement = "DELETE FROM Users WHERE email=?;";
-    const query = mysql.format(statement, [user.email]);
+    const query = mysql.format(statement, [login.email]);
     conn.query(query, (err, results, fields) => {
       if (err) console.error(err);
       done();
@@ -195,10 +221,6 @@ describe("Logs in", _ => {
 
 describe("Gets user details", _ => {
   const agent = chai.request.agent(app);
-  const login = {
-    email: "test@test.com",
-    password: "password"
-  };
   before(done => {
     agent.post("/api/users/new").send(newUser).end((_, res) => {
       agent.post("/api/users/login").send(login).end((_, res) => {
