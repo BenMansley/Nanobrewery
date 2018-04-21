@@ -80,7 +80,7 @@ describe("Updates a variable", _ => {
     const conn = app.get("conn");
     const statement = "UPDATE Variables SET max=? WHERE id=?;";
     const query = mysql.format(statement, [updatedVariable.max, updatedVariable.id]);
-    conn.query(query, (err, results, fields) => {
+    conn.query(query, (err, results) => {
       if (err) console.error(err);
       done();
     });
@@ -89,14 +89,14 @@ describe("Updates a variable", _ => {
 
 const newUser = {
   email: "test@test.com",
-  password: "password3114",
+  password: "Password3114",
   name: "Test User",
   companyName: ""
 };
 
 const login = {
   email: "test@test.com",
-  password: "password3114"
+  password: "Password3114"
 };
 
 describe("Creates a new customization", _ => {
@@ -149,7 +149,7 @@ describe("Creates a new customization", _ => {
     const conn = app.get("conn");
     const statement = "DELETE FROM Users WHERE email=?;";
     const query = mysql.format(statement, [newUser.email]);
-    conn.query(query, (err, results, fields) => {
+    conn.query(query, (err, results) => {
       if (err) console.error(err);
       done();
     });
@@ -212,7 +212,7 @@ describe("Updates a customization", _ => {
     const conn = app.get("conn");
     const statement = "DELETE FROM Users WHERE email=?;";
     const query = mysql.format(statement, [newUser.email]);
-    conn.query(query, (err, results, fields) => {
+    conn.query(query, (err, results) => {
       if (err) console.error(err);
       done();
     });
@@ -287,7 +287,7 @@ describe("Can get customizations", _ => {
     const conn = app.get("conn");
     const statement = "DELETE FROM Users WHERE email=?;";
     const query = mysql.format(statement, [newUser.email]);
-    conn.query(query, (err, results, fields) => {
+    conn.query(query, (err, results) => {
       if (err) console.error(err);
       done();
     });

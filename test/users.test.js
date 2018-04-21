@@ -7,14 +7,14 @@ const app = require("../app");
 
 const newUser = {
   email: "test@test.com",
-  password: "password3114",
+  password: "Password3114",
   name: "Test User",
   companyName: ""
 };
 
 const login = {
   email: "test@test.com",
-  password: "password3114"
+  password: "Password3114"
 };
 
 describe("Register a new user", _ => {
@@ -123,7 +123,7 @@ describe("Register a new user", _ => {
     const conn = app.get("conn");
     const statement = "DELETE FROM Users WHERE email=?;";
     const query = mysql.format(statement, [newUser.email]);
-    conn.query(query, (err, results, fields) => {
+    conn.query(query, (err, results) => {
       if (err) console.error(err);
       done();
     });
@@ -212,7 +212,7 @@ describe("Logs in", _ => {
     const conn = app.get("conn");
     const statement = "DELETE FROM Users WHERE email=?;";
     const query = mysql.format(statement, [login.email]);
-    conn.query(query, (err, results, fields) => {
+    conn.query(query, (err, results) => {
       if (err) console.error(err);
       done();
     });
@@ -270,7 +270,7 @@ describe("Gets user details", _ => {
     const conn = app.get("conn");
     const statement = "DELETE FROM Users WHERE email=?;";
     const query = mysql.format(statement, [newUser.email]);
-    conn.query(query, (err, results, fields) => {
+    conn.query(query, (err, results) => {
       if (err) console.error(err);
       done();
     });
@@ -317,7 +317,7 @@ describe("Edits user details", _ => {
     const conn = app.get("conn");
     const statement = "DELETE FROM Users WHERE email=?;";
     const query = mysql.format(statement, [newUser.email]);
-    conn.query(query, (err, results, fields) => {
+    conn.query(query, (err, results) => {
       if (err) console.error(err);
       done();
     });
@@ -356,7 +356,7 @@ describe("Signs out", _ => {
     const conn = app.get("conn");
     const statement = "DELETE FROM Users WHERE email=?;";
     const query = mysql.format(statement, [newUser.email]);
-    conn.query(query, (err, results, fields) => {
+    conn.query(query, (err, results) => {
       if (err) console.error(err);
       done();
     });

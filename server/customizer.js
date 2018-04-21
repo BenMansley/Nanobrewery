@@ -7,6 +7,7 @@ const app = require("../app");
 
 const { customizer:SQL } = require("./statements");
 const { isLoggedIn } = require("./mw");
+const logger = require("../logger");
 
 /**
  * Gets all customizer variables
@@ -17,8 +18,11 @@ router.get("/variables", (req, res, next) => {
   const conn = app.get("conn");
   const error = "Error retrieving customization options";
   const query = SQL.getVariables();
-  conn.query(query, (err, results, fields) => {
-    if (err) return res.status(500).json(error);
+  conn.query(query, (err, results) => {
+    if (err) {
+      logger.error(err);
+      return res.status(500).json(error);
+    }
     return res.status(200).json(results);
   });
 });
@@ -34,8 +38,11 @@ router.get("/all-data", (req, res, next) => {
   let data = { variables: [], templates: [] };
 
   const query = SQL.getVariables();
-  conn.query(query, (err, results, fields) => {
-    if (err) return res.status(500).json(error);
+  conn.query(query, (err, results) => {
+    if (err) {
+      logger.error(err);
+      return res.status(500).json(error);
+    }
     data.variables = results;
     const filename = path.join(__dirname, "../raw/strings.json");
     data.templates = JSON.parse(readFileSync(filename, "utf-8"));
@@ -61,8 +68,11 @@ router.put("/edit-variable", (req, res, next) => {
   const error = "Error updating variables";
   const query = SQL.editVariable(name, min, max, step, defaultVal, suffix, id);
 
-  conn.query(query, (err, results, fields) => {
-    if (err) return res.status(500).json(error);
+  conn.query(query, (err, results) => {
+    if (err) {
+      logger.error(err);
+      return res.status(500).json(error);
+    }
     return res.status(200).json("Success");
   });
 });
@@ -78,8 +88,11 @@ router.get("/customizations", isLoggedIn, (req, res, next) => {
   const error = "Error getting customizations";
   const query = SQL.getCustomizations(token);
 
-  conn.query(query, (err, results, fields) => {
-    if (err) return res.status(500).json(error);
+  conn.query(query, (err, results) => {
+    if (err) {
+      logger.error(err);
+      return res.status(500).json(error);
+    }
     return res.status(200).json(results);
   });
 });
@@ -105,22 +118,31 @@ router.post("/new", isLoggedIn, (req, res, next) => {
 
   error = "Error retrieving customizations";
   let query = SQL.getCustomizationByNameAndUser(name, token);
-  conn.query(query, (err, results, fields) => {
-    if (err) return res.status(500).json(error);
+  conn.query(query, (err, results) => {
+    if (err) {
+      logger.error(err);
+      return res.status(500).json(error);
+    }
 
     error = "You already have a beer with that name!";
     if (results.length !== 0) return res.status(400).json(error);
 
     error = "Error saving new customization";
     query = SQL.newCustomization(token, name, description, volume, colour, hoppiness, maltFlavour);
-    conn.query(query, (err, results, fields) => {
-      if (err) return res.status(500).json(error);
+    conn.query(query, (err, results) => {
+      if (err) {
+        logger.error(err);
+        return res.status(500).json(error);
+      }
       const id = results.insertId;
 
       error = "Error retrieving customizations";
       query = SQL.getCustomizations(token);
-      conn.query(query, (err, results, fields) => {
-        if (err) return res.status(500).json(error);
+      conn.query(query, (err, results) => {
+        if (err) {
+          logger.error(err);
+          return res.status(500).json(error);
+        }
         return res.status(200).json({ customizations: results, id });
       });
     });
@@ -136,13 +158,19 @@ router.put("/update", isLoggedIn, (req, res, next) => {
 
   error = "Error updating customization";
   let query = SQL.updateCustomization(name, description, volume, colour, hoppiness, maltFlavour, id);
-  conn.query(query, (err, results, fields) => {
-    if (err) return res.status(500).json(error);
+  conn.query(query, (err, results) => {
+    if (err) {
+      logger.error(err);
+      return res.status(500).json(error);
+    }
 
     error = "Error retrieving customizations";
     query = SQL.getCustomizations(token);
-    conn.query(query, (err, results, fields) => {
-      if (err) return res.status(500).json(error);
+    conn.query(query, (err, results) => {
+      if (err) {
+        logger.error(err);
+        return res.status(500).json(error);
+      }
       return res.status(200).json({ customizations: results, id });
     });
   });
@@ -162,13 +190,19 @@ router.delete("/delete", isLoggedIn, (req, res, next) => {
   let query = SQL.deleteCustomization(id, token);
   console.log(query);
 
-  conn.query(query, (err, results, fields) => {
-    if (err) return res.status(500).json(error);
+  conn.query(query, (err, results) => {
+    if (err) {
+      logger.error(err);
+      return res.status(500).json(error);
+    }
     error = "Error getting customizations";
     query = SQL.getCustomizations(token);
 
-    conn.query(query, (err, results, fields) => {
-      if (err) return res.status(500).json(error);
+    conn.query(query, (err, results) => {
+      if (err) {
+        logger.error(err);
+        return res.status(500).json(error);
+      }
       return res.status(200).json(results);
     });
   });
@@ -186,7 +220,7 @@ router.get("/from-id/:id", isLoggedIn, (req, res, next) => {
   const conn = app.get("conn");
   const error = "Error getting customization";
   const query = SQL.getCustomizationById(id, token);
-  conn.query(query, (err, results, fields) => {
+  conn.query(query, (err, results) => {
     if (err || results.length === 0) return res.status(500).json(error);
     return res.status(200).json(results[0]);
   });

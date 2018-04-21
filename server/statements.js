@@ -18,6 +18,11 @@ function saveToken(token, email, expiry) {
   return mysql.format(query, Object.values(arguments));
 }
 
+function refreshToken(newToken, expiry, prevToken) {
+  const query = "UPDATE Tokens SET token=?, expiry=? WHERE token=?";
+  return mysql.format(query, Object.values(arguments));
+}
+
 function getPassword(email) {
   const query = "SELECT password FROM Users WHERE email=?;";
   return mysql.format(query, [email]);
@@ -122,6 +127,7 @@ module.exports = {
     newUser,
     getUserByEmail,
     saveToken,
+    refreshToken,
     getPassword,
     getUserFromToken,
     getUserDetails,

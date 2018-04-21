@@ -7,14 +7,14 @@ const app = require("../app");
 
 const newUser = {
   email: "test@test.com",
-  password: "password3114",
+  password: "Password3114",
   name: "Test User",
   companyName: ""
 };
 
 const login = {
   email: "test@test.com",
-  password: "password3114"
+  password: "Password3114"
 };
 
 describe("Gets product data about a category", _ => {
@@ -93,7 +93,7 @@ describe("Add a product to a user's basket", _ => {
     const conn = app.get("conn");
     const statement = "DELETE FROM Users WHERE email=?;";
     const query = mysql.format(statement, [newUser.email]);
-    conn.query(query, (err, results, fields) => {
+    conn.query(query, (err, results) => {
       if (err) console.error(err);
       done();
     });
@@ -139,7 +139,7 @@ describe("Gets the size of a user's basket", _ => {
     const conn = app.get("conn");
     const statement = "DELETE FROM Users WHERE email=?;";
     const query = mysql.format(statement, [newUser.email]);
-    conn.query(query, (err, results, fields) => {
+    conn.query(query, (err, results) => {
       if (err) console.error(err);
       done();
     });
@@ -186,7 +186,7 @@ describe("Gets the contents of a user's basket", _ => {
     const conn = app.get("conn");
     const statement = "DELETE FROM Users WHERE email=?;";
     const query = mysql.format(statement, [newUser.email]);
-    conn.query(query, (err, results, fields) => {
+    conn.query(query, (err, results) => {
       if (err) console.error(err);
       done();
     });
@@ -250,7 +250,7 @@ describe("Updates the quantity of an item in a user's basket", _ => {
     const conn = app.get("conn");
     const statement = "DELETE FROM Users WHERE email=?;";
     const query = mysql.format(statement, [newUser.email]);
-    conn.query(query, (err, results, fields) => {
+    conn.query(query, (err, results) => {
       if (err) console.error(err);
       done();
     });
