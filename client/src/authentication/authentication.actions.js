@@ -10,7 +10,11 @@ export const actionTypes = {
   AUTH_SIGNOUT: "AUTH_SIGNOUT",
   ROUTE_CHANGE: "ROUTE_CHANGE",
   GET_USER_DETAILS_SUCCESS: "GET_USER_DETAILS_SUCCESS",
-  EDIT_USER_SUCCESS: "EDIT_USER_SUCCESS"
+  EDIT_USER_SUCCESS: "EDIT_USER_SUCCESS",
+  VERIFY_SUCCESS: "VERIFY_SUCCESS",
+  VERIFY_FAILURE: "VERIFY_FAILURE",
+  REVERIFY_SUCCESS: "REVERIFY_SUCCESS",
+  REVERIFY_FAILURE: "REVERIFY_FAILURE"
 };
 
 const sendAuthRequest = () => {
@@ -93,4 +97,30 @@ export const editUser = (email, name, companyName) => {
 
 export const changeRoute = (location, action) => {
   return { type: actionTypes.ROUTE_CHANGE, location, action };
+};
+
+const verifySuccess = _ => {
+  return { type: actionTypes.VERIFY_SUCCESS };
+};
+
+const verifyFailure = error => {
+  return { type: actionTypes.VERIFY_FAILURE, error };
+};
+
+const reverifySuccess = _ => {
+  return { type: actionTypes.REVERIFY_SUCCESS };
+};
+
+const reverifyFailure = error => {
+  return { type: actionTypes.REVERIFY_FAILURE, error };
+};
+
+export const verifyUser = token => {
+  return asyncAction(`/api/users/verify${token}`, { method: "GET" },
+    sendAuthRequest, verifySuccess, verifyFailure);
+};
+
+export const reverifyUser = token => {
+  return asyncAction(`/api/users/reverify${token}`, { method: "GET" },
+    sendAuthRequest, reverifySuccess, reverifyFailure);
 };

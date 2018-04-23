@@ -8,6 +8,7 @@ import Home from "./home/home.component";
 import SignIn from "./authentication/signin/signin.component";
 import SignUp from "./authentication/signup/signup.component";
 import Admin from "./admin/admin.component";
+import Verify from "./authentication/verify.component";
 import NoMatch from "./no-match";
 import { signout, changeRoute, getSessionFromCookie } from "./authentication/authentication.actions";
 import { getBasketSize } from "./admin/shop/shop.actions";
@@ -75,6 +76,7 @@ class App extends Component {
           <Route exact path="/" component={Home} />
           <Route exact path="/authentication/signin" component={SignIn} />
           <Route exact path="/authentication/signup" component={SignUp} />
+          <Route exact path="/verify" component={Verify} />
           { (!this.state.validating || isLoggedIn)
             ? <PrivateRoute path="/admin" allowAccess={isLoggedIn} component={Admin} /> : null }
           { (!this.state.validating || isLoggedIn) ? <Route exact component={NoMatch} /> : null }

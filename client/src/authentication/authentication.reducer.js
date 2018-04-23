@@ -11,7 +11,10 @@ const authenticationReducer =
       email: "",
       name: "",
       companyName: ""
-    }
+    },
+    verifyError: "",
+    verifySuccess: false,
+    reverifySuccess: false
   },
   action
   ) => {
@@ -39,6 +42,25 @@ const authenticationReducer =
           isLoading: false,
           error: "",
           userDetails: action.user
+        });
+      case actionTypes.VERIFY_SUCCESS:
+        return Object.assign({}, state, {
+          isLoading: false,
+          verifyError: "",
+          verifySuccess: true
+        });
+      case actionTypes.VERIFY_FAILURE:
+      case actionTypes.REVERIFY_FAILURE:
+        return Object.assign({}, state, {
+          isLoading: false,
+          verifyError: action.error,
+          verifySuccess: false
+        });
+      case actionTypes.REVERIFY_SUCCESS:
+        return Object.assign({}, state, {
+          isLoading: false,
+          reverifyError: "",
+          reverifySuccess: true
         });
       case actionTypes.AUTH_RESPONSE_FAILURE:
         return Object.assign({}, state, {

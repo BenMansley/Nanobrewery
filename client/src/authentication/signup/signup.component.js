@@ -35,6 +35,7 @@ class SignUp extends Component {
       <div className="page-content auth">
         <div className="auth-form card">
           <h1 className="page-title">Create an Account</h1>
+          <p>After signing up, check your email for a verification link.</p>
           <form onSubmit={(event) => this.onSubmit(event)}>
             <MaterialInput labelText="Email *" type="email" id="email" value={email}
               active={!!email} onChange={(evt) => this.setState({ email: evt.target.value })} />

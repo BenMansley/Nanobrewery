@@ -10,6 +10,7 @@ const app = require("../app");
 const { auth:SQL } = require("./statements");
 const { isLoggedIn } = require("./mw");
 const logger = require("../logger");
+const mailer = require("./mailer");
 const passwords = fs.readFileSync(`${__dirname}/passwords.txt`, "utf8").split(/\r?\n/);
 
 /**
@@ -63,13 +64,22 @@ router.post("/new", (req, res, next) => {
 
         let expiry = moment().add(12, "hours").toDate();
         error = "Error creating token";
-        query = SQL.saveToken(token, email, expiry);
+        query = SQL.saveEmailToken(token, email, expiry);
         conn.query(query, (err, results) => {
           if (err) {
             logger.error(err);
             return res.status(500).json(error);
           }
-          return res.status(200).json("Success");
+
+          error = "Error sending verification email";
+          mailer.verify(name, email, token)
+            .then(_ => {
+              return res.status(200).json("Success");
+            })
+            .catch(err => {
+              logger.error(err);
+              return res.status(500).json(error);
+            });
         });
       });
     });
@@ -108,14 +118,89 @@ router.post("/login", (req, res, next) => {
         return res.status(401).json(userError);
       }
       const token = generateToken();
-      query = SQL.saveToken(token, email, moment().add(12, "hours").toDate());
+      query = SQL.saveSessionToken(token, email, moment().add(12, "hours").toDate());
       conn.query(query, (err, results) => {
         if (err) {
           logger.error(err);
           return res.status(500).json(serverError);
         }
-        res.cookie("session", token, { maxAge: 1000 * 60 * 60 * 24 });
+        res.cookie("session", token, { maxAge: 1000 * 60 * 60 * 12 });
         return res.status(200).json(success);
+      });
+    });
+  });
+});
+
+router.get("/reverify", (req, res, next) => {
+  const token = req.params.t;
+  const conn = app.get("conn");
+  let error = "Error retrieving token";
+  let query = SQL.getUserDetails(token);
+  conn.query(query, (err, results) => {
+    if (err) {
+      logger.error(err);
+      return res.status(500).json(error);
+    }
+    if (results.length === 0) return res.status(401).json(error);
+
+    const email = results[0].email;
+    const token = generateToken();
+    let expiry = moment().add(12, "hours").toDate();
+    error = "Error creating token";
+    query = SQL.saveEmailToken(token, email, expiry);
+    conn.query(query, (err, results) => {
+      if (err) {
+        logger.error(err);
+        return res.status(500).json(error);
+      }
+
+      error = "Error sending verification email";
+      mailer.verify(name, email, token)
+        .then(_ => {
+          return res.status(200).json("Success");
+        })
+        .catch(err => {
+          logger.error(err);
+          return res.status(500).json(error);
+        });
+    });
+  });
+});
+
+router.get("/verify", (req, res, next) => {
+  const token = req.query.t;
+  const conn = app.get("conn");
+  let error = "Error retrieving token";
+  let query = SQL.getToken(token);
+  conn.query(query, (err, results) => {
+    if (err) {
+      logger.error(err);
+      return res.status(500).json(error);
+    }
+
+    error = "Token Not Found";
+    if (results.length === 0) return res.status(401).json(error);
+
+    const { userId, expiry } = results[0];
+    error = "Token Expired";
+    if (new Date(expiry) < new Date()) return res.status(401).json(error);
+
+    error = "Error verifying user";
+    query = SQL.verifyUser(userId);
+    conn.query(query, (err, results) => {
+      if (err) {
+        logger.error(err);
+        return res.status(500).json(error);
+      }
+
+      error = "Error deleting token";
+      query = SQL.deleteToken(token);
+      conn.query(query, (err, results) => {
+        if (err) {
+          logger.error(err);
+          return res.status(500).json(error);
+        }
+        return res.status(200).json("Success");
       });
     });
   });
