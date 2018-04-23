@@ -62,10 +62,10 @@ const updateCustomizationFailure = error => {
   return { type: actionTypes.UPDATE_CUSTOMIZATION_FAILURE, error };
 };
 
-export const updateCustomization = (id, name, description, volume, colour, hoppiness, maltFlavour) => {
-  const data = { id, name, description, volume, colour, hoppiness, maltFlavour };
+export const updateCustomization = (name, description, volume, colour, hoppiness, maltFlavour) => {
+  const data = { name, description, volume, colour, hoppiness, maltFlavour };
   return asyncAction("/api/customizer/update",
-    { method: "POST", body: JSON.stringify(data), credentials: "same-origin" },
+    { method: "PUT", body: JSON.stringify(data), credentials: "same-origin" },
     updateCustomizationRequest, updateCustomizationSuccess, updateCustomizationFailure);
 };
 

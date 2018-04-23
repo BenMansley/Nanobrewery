@@ -12,7 +12,7 @@ function getUserByEmail(email) {
   return mysql.format(query, [email]);
 }
 
-function saveToken(token, email, expiry) {
+function saveSessionToken(token, email, expiry) {
   const query = "INSERT INTO Tokens (token, userId, expiry)" +
                 " VALUES (?, (SELECT id FROM Users WHERE email=?), ?);";
   return mysql.format(query, Object.values(arguments));
@@ -23,12 +23,23 @@ function refreshToken(newToken, expiry, prevToken) {
   return mysql.format(query, Object.values(arguments));
 }
 
+function saveEmailToken(token, email, expiry) {
+  const query = "INSERT INTO Tokens (token, userId, expiry, type)" +
+                " VALUES (?, (SELECT id FROM Users WHERE email=?), ?, 'email');";
+  return mysql.format(query, Object.values(arguments));
+}
+
+function verifyUser(userId) {
+  const query = "UPDATE Users SET isVerified=1 WHERE id=?";
+  return mysql.format(query, Object.values(arguments));
+}
+
 function getPassword(email) {
   const query = "SELECT password FROM Users WHERE email=?;";
   return mysql.format(query, [email]);
 }
 
-function getUserFromToken(token) {
+function getToken(token) {
   const query = "SELECT * FROM Tokens WHERE token=?;";
   return mysql.format(query, [token]);
 }
@@ -69,9 +80,9 @@ function newCustomization(token, name, description, volume, colour, hoppiness, m
   return mysql.format(query, Object.values(arguments));
 }
 
-function updateCustomization(name, description, volume, colour, hoppiness, maltFlavour, id) {
-  const query = "UPDATE Customizations SET name=?, description=?, volume=?, colour=?, hoppiness=?, maltFlavour=?" +
-  " WHERE id=?";
+function updateCustomization(description, volume, colour, hoppiness, maltFlavour, name, token) {
+  const query = "UPDATE Customizations SET description=?, volume=?, colour=?, hoppiness=?, maltFlavour=?" +
+  " WHERE name=? AND userId=" + userId;
   return mysql.format(query, Object.values(arguments));
 }
 
@@ -126,10 +137,12 @@ module.exports = {
   auth: {
     newUser,
     getUserByEmail,
-    saveToken,
+    saveSessionToken,
     refreshToken,
+    saveEmailToken,
     getPassword,
-    getUserFromToken,
+    getToken,
+    verifyUser,
     getUserDetails,
     editUser,
     deleteToken

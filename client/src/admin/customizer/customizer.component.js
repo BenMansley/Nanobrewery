@@ -6,7 +6,7 @@ import Slider from "./slider/slider.component";
 import MaterialInput from "../../components/material-input.component";
 import MaterialSelect from "../../components/material-select.component";
 import { getCustomizerData } from "./customizer.actions";
-import { getCustomizations, newCustomization } from "../branding/branding.actions";
+import { getCustomizations, newCustomization, updateCustomization } from "../branding/branding.actions";
 
 class Customizer extends Component {
   constructor(props) {
@@ -95,9 +95,13 @@ class Customizer extends Component {
 
   saveCustomization() {
     const { Volume:volume, Colour:colour, Hoppiness:hoppiness, "Malt Flavour":maltFlavour } = this.state.variables;
-    const { newCustomization } = this.props;
-    const { name, description } = this.state;
-    newCustomization(name, description, volume, colour, hoppiness, maltFlavour);
+    const { newCustomization, updateCustomization, customizations } = this.props;
+    const { name, description, index } = this.state;
+    if (index === customizations.length) {
+      newCustomization(name, description, volume, colour, hoppiness, maltFlavour);
+    } else {
+      updateCustomization(name, description, volume, colour, hoppiness, maltFlavour);
+    }
   }
 
   setActiveBeer(beer, index) {
@@ -143,7 +147,8 @@ class Customizer extends Component {
 
   render() {
     const { rgb, variables, name, description, index } = this.state;
-    const { variables:variableSchema, customizations, customizationError, newCustomizationId } = this.props;
+    const { variables:variableSchema, customizations, customizationError, newCustomizationId,
+      isLoadingData } = this.props;
 
     let options = [];
 
@@ -180,6 +185,7 @@ class Customizer extends Component {
         <div className="customizer">
           <div className="customizer-element top card">
             <div className="customizer-element sliders">
+              { isLoadingData ? <span className="material-icons loading spin">toys</span> : null }
               { sliders }
             </div>
             <div className="customizer-element image">
@@ -216,9 +222,13 @@ class Customizer extends Component {
             <p>{description}</p>
           </div>
           <div className="customizer-element actions card">
-            <h2>One more thing...</h2>
-            <MaterialInput className="large" type="text" id="name" labelText="Name your beer" active={!!name}
-              value={name} onChange={(event) => this.setState({ name: event.target.value })} />
+            { index === customizations.length ?
+              <React.Fragment>
+                <h2>One more thing...</h2>
+                <MaterialInput className="large" type="text" id="name" labelText="Name your beer" active={!!name}
+                  value={name} onChange={(event) => this.setState({ name: event.target.value })} />
+              </React.Fragment>
+            : null }
             { newCustomizationId ? <p className="success"><span>Beer Saved!</span>
               <Link className="button" to={{ pathname: "/admin/branding", search:`?id=${newCustomizationId}` }}>
                 Brand It</Link></p>
@@ -263,11 +273,13 @@ Customizer.propTypes = {
     })
   ),
   newCustomizationId: PropTypes.number,
+  isLoadingData: PropTypes.bool.isRequired,
   // dataError: PropTypes.string.isRequired,
   customizationError: PropTypes.string.isRequired,
   getData: PropTypes.func.isRequired,
   getCustomizations: PropTypes.func.isRequired,
   newCustomization: PropTypes.func.isRequired,
+  updateCustomization: PropTypes.func.isRequired,  
   location: PropTypes.object
 };
 
@@ -279,7 +291,8 @@ const mapStateToProps = state => {
     customizations: state.branding.customizations,
     newCustomizationId: state.branding.newCustomizationId,
     dataError: state.customizer.error,
-    customizationError: state.branding.error
+    customizationError: state.branding.error,
+    isLoadingData: state.customizer.isLoading
   };
 };
 
@@ -288,7 +301,9 @@ const mapDispatchToProps = dispatch => {
     getData: () => dispatch(getCustomizerData()),
     getCustomizations: () => dispatch(getCustomizations()),
     newCustomization: (name, description, volume, colour, hoppiness, maltFlavour) =>
-      dispatch(newCustomization(name, description, volume, colour, hoppiness, maltFlavour))
+      dispatch(newCustomization(name, description, volume, colour, hoppiness, maltFlavour)),
+    updateCustomization: (name, description, volume, colour, hoppiness, maltFlavour) =>
+      dispatch(updateCustomization(name, description, volume, colour, hoppiness, maltFlavour))
   };
 };
 

@@ -150,18 +150,23 @@ router.post("/new", isLoggedIn, (req, res, next) => {
 });
 
 router.put("/update", isLoggedIn, (req, res, next) => {
-  const { id, name, description, volume, colour, hoppiness, maltFlavour } = req.body;
+  const { name, description, volume, colour, hoppiness, maltFlavour } = req.body;
   const token = req.cookies.session;
   const conn = app.get("conn");
   let error = "Your beer needs a name!";
   if (!name) return res.status(400).json(error);
 
   error = "Error updating customization";
-  let query = SQL.updateCustomization(name, description, volume, colour, hoppiness, maltFlavour, id);
+  let query = SQL.updateCustomization(description, volume, colour, hoppiness, maltFlavour, name, token);
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err);
+      logger.error(err.message);
       return res.status(500).json(error);
+    }
+
+    error = "No beer found with that name!";
+    if (results.affectedRows === 0) {
+      return res.status(400).json(error);
     }
 
     error = "Error retrieving customizations";
@@ -171,6 +176,7 @@ router.put("/update", isLoggedIn, (req, res, next) => {
         logger.error(err);
         return res.status(500).json(error);
       }
+      const id = results.find(c => c.name === name).id;
       return res.status(200).json({ customizations: results, id });
     });
   });

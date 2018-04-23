@@ -166,15 +166,13 @@ describe("Updates a customization", _ => {
     hoppiness: 80,
     maltFlavour: 20
   };
-  let id;
   let updated;
   before(function(done) {
     this.timeout(4000);
     agent.post("/api/users/new").send(newUser).end((_, res) => {
       agent.post("/api/users/login").send(login).end((_, res) => {
         agent.post("/api/customizer/new").send(customization).end((_, res) => {
-          id = res.body.id;
-          updated = Object.assign({}, customization, { id, volume: 5 });
+          updated = Object.assign({}, customization, { volume: 5 });
           done();
         });
       });
@@ -185,19 +183,27 @@ describe("Updates a customization", _ => {
       expect(res).to.have.status(200);
       expect(res.body).to.be.have.all.keys(["customizations", "id"]);
       expect(res.body.customizations).to.be.an("array");
-      expect(res.body.id).to.be.a("number").and.to.equal(id);
+      expect(res.body.id).to.be.a("number");
       done();
     });
   });
   it("Rejects on no name", done => {
-    const badCustomization = Object.assign({}, customization, { id, name: "" });
+    const badCustomization = Object.assign({}, customization, { name: "" });
     agent.put("/api/customizer/update").send(badCustomization).end((_, res) => {
       expect(res).to.have.status(400);
       expect(res.body).to.equal("Your beer needs a name!");
       done();
     });
   });
-  it("Rejects on db error", done => {
+  it("Rejects on bad name", done => {
+    const badCustomization = Object.assign({}, customization, { name: "Flerg" });
+    agent.put("/api/customizer/update").send(badCustomization).end((_, res) => {
+      expect(res).to.have.status(400);
+      expect(res.body).to.equal("No beer found with that name!");
+      done();
+    });
+  });
+  it("Rejects on db error updating", done => {
     const sqlStub = sinon.stub(app.get("conn"), "query");
     sqlStub.onSecondCall().callsArgWith(1, new Error());
     sqlStub.callThrough();
@@ -205,6 +211,17 @@ describe("Updates a customization", _ => {
       sqlStub.restore();
       expect(res).to.have.status(500);
       expect(res.body).to.equal("Error updating customization");
+      done();
+    });
+  });
+  it("Rejects on db error getting customizations", done => {
+    const sqlStub = sinon.stub(app.get("conn"), "query");
+    sqlStub.onThirdCall().callsArgWith(1, new Error());
+    sqlStub.callThrough();
+    agent.put("/api/customizer/update").send(updated).end((_, res) => {
+      sqlStub.restore();
+      expect(res).to.have.status(500);
+      expect(res.body).to.equal("Error retrieving customizations");
       done();
     });
   });

@@ -145,6 +145,10 @@ a {
   &:first-of-type, .page-title, h2 {
     margin-top: 0;
   }
+
+  > p.large {
+    font-size: 1.1em;
+  }
 }
 
 .loading {

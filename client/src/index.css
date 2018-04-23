@@ -106,6 +106,7 @@ button:not(.select-dropdown), .button {
     box-shadow: 0px 3px 4px rgba(50, 50, 50, 0.5);
     list-style: none;
     background: #FFFFFF;
+    z-index: 10;
     cursor: pointer; }
     .material-select .select-options .select-option {
       padding: 0.5em 0.25em 0.5em 1em; }
@@ -585,6 +586,8 @@ a {
   box-shadow: 0px 4px 10px rgba(210, 210, 210, 0.5); }
   .card:first-of-type, .card .page-title, .card h2 {
     margin-top: 0; }
+  .card > p.large {
+    font-size: 1.1em; }
 
 .loading {
   font-size: 2.5em;

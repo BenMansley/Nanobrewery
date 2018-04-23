@@ -14,7 +14,8 @@ const brandingReducer =
       case actionTypes.DELETE_CUSTOMIZATION_REQUEST:
       case actionTypes.GET_CUSTOMIZATIONS_REQUEST:
         return Object.assign({}, state, {
-          isLoading: true
+          isLoading: true,
+          error: ""
         });
       case actionTypes.UPDATE_CUSTOMIZATION_SUCCESS:
       case actionTypes.NEW_CUSTOMIZATION_SUCCESS:
