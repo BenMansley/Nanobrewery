@@ -48,7 +48,7 @@ router.post("/new", (req, res, next) => {
     }
     if (results.length !== 0) return res.status(401).json(error);
 
-    bcrypt.hash(password, 10, function(err, hash) {
+    bcrypt.hash(password, 10, (err, hash) => {
       if (err) {
         logger.error(err);
         return res.status(500).json(error);
@@ -60,8 +60,8 @@ router.post("/new", (req, res, next) => {
           logger.error(err);
           return res.status(500).json(error);
         }
-        const token = generateToken();
 
+        const token = generateToken();
         let expiry = moment().add(12, "hours").toDate();
         error = "Error creating token";
         query = SQL.saveEmailToken(token, email, expiry);
@@ -70,17 +70,19 @@ router.post("/new", (req, res, next) => {
             logger.error(err);
             return res.status(500).json(error);
           }
-
-          error = "Error sending verification email";
-          mailer.verify(name, email, token)
-            .then(_ => {
-              return res.status(200).json("Success");
-            })
-            .catch(err => {
-              logger.error(err);
-              return res.status(500).json(error);
-            });
+          return res.status(200).json("Success");
         });
+
+      //     error = "Error sending verification email";
+      //     mailer.verify(name, email, token)
+      //       .then(_ => {
+      //         return res.status(200).json("Success");
+      //       })
+      //       .catch(err => {
+      //         logger.error(err);
+      //         return res.status(500).json(error);
+      //       });
+      //   });
       });
     });
   });
