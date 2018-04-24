@@ -137,9 +137,10 @@ button:not(.select-dropdown), .button {
       color: $darkTheme;
     }
 
-    &:focus {
+    &.open:focus {
       outline: none;
     }
+
   }
 
   .select-options {
@@ -166,6 +167,18 @@ button:not(.select-dropdown), .button {
 
       &:hover {
         background: $greyE;
+      }
+
+      button {
+        border: none;
+        background: none;
+        color: inherit;
+        text-transform: none;
+        padding: 0;
+        letter-spacing: 0;
+        display: inline;
+        border-radius: 0;
+        text-align: left;
       }
     }
 

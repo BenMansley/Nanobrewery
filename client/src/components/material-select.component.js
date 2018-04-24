@@ -21,13 +21,13 @@ class MaterialSelect extends Component {
 
     const items = options.map((item, i) =>
       <li key={i} className={"select-option" + (selected === i ? " selected" : "")}
-        onClick={() => this.onOptionClick(item.value)}>{item.text}</li>
+        onClick={() => this.onOptionClick(item.value)}><button>{item.text}</button></li>
     );
 
     return (
       <div className="material-select">
-        <button className="select-dropdown" onClick={() => this.setState({ open: true })}>{buttonText}
-          <span className="material-icons">keyboard_arrow_down</span>
+        <button className={"select-dropdown" + (this.state.open ? " open" : "")} onClick={() => this.setState({ open: true })}>
+          {buttonText}<span className="material-icons">keyboard_arrow_down</span>
         </button>
         <ul className={"select-options" + (this.state.open ? " visible" : "")}>{items}</ul>
       </div>

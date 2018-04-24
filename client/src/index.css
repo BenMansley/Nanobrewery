@@ -92,7 +92,7 @@ button:not(.select-dropdown), .button {
     cursor: pointer; }
     .material-select .select-dropdown:hover {
       color: #0D47A1; }
-    .material-select .select-dropdown:focus {
+    .material-select .select-dropdown.open:focus {
       outline: none; }
   .material-select .select-options {
     position: absolute;
@@ -114,6 +114,16 @@ button:not(.select-dropdown), .button {
         color: #0D47A1; }
       .material-select .select-options .select-option:hover {
         background: #EAEAEA; }
+      .material-select .select-options .select-option button {
+        border: none;
+        background: none;
+        color: inherit;
+        text-transform: none;
+        padding: 0;
+        letter-spacing: 0;
+        display: inline;
+        border-radius: 0;
+        text-align: left; }
     .material-select .select-options.visible {
       display: block; }
   .material-select .material-icons {
