@@ -490,18 +490,21 @@ p {
   flex-direction: column;
   align-items: center; }
   .homepage .guest .large {
-    font-size: 1.25em;
+    font-size: 1.4em;
     font-weight: bold;
-    margin: 0.8em; }
+    margin: 1.25em 0.8em 0.8em; }
   .homepage .guest .flex-container {
     display: flex;
     flex-flow: row wrap; }
     .homepage .guest .flex-container > * {
+      min-width: 250px;
       flex: 1 1 0;
       margin: 0 1.5em; }
     .homepage .guest .flex-container > .img {
+      margin-bottom: 1em;
+      min-height: 20em;
       border-radius: 1em;
-      background: #03A9F4; }
+      background: url("./img/brewery.jpg") center/cover no-repeat; }
   .homepage .guest .button {
     font-size: 1.25em;
     margin: 2em 0; }

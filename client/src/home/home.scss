@@ -22,11 +22,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-  
+
     .large {
-      font-size: 1.25em;
+      font-size: 1.4em;
       font-weight: bold;
-      margin: 0.8em;
+      margin: 1.25em 0.8em 0.8em;
     }
 
     .flex-container {
@@ -34,13 +34,16 @@
       flex-flow: row wrap;
 
       > * {
+        min-width: 250px;
         flex: 1 1 0;
         margin: 0 1.5em;
       }
 
       > .img {
+        margin-bottom: 1em;
+        min-height: 20em;
         border-radius: 1em;
-        background: $lightTheme;
+        background: url('./img/brewery.jpg') center/cover no-repeat;
       }
     }
 

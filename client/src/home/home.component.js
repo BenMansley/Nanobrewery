@@ -45,27 +45,27 @@ class Home extends Component {
             }
           </React.Fragment>
           : <div className="guest">
-            <p className="large">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Ut at nisl vel magna porta consectetur.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut at nisl vel magna porta consectetur.
-              Phasellus sed aliquam sem, a rutrum massa. Duis eu rutrum tellus, ac gravida lectus. Ut nec tempus elit,
-              maximus dignissim dui. Donec sagittis consectetur eleifend. Nulla non est dictum, tincidunt tellus non,
-              facilisis felis. Nam lacinia purus eu dapibus lobortis. Proin pulvinar, nisi vel tincidunt elementum,
-              massa tortor dictum lorem, sit amet suscipit sapien odio quis metus. Donec sit amet augue lacus.
-              Cras tincidunt et nibh et feugiat. Phasellus tempor leo nec quam consectetur aliquet. Interdum et
-              malesuada fames ac ante ipsum primis in faucibus. Sed vehicula non ligula quis facilisis. Donec rutrum
-              nisl at ultrices maximus. Vivamus augue leo, eleifend ac libero eget, gravida pharetra tortor.
-              Nam ornare leo vel auctor sagittis.
-            </p>
-            <p className="large">How It Works</p>
+            <p className="large">Welcome to NanoBrewery!</p>
+            <p>Welcome to Nanobrewery - the place where you can design a beer to your own specifications (or just
+              pick one from our standard list) and have it ready to sell in your own premises just 10 days later.
+              You can make that beer light or dark, really effervescent or not, choose how much alcohol it should
+              contain and how hoppy you would like it. In fact, we estimate that there around 5-8,000 tasty
+              combinations - so many that we haven't been able to try them all yet!<br />Add to that, you can give
+              your beer a unique name, design a pump clip, beer mats, glasses or towels and have them all delivered
+              with the beer: everything you need to offer your customers a unique experience and help you stand out
+              from the crowd.</p>
+            <p className="large">How Do We Do It?</p>
             <div className="flex-container">
-              <div className="img" />
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut at nisl vel magna porta consectetur.
-                Phasellus sed aliquam sem, a rutrum massa. Duis eu rutrum tellus, ac gravida lectus. Ut nec tempus elit,
-                maximus dignissim dui. Donec sagittis consectetur eleifend. Nulla non est dictum, tincidunt tellus non,
-                facilisis felis. Nam lacinia purus eu dapibus lobortis. Proin pulvinar, nisi vel tincidunt elementum,
-                massa tortor dictum lorem, sit amet suscipit sapien odio quis metus. Donec sit amet augue lacus.
-                Cras tincidunt et nibh et feugiat. Phasellus tempor leo nec quam consectetur aliquet.
+              <div class="img"/>
+              <p>It's easy and we take care of it all for you. You sign up to have a fermentation kit fitted on your
+                premises,then design your beer and marketing materials here. 3-4 days later we deliver you the mash
+                and you simply drop the entire bag into the fermentation unit - we manage everything for you remotely.
+                When the beer's ready, you'll get a message and you can tap off the beer into a cask. Simply wash out
+                the unit and you're good to go again (you can even have the empty mash bag picked up when your next
+                delivery arrives so there's no waste to deal with).<br />If you love what you made, the recipe is in
+                your account to re-order, or you can try something else. Test it out on your regulars and adjust the
+                flavour based on their comments: a great way to tailor your product and an excellent opportunity
+                to build rapport with your customers.
               </p>
             </div>
             <Link className="button" to="/admin/customizer">Make Your Own!</Link>
