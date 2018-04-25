@@ -35,7 +35,7 @@ class Basket extends Component {
           <p>{item.description}</p>
           <div className="product-base">
             <label htmlFor="quantity">Quantity: </label>
-            <input type="number" id="quantity" value={quantity}
+            <input className="quantity-input" type="number" id="quantity" value={quantity}
               onChange={(event) => this.updateQuantity(event.target.value, item.id)}
               onBlur={(event) => updateQuantity(event.target.value, item.id)} />
             <label>Total Price:</label>
@@ -53,7 +53,7 @@ class Basket extends Component {
             <div>{basketItems}</div>
             <div className="basket-actions-container">
               <div className="card basket-actions">
-                <p>Basket Total: <span className="price">${totalPrice}</span></p>
+                <p>Basket Total: <span className="price">£{totalPrice}</span></p>
                 <button>Checkout</button>
               </div>
             </div>

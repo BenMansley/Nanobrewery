@@ -2,3 +2,34 @@
 @import 'branding/branding';
 @import 'user/user';
 @import 'shop/shop';
+
+  
+.product-base {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 1.1em;
+  
+  label {
+    margin: 0 0.4em 0 1.25em;
+  }
+  
+  .quantity-input {
+    border: 2px solid transparent;
+    border-bottom-color: $lightTheme;
+    padding: 0 0.2em;
+    width: 4em;
+    font-family: inherit;
+    font-size: 1.4em;
+    font-weight: bold;
+    
+    &:focus {
+      outline: none;
+      border-color: $lightTheme;
+    }
+  }
+  
+  .product-add {
+    margin: 1em 0 1em 1.5em;
+  }
+}

@@ -102,11 +102,12 @@ function getCustomizationByNameAndUser(name, token) {
   return mysql.format(query, Object.values(arguments));
 }
 
-function getProductsByCategory(category) {
+function getProductsByCategory(token, category) {
   const query = "SELECT id, name, description, price, category, quantity" +
-                " FROM Products LEFT JOIN Baskets ON Baskets.productId=Products.id " +
-                " WHERE category=? GROUP BY Products.id;";
-  return mysql.format(query, [category]);
+                " FROM Products LEFT JOIN Baskets" +
+                " ON Baskets.productId=Products.id AND Baskets.userId=(SELECT userId FROM Tokens WHERE token=?)" +
+                " WHERE category=? GROUP BY Products.id";
+  return mysql.format(query, Object.values(arguments));
 }
 
 function addProductToBasket(productId, token, quantity) {
@@ -116,15 +117,24 @@ function addProductToBasket(productId, token, quantity) {
   return mysql.format(query, [productId, token, quantity, quantity]);
 }
 
+function addCustomizationToBasket(productId, token, quantity, customizationId) {
+  const query = "INSERT INTO Baskets (productId, userId, quantity, customizationId) VALUES" +
+                " (?, (SELECT userId FROM Tokens WHERE token=?), ?, ?);";
+  return mysql.format(query, Object.values(arguments));
+}
+
 function getBasketSize(token) {
   const query = "SELECT COUNT(*) FROM Baskets WHERE userId=" + userId;
   return mysql.format(query, [token]);
 }
 
 function getBasketItems(token) {
-  const query = "SELECT ProductId AS id, quantity, name, description, price, category" +
-                " FROM Baskets INNER JOIN Products" +
-                " WHERE Products.id=baskets.productId AND userId=" + userId;
+  const query = "SELECT ProductId AS id, quantity, Products.name, price, category," +
+                " CASE WHEN ProductID!=1 THEN Products.name ELSE Customizations.name END AS name," +
+                " CASE WHEN ProductID!=1 THEN Products.description ELSE Customizations.description END AS description" +
+                " FROM Baskets INNER JOIN Products ON Products.id=Baskets.productId" +
+                " LEFT JOIN Customizations ON baskets.customizationId=Customizations.id" +
+                " WHERE Baskets.userId=" + userId;
   return mysql.format(query, [token]);
 }
 
@@ -160,6 +170,7 @@ module.exports = {
   shop: {
     getProductsByCategory,
     addProductToBasket,
+    addCustomizationToBasket,
     getBasketSize,
     getBasketItems,
     updateQuantity

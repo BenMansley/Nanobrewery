@@ -14,10 +14,12 @@ const logger = require("../logger");
  * @routeparam {string} category Name of the category to search for
  */
 router.get("/products/category/:category", (req, res, next) => {
+  const token = req.cookies.session ? req.cookies.session : null;
   const category = req.params.category;
   let error = "Error retrieving products";
   const conn = app.get("conn");
-  const query = SQL.getProductsByCategory(category);
+  const query = SQL.getProductsByCategory(token, category);
+  console.log(query);
   conn.query(query, (err, results) => {
     if (err) {
       logger.error(err);
@@ -37,17 +39,23 @@ router.get("/products/category/:category", (req, res, next) => {
  * @bodyparam {number} quantity  Quantity of item to add
  */
 router.post("/basket/add", isLoggedIn, (req, res, next) => {
-  const { productId, quantity } = req.body;
+  const { productId, quantity, customizationId } = req.body;
   const token = req.cookies.session;
   let error = "Error adding item to basket";
   const conn = app.get("conn");
-  const query = SQL.addProductToBasket(productId, token, quantity);
+  let query;
+
+  if (productId === 1) {
+    query = SQL.addCustomizationToBasket(productId, token, quantity, customizationId);
+  } else {
+    query = SQL.addProductToBasket(productId, token, quantity);
+  }
   conn.query(query, (err, results) => {
     if (err) {
       logger.error(err);
       return res.status(500).json(error);
     }
-    const query = SQL.getBasketSize(token);
+    query = SQL.getBasketSize(token);
     error = "Error getting updated basket";
     conn.query(query, (err, results) => {
       if (err) {
@@ -85,7 +93,7 @@ function getBasket(token) {
     const query = SQL.getBasketItems(token);
     conn.query(query, (err, results) => {
       if (err) {
-        logger.error(err);
+        logger.error(err.message);
         reject(error);
       }
       resolve(results);

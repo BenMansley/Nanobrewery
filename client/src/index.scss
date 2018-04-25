@@ -122,6 +122,10 @@ header {
       display: inline-block;
     }
   }
+
+  &.no-match {
+    align-items: flex-start;
+  }
 }
 
 a {

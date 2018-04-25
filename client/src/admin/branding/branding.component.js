@@ -6,6 +6,7 @@ import { getCustomizations } from "./branding.actions";
 import MaterialSelect from "../../components/material-select.component";
 import BeerImage from "./beer-image.component";
 import MaterialInput from "../../components/material-input.component";
+import { addProductToBasket } from "../shop/shop.actions";
 const imageOptions = [{ value: 0, text: "Custom" }, { value: 1, text: "Pilsen" }, { value: 2, text: "Ale" }];
 const imageTypes = ["pilsen", "ale"];
 
@@ -18,7 +19,8 @@ class Branding extends Component {
       isEditingName: false,
       name: "",
       image: 0,
-      customImage: ""
+      customImage: "",
+      quantity: 140
     };
   }
 
@@ -26,7 +28,7 @@ class Branding extends Component {
     const id = /\?id=(\d+)/.exec(searchString)[1];
     const index = customizations.findIndex(c => c.id === Number(id));
     if (index !== -1) {
-      this.setState({ index });
+      this.setState({ index, quantity: 0 });
     }
   }
 
@@ -57,9 +59,17 @@ class Branding extends Component {
     this.setState({ index: i });
   }
 
+  onAddToBasket() {
+    const { quantity, index } = this.state;
+    if (quantity < 1) return;
+    const { customizations, addToBasket } = this.props;
+    const customizationId = customizations[index].id;
+    addToBasket(quantity, customizationId);
+  }
+
   render() {
-    const { name, isEditingName, index, image, customImage } = this.state;
-    const { customizations, isLoading } = this.props;
+    const { name, isEditingName, index, image, customImage, quantity } = this.state;
+    const { customizations, isLoadingCustomizations, isLoadingBasket } = this.props;
     let beer = null;
     let options = null;
 
@@ -116,10 +126,22 @@ class Branding extends Component {
                   : <BeerImage type={imageTypes[image - 1]} text={beer.name} />
                 }
               </div>
+              <hr />
+              <h3>Order your Beer</h3>
+              <div className="product-base">
+                <label htmlFor="quantity">Quantity: </label>
+                <input id="quantity" type="number" className="quantity-input" value={quantity}
+                  onChange={(event) => this.setState({ quantity: event.target.value })} />
+                <span>pints</span>
+                { isLoadingBasket
+                  ? <span className="loading spin material-icons">toys</span>
+                  : <button className="product-add" onClick={() => this.onAddToBasket()}>Add to Basket</button>
+                }
+              </div>
             </div>
           </div>
           : null }
-        { isLoading
+        { isLoadingCustomizations
           ? <span className="loading spin material-icons">toys</span>
           : customizations.length === 0
             ? <p className="none-found">You haven"t made any beers. <Link to="/admin/customizer">Make one now?</Link>
@@ -141,21 +163,25 @@ Branding.propTypes = {
       maltFlavour: PropTypes.number
     })
   ),
+  isLoadingCustomizations: PropTypes.bool.isRequired,
+  isLoadingBasket: PropTypes.bool.isRequired,
   getCustomizations: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool.isRequired,
+  addToBasket: PropTypes.func.isRequired,
   location: PropTypes.object
 };
 
 const mapStateToProps = state => {
   return {
     customizations: state.branding.customizations,
-    isLoading: state.branding.isLoading
+    isLoadingCustomizations: state.branding.isLoading,
+    isLoadingBasket: state.shop.isLoading
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    getCustomizations: () => dispatch(getCustomizations())
+    getCustomizations: () => dispatch(getCustomizations()),
+    addToBasket: (quantity, customizationId) => dispatch(addProductToBasket(1, quantity, customizationId))
   };
 };
 

@@ -30,8 +30,8 @@ const addToBasketFailure = error => {
   return { type: actionTypes.ADD_TO_BASKET_FAILURE, error };
 };
 
-export const addProductToBasket = (productId, quantity) => {
-  const body = JSON.stringify({ productId, quantity });
+export const addProductToBasket = (productId, quantity, customizationId) => {
+  const body = JSON.stringify({ productId, quantity, customizationId });
   return asyncAction("/api/shop/basket/add", { body, method: "POST", credentials: "same-origin" },
     addToBasketRequest, addToBasketSuccess, addToBasketFailure);
 };
@@ -49,7 +49,7 @@ const getProductsFailure = error => {
 };
 
 export const getProductsByCategory = category => {
-  return asyncAction(`/api/shop/products/category/${category}`, { method: "GET" },
+  return asyncAction(`/api/shop/products/category/${category}`, { method: "GET", credentials: "same-origin" },
     getProductsRequest, getProductsSuccess, getProductsFailure);
 };
 

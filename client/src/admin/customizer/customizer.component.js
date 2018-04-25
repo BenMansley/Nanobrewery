@@ -222,13 +222,13 @@ class Customizer extends Component {
             <p>{description}</p>
           </div>
           <div className="customizer-element actions card">
-            { index === customizations.length ?
-              <React.Fragment>
+            { index === customizations.length
+              ? <React.Fragment>
                 <h2>One more thing...</h2>
                 <MaterialInput className="large" type="text" id="name" labelText="Name your beer" active={!!name}
                   value={name} onChange={(event) => this.setState({ name: event.target.value })} />
               </React.Fragment>
-            : null }
+              : null }
             { newCustomizationId ? <p className="success"><span>Beer Saved!</span>
               <Link className="button" to={{ pathname: "/admin/branding", search:`?id=${newCustomizationId}` }}>
                 Brand It</Link></p>
@@ -279,7 +279,7 @@ Customizer.propTypes = {
   getData: PropTypes.func.isRequired,
   getCustomizations: PropTypes.func.isRequired,
   newCustomization: PropTypes.func.isRequired,
-  updateCustomization: PropTypes.func.isRequired,  
+  updateCustomization: PropTypes.func.isRequired,
   location: PropTypes.object
 };
 

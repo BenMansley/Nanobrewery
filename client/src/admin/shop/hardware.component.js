@@ -20,7 +20,7 @@ class Hardware extends Component {
           <p>{product.description}</p>
           <div className="product-base">
             <span className="price">£{product.price}</span>
-            { product.quantity === null
+            { !product.quantity
               ? <button className="product-add" onClick={() => addToBasket(product.id, userId)}>Add to Basket</button>
               : <Link className="product-add button" to="/admin/basket">In Basket</Link>
             }
@@ -67,7 +67,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getProducts: () => dispatch(getProductsByCategory("hardware")),
-    addToBasket: (productId) => dispatch(addProductToBasket(productId, 1))
+    addToBasket: (productId) => dispatch(addProductToBasket(productId, 1, null))
   };
 };
 
