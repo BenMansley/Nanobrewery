@@ -46,8 +46,14 @@ class App extends Component {
     }
   }
 
+  onSignOut() {
+    const { cookies, signout } = this.props;
+    signout();
+    cookies.remove("session", { path: "/" });
+  }
+
   render() {
-    const { basketSize, signout, isLoggedIn } = this.props;
+    const { basketSize, isLoggedIn } = this.props;
 
     return (
       <div className="app-root">
@@ -60,7 +66,7 @@ class App extends Component {
                 ? <Link to="/admin/user/account" className="header-link"><span>Account</span></Link>
                 : null }
               { isLoggedIn
-                ? <a className="header-link" onClick={() => signout()}>Sign Out</a> : null }
+                ? <a className="header-link" onClick={() => this.onSignOut()}>Sign Out</a> : null }
               { !isLoggedIn
                 ? <Link to="/authentication/signin" className="header-link"><span>Sign In</span></Link> : null }
               { !isLoggedIn
@@ -78,7 +84,7 @@ class App extends Component {
           <Route exact path="/authentication/signup" component={SignUp} />
           <Route exact path="/verify" component={Verify} />
           { (!this.state.validating || isLoggedIn)
-            ? <PrivateRoute path="/admin" allowAccess={isLoggedIn} component={Admin} /> : null }
+            ? <PrivateRoute path="/admin" allowAccess={isLoggedIn} component={Admin} /> : <NoMatch /> }
           { (!this.state.validating || isLoggedIn) ? <Route exact component={NoMatch} /> : null }
         </Switch>
       </div>

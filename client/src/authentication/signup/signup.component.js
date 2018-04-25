@@ -13,18 +13,19 @@ class SignUp extends Component {
       email: "",
       password: "",
       name: "",
+      dob: new Date().toISOString().substring(0, 10),
       companyName: ""
     };
   }
 
   onSubmit(event) {
     event.preventDefault();
-    const { email, name, password, companyName } = this.state;
-    this.props.sendSignUpRequest(email, name, password, companyName);
+    const { email, name, password, dob, companyName } = this.state;
+    this.props.sendSignUpRequest(email, name, password, dob, companyName);
   }
 
   render() {
-    const { email, password, name, companyName } = this.state;
+    const { email, password, name, dob, companyName } = this.state;
     const { redirect, error, success, location } = this.props;
 
     if (redirect) {
@@ -43,6 +44,8 @@ class SignUp extends Component {
               active={!!password} onChange={(evt) => this.setState({ password: evt.target.value })} />
             <MaterialInput labelText="Name *" type="text" id="name" value={name}
               active={!!name} onChange={(evt) => this.setState({ name: evt.target.value })} />
+            <MaterialInput labelText="Date of Birth" type="date" id="dob" value={dob}
+              active={!!dob} onChange={(evt) => this.setState({ dob: evt.target.value })} />
             <MaterialInput labelText="Company" type="text" id="company" value={companyName}
               active={!!companyName} onChange={(evt) => this.setState({ companyName: evt.target.value })} />
             <div className="form-base">

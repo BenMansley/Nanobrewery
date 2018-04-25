@@ -28,14 +28,23 @@ function generateToken() {
  * @bodyparam {string} email       User input email
  * @bodyparam {string} name        User input name
  * @bodyparam {string} password    User input password
+ * @bodyparam {string} password    User input date of birth
  * @bodyparam {string} companyName User input company name
  */
 router.post("/new", (req, res, next) => {
-  const { email, name, password, companyName } = req.body;
+  const { email, name, password, dob, companyName } = req.body;
   const conn = app.get("conn");
   let error = "Insecure Password!";
-  if (passwords.indexOf(password) !== -1 || password.length < 8 || !(/\d+/.test(password)) ||
+  if (passwords.indexOf(password) !== -1 || password.length < 8 ||
+    !((/\d+/.test(password)) || (/\W+/.test(password))) ||
     !(/[a-z]+/.test(password)) || !(/[A-Z]+/.test(password))) {
+    return res.status(401).json(error);
+  }
+
+  error = "You must be at least 18 to sign up";
+  const isUnderage = moment().subtract(18, "years").isSameOrBefore(dob);
+  if (isUnderage) {
+    console.log(error);
     return res.status(401).json(error);
   }
 

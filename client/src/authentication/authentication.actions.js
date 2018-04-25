@@ -37,11 +37,11 @@ const signUpSuccess = message => {
   return { type: actionTypes.SIGN_UP_SUCCESS };
 };
 
-export const authenticateSignUp = (email, name, password, companyName) => {
-  if (!email || !name || !password) {
+export const authenticateSignUp = (email, name, password, dob, companyName) => {
+  if (!email || !name || !password || !dob) {
     return authFormError("Required fields left blank");
   }
-  const data = { email, name, password, companyName };
+  const data = { email, name, password, dob, companyName };
   return asyncAction("/api/users/new", { method: "POST", body: JSON.stringify(data) },
     sendAuthRequest, signUpSuccess, authResponseFailure);
 };
