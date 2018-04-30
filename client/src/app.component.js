@@ -94,7 +94,10 @@ class App extends Component {
           <Route exact path="/authentication/reset-request" component={ResetRequest} />
           <Route exact path="/authentication/password-reset" component={PasswordReset} />
           { (!this.state.validating || isLoggedIn)
-            ? <PrivateRoute path="/admin" allowAccess={isLoggedIn} component={Admin} /> : <NoMatch /> }
+            ? <PrivateRoute path="/admin" allowAccess={isLoggedIn} component={Admin} />
+            : this.state.validating
+              ? null : <NoMatch />
+          }
           { (!this.state.validating || isLoggedIn) ? <Route exact component={NoMatch} /> : null }
         </Switch>
       </div>
