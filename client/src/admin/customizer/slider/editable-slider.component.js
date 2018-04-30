@@ -49,17 +49,17 @@ class EditableSlider extends Component {
           })}>Edit Variable</button>
         </label>
         <form onSubmit={(event) => this.onSubmit(event)} className={active ? "active" : ""}>
-          <MaterialInput type="text" id="name" labelText="Name *" active={!!name} value={name}
+          <MaterialInput type="text" id="name" labelText="Name *" value={name}
             onChange={(event) => this.setState({ name: event.target.value })} />
-          <MaterialInput type="number" id="min" labelText="Minimum *" active={!!min.toString()} value={min}
+          <MaterialInput type="number" id="min" labelText="Minimum *" value={min}
             onChange={(event) => this.setState({ min: event.target.value })} />
-          <MaterialInput type="number" id="max" labelText="Maximum *" active={!!max.toString()} value={max}
+          <MaterialInput type="number" id="max" labelText="Maximum *" value={max}
             onChange={(event) => this.setState({ max: event.target.value })} />
-          <MaterialInput type="number" id="step" labelText="Increment *" active={!!step.toString()} value={step}
+          <MaterialInput type="number" id="step" labelText="Increment *" value={step}
             onChange={(event) => this.setState({ step: event.target.value })} />
-          <MaterialInput type="number" id="defaultVal" labelText="Default *" active={!!defaultVal.toString()}
-            value={defaultVal} onChange={(event) => this.onDefaultChange(event.target.value)} />
-          <MaterialInput type="text" id="suffix" labelText="Suffix (after %)" active={!!suffix} value={suffix}
+          <MaterialInput type="number" id="defaultVal" labelText="Default *" value={defaultVal}
+            onChange={(event) => this.onDefaultChange(event.target.value)} />
+          <MaterialInput type="text" id="suffix" labelText="Suffix (after %)" value={suffix}
             onChange={(event) => this.setState({ suffix: event.target.value })} />
           <div className="slider-buttons">
             <button onClick={(event) => this.onReset(event)}>Reset</button>

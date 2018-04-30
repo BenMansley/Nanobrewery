@@ -6,7 +6,9 @@ import Slider from "./slider/slider.component";
 import MaterialInput from "../../components/material-input.component";
 import MaterialSelect from "../../components/material-select.component";
 import { getCustomizerData } from "./customizer.actions";
-import { getCustomizations, newCustomization, updateCustomization } from "../branding/branding.actions";
+import {
+  getCustomizations, newCustomization, updateCustomization, resetBeerErrors
+} from "../branding/branding.actions";
 
 class Customizer extends Component {
   constructor(props) {
@@ -14,7 +16,7 @@ class Customizer extends Component {
 
     this.state = {
       variables: {
-        "Volume": 0,
+        "Volume": 4,
         "Colour": 0,
         "Hoppiness": 50,
         "Malt Flavour": 50
@@ -117,10 +119,11 @@ class Customizer extends Component {
   }
 
   onNewBeerClick() {
+    this.props.resetBeerErrors();
     this.setState({
       index: this.props.customizations.length,
       variables: {
-        "Volume": 0,
+        "Volume": 4,
         "Colour": 0,
         "Hoppiness": 50,
         "Malt Flavour": 50
@@ -132,16 +135,16 @@ class Customizer extends Component {
   }
 
   onBeerSelect(i) {
-    console.log(`Selected: ${i}`);
     console.log(this.props.customizations);
     const { Volume:volume, Colour:colour, Hoppiness:hoppiness, "Malt Flavour":maltFlavour } = this.state.variables;
     let { name, description, index } = this.state;
-    const { customizations } = this.props;
+    const { customizations, resetBeerErrors } = this.props;
     if (name) {
       customizations[index] = Object.assign({}, customizations[index], {
         name, description, volume, colour, hoppiness, maltFlavour
       });
     }
+    resetBeerErrors();
     this.setActiveBeer(customizations[i], i);
   }
 
@@ -225,8 +228,8 @@ class Customizer extends Component {
             { index === customizations.length
               ? <React.Fragment>
                 <h2>One more thing...</h2>
-                <MaterialInput className="large" type="text" id="name" labelText="Name your beer" active={!!name}
-                  value={name} onChange={(event) => this.setState({ name: event.target.value })} />
+                <MaterialInput className="large" type="text" id="name" labelText="Name your beer" value={name}
+                  onChange={(event) => this.setState({ name: event.target.value })} />
               </React.Fragment>
               : null }
             { newCustomizationId ? <p className="success"><span>Beer Saved!</span>
@@ -280,6 +283,7 @@ Customizer.propTypes = {
   getCustomizations: PropTypes.func.isRequired,
   newCustomization: PropTypes.func.isRequired,
   updateCustomization: PropTypes.func.isRequired,
+  resetBeerErrors: PropTypes.func.isRequired,
   location: PropTypes.object
 };
 
@@ -303,7 +307,8 @@ const mapDispatchToProps = dispatch => {
     newCustomization: (name, description, volume, colour, hoppiness, maltFlavour) =>
       dispatch(newCustomization(name, description, volume, colour, hoppiness, maltFlavour)),
     updateCustomization: (name, description, volume, colour, hoppiness, maltFlavour) =>
-      dispatch(updateCustomization(name, description, volume, colour, hoppiness, maltFlavour))
+      dispatch(updateCustomization(name, description, volume, colour, hoppiness, maltFlavour)),
+    resetBeerErrors: () => dispatch(resetBeerErrors())
   };
 };
 

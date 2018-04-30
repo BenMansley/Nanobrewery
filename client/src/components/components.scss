@@ -6,7 +6,7 @@
   label {
     position: absolute;
     display: block;
-    color: #777777;
+    color: $grey7;
     top: 1em;
     left: 0;
     transform: none;
@@ -16,22 +16,29 @@
     cursor: text;
   }
 
-  input {
+  input, textarea {
     width: 100%;
     border-width: 0 0 2px 0;
-    border-color: #888888;
+    border-color: $grey8;
     background: transparent;
     padding: 0.6em 0 0.5em;
     font-family: inherit;
     font-size: 1.1em;
+    height: 2.6em;
+    transition: border-color 0.25s ease-out;
     
     &:focus, &:hover {
       border-color: $darkTheme;
       outline: none;
     }
-
-    &:focus + label, &.active + label {
+   
+    &.active + label {
       color: $darkGrey;
+      transform: translateY(-2.1em) scale(0.8);
+    }
+
+    &:focus + label {
+      color: $darkTheme;
       transform: translateY(-2.1em) scale(0.8);
     }
   }
@@ -51,6 +58,28 @@
   }
 }
 
+.material-textarea {
+  @extend .material-input;
+
+  textarea {
+    overflow: hidden;
+    resize: none;
+    min-height: 2.6em;
+    
+    ~ .hidden {
+      position: absolute;
+      top: 0;
+      z-index: -1;
+      padding-top: 1.2rem;
+      padding: 0.6em 0 0.5em;
+      font-size: 1.1em;
+      visibility: hidden;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+  }
+}
 
 button:not(.select-dropdown), .button {
   display: inline-block;

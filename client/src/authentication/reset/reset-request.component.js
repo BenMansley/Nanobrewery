@@ -31,8 +31,8 @@ class ResetRequest extends Component {
           <h1 className="page-title">Reset Your Password</h1>
           <p>Send a password reset request to your email.</p>
           <form onSubmit={(event) => this.onSubmit(event)}>
-            <MaterialInput labelText="Email *" type="email" id="email" active={!!this.state.email}
-              value={this.state.email} onChange={(event) => this.setState({ email: event.target.value })} />
+            <MaterialInput labelText="Email *" type="email" id="email" value={this.state.email}
+              onChange={(event) => this.setState({ email: event.target.value })} />
             <div className="form-base">
               { success ? <p>Sent - Check your email for a reset link.</p>
                 : <React.Fragment>

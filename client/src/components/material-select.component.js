@@ -26,8 +26,9 @@ class MaterialSelect extends Component {
 
     return (
       <div className="material-select">
-        <button className={"select-dropdown" + (this.state.open ? " open" : "")} onClick={() => this.setState({ open: true })}>
-          {buttonText}<span className="material-icons">keyboard_arrow_down</span>
+        <button className={"select-dropdown" + (this.state.open ? " open" : "")}
+          onClick={() => this.setState({ open: true })}>{buttonText}
+          <span className="material-icons">keyboard_arrow_down</span>
         </button>
         <ul className={"select-options" + (this.state.open ? " visible" : "")}>{items}</ul>
       </div>

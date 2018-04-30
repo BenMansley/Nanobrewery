@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { getCustomizations } from "./branding.actions";
+import { getCustomizations, editCustomizationDetails } from "./branding.actions";
 import MaterialSelect from "../../components/material-select.component";
 import BeerImage from "./beer-image.component";
 import MaterialInput from "../../components/material-input.component";
 import { addProductToBasket } from "../shop/shop.actions";
+import MaterialTextarea from "../../components/material-textarea.component";
 const imageOptions = [{ value: 0, text: "Custom" }, { value: 1, text: "Pilsen" }, { value: 2, text: "Ale" }];
 const imageTypes = ["pilsen", "ale"];
 
@@ -16,9 +17,11 @@ class Branding extends Component {
 
     this.state = {
       index: 0,
-      isEditingName: false,
+      isEditing: false,
       name: "",
-      image: 0,
+      description: "",
+      rgb: "",
+      imageType: 0,
       customImage: "",
       quantity: 140
     };
@@ -28,7 +31,8 @@ class Branding extends Component {
     const id = /\?id=(\d+)/.exec(searchString)[1];
     const index = customizations.findIndex(c => c.id === Number(id));
     if (index !== -1) {
-      this.setState({ index, quantity: 0 });
+      this.setState({ quantity: 0 });
+      this.onBeerSelect(index, customizations);
     }
   }
 
@@ -42,9 +46,11 @@ class Branding extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const location = this.props.location;
-    if (location.search && (nextProps.customizations.length !== 0)) {
+    const { location, customizations } = this.props;
+    if (location.search && (nextProps.customizations.length !== 0 && customizations.length === 0)) {
       this.setIndex(location.search, nextProps.customizations);
+    } else if (nextProps.customizations.length !== 0 && customizations.length === 0) {
+      this.onBeerSelect(0, nextProps.customizations);
     }
   }
 
@@ -55,8 +61,34 @@ class Branding extends Component {
     }
   }
 
-  onBeerSelect(i) {
-    this.setState({ index: i });
+  onEditClick(beer) {
+    this.setState(prevState => {
+      return {
+        isEditing: !prevState.isEditing,
+        name: beer.name,
+        description: beer.description
+      };
+    });
+  }
+
+  onSubmitEdits(event, beer) {
+    event.preventDefault();
+    const { name, description } = this.state;
+    const id = beer.id;
+    this.props.editBeerDetails(name, description, id);
+    this.setState({ isEditing: false });
+  }
+
+  onBeerSelect(i, newCustomizations) {
+    const customizations = this.props.customizations.length !== 0 ? this.props.customizations : newCustomizations;
+    this.props.history.push({ pathname: "/admin/branding", search: `?id=${customizations[i].id}` });
+    const colour = customizations[i].colour;
+    const minRGB = [55, 8, 10];
+    const step = [2, 2.25, 1.45];
+    const rgb = minRGB.map((c, i) => {
+      return Math.round(c + step[i] * colour);
+    }).join(",");
+    this.setState({ index: i, rgb });
   }
 
   onAddToBasket() {
@@ -68,8 +100,8 @@ class Branding extends Component {
   }
 
   render() {
-    const { name, isEditingName, index, image, customImage, quantity } = this.state;
-    const { customizations, isLoadingCustomizations, isLoadingBasket } = this.props;
+    const { name, description, isEditing, rgb, index, imageType, customImage, quantity } = this.state;
+    const { customizations, editError, isLoadingEdits, isLoadingCustomizations, isLoadingBasket } = this.props;
     let beer = null;
     let options = null;
 
@@ -95,36 +127,54 @@ class Branding extends Component {
         { beer
           ? <div>
             <div className="card beer">
-              { isEditingName
-                ? <div>
-                  <MaterialInput type="text" id="beer-name" labelText="Name" active={name !== ""} inline
-                    onChange={(event) => this.setState({ name: event.target.value })} value={name} />
-                  <button onClick={() => this.setState({ isEditingName: false })}>Done</button>
-                </div>
-                : <div>
-                  <h2 className="beer-name">{beer.name}</h2>
-                  <button onClick={() => this.setState({ isEditingName: true, name: beer.name })}>Edit Name</button>
-                </div>
+              { isEditing
+                ? <form onSubmit={(event) => this.onSubmitEdits(event, beer)}>
+                  <MaterialInput type="text" id="beer-name" labelText="Name" value={name}
+                    onChange={(event) => this.setState({ name: event.target.value })} />
+                  <MaterialTextarea id="beer-description" labelText={"Description (" + description.length + "/800)"}
+                    value={description} onChange={(event) => this.setState({ description: event.target.value })} />
+                  <div className="form-base">
+                    <div>
+                      <button type="submit">Done</button>
+                      <button type="reset" onClick={() => this.onEditClick(beer)}>Cancel</button>
+                    </div>
+                  </div>
+                </form>
+                : <React.Fragment>
+                  <div className="title-bar">
+                    { isLoadingEdits ? <span className="loading spin material-icons">toys</span>
+                      : <React.Fragment>
+                        {editError
+                          ? <p className="error"><span className="material-icons">error</span>{editError}</p>
+                          : <h2 className="beer-name">{beer.name}</h2> }
+                        <button onClick={() => this.onEditClick(beer)}>Edit</button>
+                      </React.Fragment>
+                    }
+                  </div>
+                  { !isLoadingEdits ? <p>{beer.description}</p> : null }
+                </React.Fragment>
               }
-              <p>{beer.description}</p>
-              <ul>
-                <li>Volume: {beer.volume}</li> <li>Colour: {beer.colour}</li>
+              <ul className="beer-facts">
+                <li>Volume: {beer.volume}</li>
+                <li>Colour: <div className="beer-colour" style={{ backgroundColor: "rgb(" + rgb + ")" }} /></li>
                 <li>Hoppiness: {beer.hoppiness}</li> <li>Malt Flavour: {beer.maltFlavour}</li>
               </ul>
               <hr />
               <h3>Make a Logo</h3>
-              <div className="beer-flex">
-                <div className="beer-image-options">
-                  <MaterialSelect options={imageOptions} selected={image}
-                    onSelect={(i) => this.setState({ image: i })} />
-                </div>
-                { image === 0
-                  ? <div className="custom-image">
-                    <input type="file" accept="image/*" onChange={(event) => this.onCustomImageChange(event)} />
-                    { customImage ? <img src={customImage} alt={beer.name} /> : null }
+              <div>
+                <div className="beer-flex">
+                  <div className="beer-image-options">
+                    <MaterialSelect options={imageOptions} selected={imageType}
+                      onSelect={(i) => this.setState({ imageType: i })} />
                   </div>
-                  : <BeerImage type={imageTypes[image - 1]} text={beer.name} />
-                }
+                  { imageType === 0
+                    ? <div className="custom-image">
+                      <input type="file" accept="image/*" onChange={(event) => this.onCustomImageChange(event)} />
+                      { customImage ? <img src={customImage} alt={beer.name} /> : null }
+                    </div>
+                    : <BeerImage type={imageTypes[imageType - 1]} text={beer.name} />
+                  }
+                </div>
               </div>
               <hr />
               <h3>Order your Beer</h3>
@@ -132,7 +182,7 @@ class Branding extends Component {
                 <label htmlFor="quantity">Quantity: </label>
                 <input id="quantity" type="number" className="quantity-input" value={quantity}
                   onChange={(event) => this.setState({ quantity: event.target.value })} />
-                <span>pints</span>
+                <span>litres</span>
                 { isLoadingBasket
                   ? <span className="loading spin material-icons">toys</span>
                   : <button className="product-add" onClick={() => this.onAddToBasket()}>Add to Basket</button>
@@ -165,23 +215,30 @@ Branding.propTypes = {
   ),
   isLoadingCustomizations: PropTypes.bool.isRequired,
   isLoadingBasket: PropTypes.bool.isRequired,
+  isLoadingEdits: PropTypes.bool.isRequired,
+  editError: PropTypes.string.isRequired,
   getCustomizations: PropTypes.func.isRequired,
   addToBasket: PropTypes.func.isRequired,
-  location: PropTypes.object
+  editBeerDetails: PropTypes.func.isRequired,
+  location: PropTypes.object,
+  history: PropTypes.object
 };
 
 const mapStateToProps = state => {
   return {
     customizations: state.branding.customizations,
     isLoadingCustomizations: state.branding.isLoading,
-    isLoadingBasket: state.shop.isLoading
+    isLoadingEdits: state.branding.isLoadingEdits,
+    editError: state.branding.editError,
+    isLoadingBasket: state.shop.isLoading,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     getCustomizations: () => dispatch(getCustomizations()),
-    addToBasket: (quantity, customizationId) => dispatch(addProductToBasket(1, quantity, customizationId))
+    addToBasket: (quantity, customizationId) => dispatch(addProductToBasket(1, quantity, customizationId)),
+    editBeerDetails: (name, description, id) => dispatch(editCustomizationDetails(name, description, id))
   };
 };
 

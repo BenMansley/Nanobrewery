@@ -40,17 +40,17 @@ class SignUp extends Component {
           <p>After signing up, check your email for a verification link.</p>
           <form onSubmit={(event) => this.onSubmit(event)}>
             <MaterialInput labelText="Email *" type="email" id="email" value={email}
-              active={!!email} onChange={(evt) => this.setState({ email: evt.target.value })} />
+              onChange={(evt) => this.setState({ email: evt.target.value })} />
             <MaterialInput labelText="Password *" type="password" id="password" value={password}
-              active={!!password} onChange={(evt) => this.setState({ password: evt.target.value })} />
+              onChange={(evt) => this.setState({ password: evt.target.value })} />
             <MaterialInput labelText="Confirm Password *" type="password" id="confirmation" value={confirmation}
-              active={!!confirmation} onChange={(evt) => this.setState({ confirmation: evt.target.value })} />
+              onChange={(evt) => this.setState({ confirmation: evt.target.value })} />
             <MaterialInput labelText="Name *" type="text" id="name" value={name}
-              active={!!name} onChange={(evt) => this.setState({ name: evt.target.value })} />
+              onChange={(evt) => this.setState({ name: evt.target.value })} />
             <MaterialInput labelText="Date of Birth" type="date" id="dob" value={dob}
-              active={!!dob} onChange={(evt) => this.setState({ dob: evt.target.value })} />
+              onChange={(evt) => this.setState({ dob: evt.target.value })} />
             <MaterialInput labelText="Company" type="text" id="company" value={companyName}
-              active={!!companyName} onChange={(evt) => this.setState({ companyName: evt.target.value })} />
+              onChange={(evt) => this.setState({ companyName: evt.target.value })} />
             <div className="form-base">
               { error ? <p className="error"><span className="material-icons">error</span>{error}</p> : null }
               {success

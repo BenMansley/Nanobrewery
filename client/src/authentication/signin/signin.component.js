@@ -33,10 +33,10 @@ class SignIn extends Component {
         <div className="auth-form card">
           <h1 className="page-title">Sign In to Your Account</h1>
           <form onSubmit={(event) => this.onSubmit(event)}>
-            <MaterialInput labelText="Email *" type="email" id="email" active={!!this.state.email}
-              value={this.state.email} onChange={(event) => this.setState({ email: event.target.value })} />
-            <MaterialInput labelText="Password *" type="password" id="password" active={!!this.state.password}
-              value={this.state.password} onChange={(event) => this.setState({ password: event.target.value })} />
+            <MaterialInput labelText="Email *" type="email" id="email" value={this.state.email}
+              onChange={(event) => this.setState({ email: event.target.value })} />
+            <MaterialInput labelText="Password *" type="password" id="password" value={this.state.password}
+              onChange={(event) => this.setState({ password: event.target.value })} />
             <div className="form-base">
               <Link to="/authentication/reset-request">Forgot Password?</Link>
               <p className="error">{this.props.error !== "" && <span className="material-icons">error</span>}

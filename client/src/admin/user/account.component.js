@@ -64,12 +64,12 @@ class Account extends Component {
             </div>
             : <form onSubmit={(event) => this.onSubmit(event)}>
               <div className="account-details">
-                <MaterialInput type="email" id="email" labelText="Email" active={!!email} value={email}
+                <MaterialInput type="email" id="email" labelText="Email" value={email}
                   onChange={(event) => this.setState({ email: event.target.value })} />
-                <MaterialInput type="text" id="name" labelText="Name" active={!!name} value={name}
+                <MaterialInput type="text" id="name" labelText="Name" value={name}
                   onChange={(event) => this.setState({ name: event.target.value })} />
-                <MaterialInput type="text" id="company-name" labelText="Company Name" active={!!companyName}
-                  value={companyName} onChange={(event) => this.setState({ companyName: event.target.value })} />
+                <MaterialInput type="text" id="company-name" labelText="Company Name" value={companyName}
+                  onChange={(event) => this.setState({ companyName: event.target.value })} />
               </div>
               <div className="form-base">
                 <p className="error">{error ? <span className="material-icons">error</span> : null }

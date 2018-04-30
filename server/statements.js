@@ -97,6 +97,11 @@ function updateCustomization(description, volume, colour, hoppiness, maltFlavour
   return mysql.format(query, Object.values(arguments));
 }
 
+function editCustomizationDetails(name, description, id, token) {
+  const query = "UPDATE Customizations SET name=?, description=? WHERE id=? AND userId=" + userId;
+  return mysql.format(query, Object.values(arguments));
+}
+
 function deleteCustomization(id, token) {
   const query = "DELETE FROM Customizations WHERE id=? AND userId=" + userId;
   return mysql.format(query, Object.values(arguments));
@@ -176,6 +181,7 @@ module.exports = {
     getCustomizations,
     newCustomization,
     updateCustomization,
+    editCustomizationDetails,
     deleteCustomization,
     getCustomizationById,
     getCustomizationByNameAndUser

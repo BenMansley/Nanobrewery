@@ -10,9 +10,13 @@ export const actionTypes = {
   UPDATE_CUSTOMIZATION_REQUEST: "UPDATE_CUSTOMIZATION_REQUEST",
   UPDATE_CUSTOMIZATION_SUCCESS: "UPDATE_CUSTOMIZATION_SUCCESS",
   UPDATE_CUSTOMIZATION_FAILURE: "UPDATE_CUSTOMIZATION_FAILURE",
+  EDIT_CUSTOMIZATION_DETAILS_REQUEST: "EDIT_CUSTOMIZATION_DETAILS_REQUEST",
+  EDIT_CUSTOMIZATION_DETAILS_SUCCESS: "EDIT_CUSTOMIZATION_DETAILS_SUCCESS",
+  EDIT_CUSTOMIZATION_DETAILS_FAILURE: "EDIT_CUSTOMIZATION_DETAILS_FAILURE",
   DELETE_CUSTOMIZATION_REQUEST: "DELETE_CUSTOMIZATION_REQUEST",
   DELETE_CUSTOMIZATION_SUCCESS: "DELETE_CUSTOMIZATION_SUCCESS",
-  DELETE_CUSTOMIZATION_FAILURE: "DELETE_CUSTOMIZATION_FAILURE"
+  DELETE_CUSTOMIZATION_FAILURE: "DELETE_CUSTOMIZATION_FAILURE",
+  RESET_BEER_ERRORS: "RESET_BEER_ERRORS"
 };
 
 const getCustomizationsRequest = _ => {
@@ -87,4 +91,27 @@ export const deleteCustomization = (id) => {
   return asyncAction("/api/customizer/delete",
     { method: "DELETE", body: JSON.stringify(data), credentials: "same-origin" },
     deleteCustomizationRequest, deleteCustomizationSuccess, deleteCustomizationFailure);
+};
+
+const editCustomizationDetailsRequest = _ => {
+  return { type: actionTypes.EDIT_CUSTOMIZATION_DETAILS_REQUEST };
+};
+
+const editCustomizationDetailsSuccess = customizations => {
+  return { type: actionTypes.EDIT_CUSTOMIZATION_DETAILS_SUCCESS, customizations };
+};
+
+const editCustomizationDetailsFailure = error => {
+  return { type: actionTypes.EDIT_CUSTOMIZATION_DETAILS_FAILURE, error };
+};
+
+export const editCustomizationDetails = (name, description, id) => {
+  const data = { name, description, id };
+  return asyncAction("/api/customizer/edit-details",
+    { method: "PUT", body: JSON.stringify(data), credentials: "same-origin" },
+    editCustomizationDetailsRequest, editCustomizationDetailsSuccess, editCustomizationDetailsFailure);
+};
+
+export const resetBeerErrors = _ => {
+  return { type: actionTypes.RESET_BEER_ERRORS };
 };

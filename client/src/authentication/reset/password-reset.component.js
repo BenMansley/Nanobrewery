@@ -33,10 +33,10 @@ class PasswordReset extends Component {
           { !location.search ? <Redirect to={{ pathname: "/" }} /> : null}
           <h1 className="page-title">Reset Your Password</h1>
           <form onSubmit={(event) => this.onSubmit(event)}>
-            <MaterialInput labelText="New Password *" type="password" id="password" active={!!password} value={password}
+            <MaterialInput labelText="New Password *" type="password" id="password" value={password}
               onChange={(event) => this.setState({ password: event.target.value })} />
-            <MaterialInput labelText="Confirm Password *" type="password" id="confirmation" active={!!confirmation}
-              value={confirmation} onChange={(event) => this.setState({ confirmation: event.target.value })} />
+            <MaterialInput labelText="Confirm Password *" type="password" id="confirmation" value={confirmation}
+              onChange={(event) => this.setState({ confirmation: event.target.value })} />
             <div className="form-base">
               { success ? <p>Password Changed. <Link to="/authentication/signin">Sign In</Link></p>
                 : <React.Fragment>
