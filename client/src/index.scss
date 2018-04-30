@@ -1,10 +1,14 @@
 $blue: #0277BD;
 $pink: #FF4081;
 $red: #D32F2F;
+$green: #0D960D;
 $white: #FFFFFF;
 $greyF: #FEFFFF;
 $greyE: #EAEAEA;
 $greyD: #DDDDDD;
+$greyA: #AAAAAA;
+$grey8: #888888;
+$grey7: #777777;
 $grey6: #666666;
 $grey3: #333333;
 $black: #000000;
@@ -18,7 +22,7 @@ $darkTheme: #0D47A1;
 @import 'admin/admin';
 @import 'home/home';
 
-* {
+*, *::before, *::after {
   box-sizing: border-box;
 }
 
@@ -39,6 +43,8 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  min-width: 320px;
+  overflow-x: auto;
 }
 
 
@@ -61,33 +67,99 @@ header {
       
       > .header-link {
         text-transform: uppercase;
+        color: $darkGrey;
       }
 
       &.mobile {
         display: none;
       }
 
-      @media all and (max-width: 480px) {
+      @media all and (max-width: 700px) {
         display: none;
         &.mobile {
           display: block;
         }
       }
     }
-    
-    .header-link {
-      color: inherit;
+
+    .menu-toggle {
+      z-index: 100;
       cursor: pointer;
-      white-space: nowrap;
-      font-weight: 700;
-
-      &:not(:first-of-type) {
-        margin-left: 1em;
+      font-size: 2em;
+      transform: rotate(0deg);
+      transition: transform 0.25s linear;
+      
+      &.active {
+        transform: rotate(180deg);
       }
+      
+      @media all and (min-width: 481px) {
+        display: none;
+      }
+    }
 
-      &:hover {
-        text-decoration: none;
-        color: $grey3;
+    nav {
+      margin-left: 1em;
+    
+      .header-link {
+        color: inherit;
+        cursor: pointer;
+        white-space: nowrap;
+        font-weight: 700;
+      }
+      
+      &.desktop {
+        
+        .header-link:not(:first-of-type) {
+          margin-left: 1em;
+        }
+
+        .header-link:hover {
+          text-decoration: none;
+          color: $grey6;
+        }
+        
+        @media all and (max-width: 480px) {
+          display: none;
+        }
+      }
+      
+      &.mobile {
+        display: none;
+        position: fixed;
+        height: 100vh;
+        top: 0;
+        right: 0;
+        padding-top: 6em;
+        background: $white;
+        box-shadow: -4px 0px 10px rgba(210, 210, 210, 0.5);
+        z-index: 99;
+        transform: translateX(110%);
+        transition: transform 0.25s ease;
+
+        .header-link {
+          padding: 1em 2em 1em 5em;
+          display: block;
+          text-align: right;
+
+          &:first-of-type {
+            border-top: 1px solid $greyD;
+          }
+
+          &:hover {
+            text-decoration: none;            
+            background: $greyE;
+          }
+        }
+  
+        @media all and (max-width: 480px) {
+          display: block;
+
+          &.active {
+            transform: translateX(0);
+          }
+        }
+
       }
     }
   }
@@ -130,7 +202,7 @@ header {
 
 a {
   text-decoration: none;
-  color: inherit;
+  color: $darkTheme;
 
   &:hover {
     color: $darkGrey

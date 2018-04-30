@@ -8,6 +8,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  flex-flow: row wrap;
   font-size: 1.1em;
   
   label {
@@ -18,7 +19,7 @@
     border: 2px solid transparent;
     border-bottom-color: $lightTheme;
     padding: 0 0.2em;
-    width: 4em;
+    width: 3em;
     font-family: inherit;
     font-size: 1.4em;
     font-weight: bold;

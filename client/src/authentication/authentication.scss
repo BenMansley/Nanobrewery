@@ -10,9 +10,10 @@
     margin-top: 1em;
     text-align: center;
     font-size: 0.9em;
+  }
 
-    a {
-      color: $darkTheme;
-    }
+  a:hover {
+    color: $darkTheme;
+    text-decoration: underline;
   }
 }
