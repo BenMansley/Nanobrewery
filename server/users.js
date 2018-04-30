@@ -35,9 +35,7 @@ router.post("/new", (req, res, next) => {
   const { email, name, password, dob, companyName } = req.body;
   const conn = app.get("conn");
   let error = "Insecure Password!";
-  if (passwords.indexOf(password) !== -1 || password.length < 8 ||
-    !((/\d+/.test(password)) || (/\W+/.test(password))) ||
-    !(/[a-z]+/.test(password)) || !(/[A-Z]+/.test(password))) {
+  if (passwords.indexOf(password) !== -1 || password.length < 8) {
     return res.status(401).json(error);
   }
 
@@ -213,6 +211,98 @@ router.get("/verify", (req, res, next) => {
         }
         return res.status(200).json("Success");
       });
+    });
+  });
+});
+
+router.post("/reset", (req, res, next) => {
+  const password = req.body.password;
+  let error = "Insecure Password!";
+  if (passwords.indexOf(password) !== -1 || password.length < 8) {
+    return res.status(401).json(error);
+  }
+
+  const token = req.query.t;
+  const conn = app.get("conn");
+  error = "Error getting token";
+  let query = SQL.getToken(token);
+  conn.query(query, (err, results) => {
+    if (err) {
+      logger.error(err);
+      return res.status(500).json(error);
+    }
+
+    error = "Token Not Found";
+    if (results.length === 0) return res.status(401).json(error);
+
+    const expiry = results[0].expiry;
+    error = "Token Expired";
+    if (new Date(expiry) < new Date()) return res.status(401).json(error);
+
+    error = "Error hashing password";
+    bcrypt.hash(password, 10, (err, hash) => {
+      if (err) {
+        logger.error(err);
+        return res.status(500).json(error);
+      }
+
+      error = "Error resetting password";
+      query = SQL.setPassword(hash, token);
+      conn.query(query, (err, results) => {
+        if (err) {
+          logger.error(err);
+          return res.status(500).json(error);
+        }
+
+        error = "Error deleting token";
+        query = SQL.deleteToken(token);
+        conn.query(query, (err, results) => {
+          if (err) {
+            logger.error(err);
+            return res.status(500).json(error);
+          }
+          return res.status(200).json("Success");
+        });
+      });
+    });
+  });
+});
+
+router.post("/send-reset", (req, res, next) => {
+  const email = req.body.email;
+  console.log(email);
+  const conn = app.get("conn");
+  let error = "Error getting user";
+  let query = SQL.getUserByEmail(email);
+  conn.query(query, (err, results) => {
+    if (err) {
+      logger.error(err);
+      return res.status(500).json(error);
+    }
+
+    const exists = results.length !== 0;
+    const name = exists ? results[0].name : "";
+
+    const token = generateToken();
+    const expiry = moment().add(12, "hours").toDate();
+    const tokenEmail = exists ? email : "emailfail@nanobrewery.com";
+    error = "Error saving token";
+    query = SQL.saveResetToken(token, tokenEmail, expiry);
+    conn.query(query, (err, results) => {
+      if (err) {
+        logger.error(err);
+        return res.status(500).json(error);
+      }
+
+      error = "Error sending verification email";
+      mailer.reset(name, email, exists, token)
+        .then(_ => {
+          return res.status(200).json("Success");
+        })
+        .catch(err => {
+          logger.error(err);
+          return res.status(500).json(error);
+        });
     });
   });
 });

@@ -18,7 +18,7 @@ class Verify extends Component {
 
     return (
       <div className="page-content">
-        <h1 className="page-title" />
+        <h1 className="page-title">&shy;</h1>
         { !location.search || verifySuccess ? <Redirect to={{ pathname: "/" }} /> : null }
         <div className="card">
           { isLoading ? <span className="loading spin material-icons">toys</span> : null }

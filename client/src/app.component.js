@@ -12,6 +12,8 @@ import Verify from "./authentication/verify.component";
 import NoMatch from "./no-match";
 import { signout, changeRoute, getSessionFromCookie } from "./authentication/authentication.actions";
 import { getBasketSize } from "./admin/shop/shop.actions";
+import ResetRequest from "./authentication/reset/reset-request.component";
+import PasswordReset from "./authentication/reset/password-reset.component";
 
 class App extends Component {
   constructor(props) {
@@ -22,7 +24,8 @@ class App extends Component {
     });
 
     this.state = {
-      validating: true
+      validating: true,
+      isMenuActive: false
     };
   }
 
@@ -54,6 +57,22 @@ class App extends Component {
 
   render() {
     const { basketSize, isLoggedIn } = this.props;
+    const isMenuActive = this.state.isMenuActive;
+
+    let navLinks;
+
+    if (isLoggedIn) {
+      navLinks = <React.Fragment>
+        <Link to="/admin/basket" className="header-link">Basket{basketSize > 0 ? " (" + basketSize + ")" : "" }</Link>
+        <Link to="/admin/user/account" className="header-link"><span>Account</span></Link>
+        <a className="header-link" onClick={() => this.onSignOut()}>Sign Out</a>
+      </React.Fragment>;
+    } else {
+      navLinks = <React.Fragment>
+        <Link to="/authentication/signin" className="header-link"><span>Sign In</span></Link>
+        <Link to="/authentication/signup" className="header-link"><span>Sign Up</span></Link>
+      </React.Fragment>;
+    }
 
     return (
       <div className="app-root">
@@ -61,21 +80,10 @@ class App extends Component {
           <div className="site-header">
             <h1 className="site-title"><Link to="/" className="header-link">The Nanobrewery Company</Link></h1>
             <h1 className="site-title mobile"><Link to="/" className="header-link">Nanobrewery</Link></h1>
-            <nav>
-              { isLoggedIn
-                ? <Link to="/admin/user/account" className="header-link"><span>Account</span></Link>
-                : null }
-              { isLoggedIn
-                ? <a className="header-link" onClick={() => this.onSignOut()}>Sign Out</a> : null }
-              { !isLoggedIn
-                ? <Link to="/authentication/signin" className="header-link"><span>Sign In</span></Link> : null }
-              { !isLoggedIn
-                ? <Link to="/authentication/signup" className="header-link"><span>Sign Up</span></Link> : null }
-              { isLoggedIn
-                ? <Link to="/admin/basket" className="header-link">
-                Basket{basketSize > 0 ? " (" + basketSize + ")" : "" }
-                </Link> : null }
-            </nav>
+            <nav className="desktop">{navLinks}</nav>
+            <span onClick={() => this.setState(prevState => { return { isMenuActive: !prevState.isMenuActive }; })}
+              className={"material-icons menu-toggle" + (isMenuActive ? " active" : "")}>menu</span>
+            <nav className={"mobile" + (isMenuActive ? " active" : "")}>{navLinks}</nav>
           </div>
         </header>
         <Switch>
@@ -83,6 +91,8 @@ class App extends Component {
           <Route exact path="/authentication/signin" component={SignIn} />
           <Route exact path="/authentication/signup" component={SignUp} />
           <Route exact path="/verify" component={Verify} />
+          <Route exact path="/authentication/reset-request" component={ResetRequest} />
+          <Route exact path="/authentication/password-reset" component={PasswordReset} />
           { (!this.state.validating || isLoggedIn)
             ? <PrivateRoute path="/admin" allowAccess={isLoggedIn} component={Admin} /> : <NoMatch /> }
           { (!this.state.validating || isLoggedIn) ? <Route exact component={NoMatch} /> : null }

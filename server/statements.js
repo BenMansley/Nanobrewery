@@ -1,6 +1,6 @@
 /** @module PreparedStatements */
 const mysql = require("mysql");
-const userId = "(SELECT userId FROM Tokens WHERE token=?);";
+const userId = "(SELECT userId FROM Tokens WHERE token=? AND type='session');";
 
 function newUser(email, password, name, companyName) {
   const query = "INSERT INTO Users (email, password, name, companyName) VALUES (?, ?, ?, ?);";
@@ -9,7 +9,7 @@ function newUser(email, password, name, companyName) {
 
 function getUserByEmail(email) {
   const query = "SELECT * FROM Users WHERE email=?;";
-  return mysql.format(query, [email]);
+  return mysql.format(query, Object.values(arguments));
 }
 
 function saveSessionToken(token, email, expiry) {
@@ -23,9 +23,15 @@ function refreshToken(newToken, expiry, prevToken) {
   return mysql.format(query, Object.values(arguments));
 }
 
-function saveEmailToken(token, email, expiry) {
+function saveVerifyToken(token, email, expiry) {
   const query = "INSERT INTO Tokens (token, userId, expiry, type)" +
-                " VALUES (?, (SELECT id FROM Users WHERE email=?), ?, 'email');";
+                " VALUES (?, (SELECT id FROM Users WHERE email=?), ?, 'verify');";
+  return mysql.format(query, Object.values(arguments));
+}
+
+function saveResetToken(token, email, expiry) {
+  const query = "INSERT INTO Tokens (token, userId, expiry, type)" +
+                " VALUES (?, (SELECT id FROM Users WHERE email=?), ?, 'reset');";
   return mysql.format(query, Object.values(arguments));
 }
 
@@ -37,6 +43,11 @@ function verifyUser(userId) {
 function getPassword(email) {
   const query = "SELECT password FROM Users WHERE email=?;";
   return mysql.format(query, [email]);
+}
+
+function setPassword(password, token) {
+  const query = "UPDATE Users SET password=? WHERE id=(SELECT userId FROM Tokens WHERE token=? AND type='reset');";
+  return mysql.format(query, Object.values(arguments));
 }
 
 function getToken(token) {
@@ -149,8 +160,10 @@ module.exports = {
     getUserByEmail,
     saveSessionToken,
     refreshToken,
-    saveEmailToken,
+    saveVerifyToken,
+    saveResetToken,
     getPassword,
+    setPassword,
     getToken,
     verifyUser,
     getUserDetails,

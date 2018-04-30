@@ -38,6 +38,7 @@ class SignIn extends Component {
             <MaterialInput labelText="Password *" type="password" id="password" active={!!this.state.password}
               value={this.state.password} onChange={(event) => this.setState({ password: event.target.value })} />
             <div className="form-base">
+              <Link to="/authentication/reset-request">Forgot Password?</Link>
               <p className="error">{this.props.error !== "" && <span className="material-icons">error</span>}
                 {this.props.error}</p>
               <button type="submit">Sign In</button>

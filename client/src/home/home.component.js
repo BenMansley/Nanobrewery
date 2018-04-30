@@ -56,7 +56,7 @@ class Home extends Component {
               from the crowd.</p>
             <p className="large">How Do We Do It?</p>
             <div className="flex-container">
-              <div className="img"/>
+              <div className="img" />
               <p>It's easy and we take care of it all for you. You sign up to have a fermentation kit fitted on your
                 premises,then design your beer and marketing materials here. 3-4 days later we deliver you the mash
                 and you simply drop the entire bag into the fermentation unit - we manage everything for you remotely.

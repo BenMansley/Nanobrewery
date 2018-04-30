@@ -12,6 +12,7 @@ class SignUp extends Component {
     this.state = {
       email: "",
       password: "",
+      confirmation: "",
       name: "",
       dob: new Date().toISOString().substring(0, 10),
       companyName: ""
@@ -20,12 +21,12 @@ class SignUp extends Component {
 
   onSubmit(event) {
     event.preventDefault();
-    const { email, name, password, dob, companyName } = this.state;
-    this.props.sendSignUpRequest(email, name, password, dob, companyName);
+    const { email, name, password, confirmation, dob, companyName } = this.state;
+    this.props.sendSignUpRequest(email, name, password, confirmation, dob, companyName);
   }
 
   render() {
-    const { email, password, name, dob, companyName } = this.state;
+    const { email, password, confirmation, name, dob, companyName } = this.state;
     const { redirect, error, success, location } = this.props;
 
     if (redirect) {
@@ -42,6 +43,8 @@ class SignUp extends Component {
               active={!!email} onChange={(evt) => this.setState({ email: evt.target.value })} />
             <MaterialInput labelText="Password *" type="password" id="password" value={password}
               active={!!password} onChange={(evt) => this.setState({ password: evt.target.value })} />
+            <MaterialInput labelText="Confirm Password *" type="password" id="confirmation" value={confirmation}
+              active={!!confirmation} onChange={(evt) => this.setState({ confirmation: evt.target.value })} />
             <MaterialInput labelText="Name *" type="text" id="name" value={name}
               active={!!name} onChange={(evt) => this.setState({ name: evt.target.value })} />
             <MaterialInput labelText="Date of Birth" type="date" id="dob" value={dob}
@@ -84,8 +87,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    sendSignUpRequest: (email, name, password, companyName) =>
-      dispatch(authenticateSignUp(email, name, password, companyName)),
+    sendSignUpRequest: (email, name, password, confirmation, dob, companyName) =>
+      dispatch(authenticateSignUp(email, name, password, confirmation, dob, companyName)),
     sendAuthError: (error) => dispatch(authFormError(error))
   };
 };
