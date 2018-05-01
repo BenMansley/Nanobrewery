@@ -134,7 +134,8 @@ describe("Register a new user", _ => {
 describe("Logs in", _ => {
   const error = "Invalid Email or Password";
   const agent = chai.request.agent(app);
-  before(done => {
+  before(function(done) {
+    this.timeout(3000);
     chai.request(app).post("/api/users/new").send(newUser).end((_, res) => {
       done();
     });

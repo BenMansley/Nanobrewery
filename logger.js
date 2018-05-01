@@ -14,9 +14,7 @@ const formatter = options => (
 
 let transports = [];
 
-if (process.env.NODE_ENV !== "test") {
-  transports.push(new winston.transports.Console({ timestamp: timeStamp, formatter: formatter }));
-}
+transports.push(new winston.transports.Console({ timestamp: timeStamp, formatter: formatter }));
 
 const logger = new winston.Logger({
   levels: levels,
