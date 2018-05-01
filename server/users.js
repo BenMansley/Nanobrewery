@@ -36,6 +36,7 @@ router.post("/new", (req, res, next) => {
   const conn = app.get("conn");
   let error = "Insecure Password!";
   if (passwords.indexOf(password) !== -1 || password.length < 10) {
+    console.log("Bad Password");
     return res.status(401).json(error);
   }
 
@@ -55,6 +56,7 @@ router.post("/new", (req, res, next) => {
     }
     if (results.length !== 0) {
       console.log("User exists");
+      console.log(results);
       return res.status(401).json(error);
     }
 

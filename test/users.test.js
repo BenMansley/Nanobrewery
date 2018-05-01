@@ -126,7 +126,7 @@ describe("Register a new user", _ => {
     const query = mysql.format(statement, [newUser.email]);
     conn.query(query, (err, results) => {
       if (err) console.error(err);
-      done();
+      else done();
     });
   });
 });
