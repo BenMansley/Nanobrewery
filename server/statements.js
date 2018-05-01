@@ -18,11 +18,6 @@ function saveSessionToken(token, email, expiry) {
   return mysql.format(query, Object.values(arguments));
 }
 
-function refreshToken(newToken, expiry, prevToken) {
-  const query = "UPDATE Tokens SET token=?, expiry=? WHERE token=?";
-  return mysql.format(query, Object.values(arguments));
-}
-
 function saveVerifyToken(token, email, expiry) {
   const query = "INSERT INTO Tokens (token, userId, expiry, type)" +
                 " VALUES (?, (SELECT id FROM Users WHERE email=?), ?, 'verify');";
@@ -75,7 +70,8 @@ function getVariables() {
 }
 
 function getPresets() {
-  return "SELECT * FROM Customizations WHERE userId=1";
+  return "SELECT id, name, description, volume, colour, hoppiness, maltFlavour, imageType, customImage" +
+         " FROM Customizations WHERE userId=1";
 }
 
 function editVariable(name, min, max, step, defaultVal, suffix, id) {
@@ -117,7 +113,7 @@ function deleteCustomization(id, token) {
 }
 
 function getCustomizationById(id, token) {
-  const query = "SELECT id, name, description, volume, colour, hoppiness, maltFlavour" +
+  const query = "SELECT id, name, description, volume, colour, hoppiness, maltFlavour, imageType, customImage" +
   " FROM Customizations WHERE id=? AND userId=" + userId;
   return mysql.format(query, Object.values(arguments));
 }
@@ -173,7 +169,6 @@ module.exports = {
     newUser,
     getUserByEmail,
     saveSessionToken,
-    refreshToken,
     saveVerifyToken,
     saveResetToken,
     getPassword,

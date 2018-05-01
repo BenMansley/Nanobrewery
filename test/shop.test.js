@@ -9,7 +9,8 @@ const newUser = {
   email: "test@test.com",
   password: "Password3114",
   name: "Test User",
-  companyName: ""
+  companyName: "",
+  dob: "1992-05-01T12:34:29.503Z"
 };
 
 const login = {
@@ -52,7 +53,7 @@ describe("Add a product to a user's basket", _ => {
   };
   const agent = chai.request.agent(app);
   before(function(done) {
-    this.timeout(3000);
+    this.timeout(4000);
     agent.post("/api/users/new").send(newUser).end((_, res) => {
       agent.post("/api/users/login").send(login).end((_, res) => {
         done();
@@ -79,10 +80,11 @@ describe("Add a product to a user's basket", _ => {
     });
   });
   it("Fails on db error getting basket size", done => {
+    const otherProduct = Object.assign({}, product, { productId:2 });
     const sqlStub = sinon.stub(app.get("conn"), "query");
     sqlStub.onThirdCall().callsArgWith(1, new Error());
     sqlStub.callThrough();
-    agent.post("/api/shop/basket/add").send(product).end((_, res) => {
+    agent.post("/api/shop/basket/add").send(otherProduct).end((_, res) => {
       sqlStub.restore();
       expect(res).to.have.status(500);
       expect(res.body).to.equal("Error getting updated basket");

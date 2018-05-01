@@ -9,7 +9,8 @@ const newUser = {
   email: "test@test.com",
   password: "Password3114",
   name: "Test User",
-  companyName: ""
+  companyName: "",
+  dob: "1992-05-01T12:34:29.503Z"
 };
 
 const login = {
@@ -33,10 +34,17 @@ describe("Register a new user", _ => {
       done();
     });
   });
+  it("Rejects on too young", done => {
+    const badUser = Object.assign({}, newUser, { dob: "2002-05-01T12:34:29.503Z" });
+    chai.request(app).post("/api/users/new").send(badUser).end((_, res) => {
+      expect(res).to.have.status(401);
+      expect(res.body).to.equal("Error creating user");
+      done();
+    });
+  });
   describe("Password check failures", _ => {
     const weakPassword = Object.assign({}, newUser, { password: "password" });
     const shortPassword = Object.assign({}, newUser, { password: "gien" });
-    const noNumberPassword = Object.assign({}, newUser, { password: "geogiergneg" });
     const error = "Insecure Password!";
     it("Rejects on weak password", done => {
       chai.request(app).post("/api/users/new").send(weakPassword).end((_, res) => {
@@ -47,13 +55,6 @@ describe("Register a new user", _ => {
     });
     it("Rejects on short password", done => {
       chai.request(app).post("/api/users/new").send(shortPassword).end((_, res) => {
-        expect(res).to.have.status(401);
-        expect(res.body).to.equal(error);
-        done();
-      });
-    });
-    it("Rejects on password without numbers", done => {
-      chai.request(app).post("/api/users/new").send(noNumberPassword).end((_, res) => {
         expect(res).to.have.status(401);
         expect(res.body).to.equal(error);
         done();
@@ -221,7 +222,8 @@ describe("Logs in", _ => {
 
 describe("Gets user details", _ => {
   const agent = chai.request.agent(app);
-  before(done => {
+  before(function(done) {
+    this.timeout(3000);
     agent.post("/api/users/new").send(newUser).end((_, res) => {
       agent.post("/api/users/login").send(login).end((_, res) => {
         done();

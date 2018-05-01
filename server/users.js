@@ -50,21 +50,21 @@ router.post("/new", (req, res, next) => {
   let query = SQL.getUserByEmail(email);
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err);
+      logger.error(err.message);
       return res.status(500).json(error);
     }
     if (results.length !== 0) return res.status(401).json(error);
 
     bcrypt.hash(password, 10, (err, hash) => {
       if (err) {
-        logger.error(err);
+        logger.error(err.message);
         return res.status(500).json(error);
       }
 
       query = SQL.newUser(email, hash, name, companyName);
       conn.query(query, (err, results) => {
         if (err) {
-          logger.error(err);
+          logger.error(err.message);
           return res.status(500).json(error);
         }
 
@@ -74,7 +74,7 @@ router.post("/new", (req, res, next) => {
         query = SQL.saveVerifyToken(token, email, expiry);
         conn.query(query, (err, results) => {
           if (err) {
-            logger.error(err);
+            logger.error(err.message);
             return res.status(500).json(error);
           }
           return res.status(200).json("Success");
@@ -86,7 +86,7 @@ router.post("/new", (req, res, next) => {
       //         return res.status(200).json("Success");
       //       })
       //       .catch(err => {
-      //         logger.error(err);
+      //         logger.error(err.message);
       //         return res.status(500).json(error);
       //       });
       //   });
@@ -111,7 +111,7 @@ router.post("/login", (req, res, next) => {
   let query = SQL.getPassword(email);
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err);
+      logger.error(err.message);
       return res.status(500).json(serverError);
     }
     if (results.length === 0) {
@@ -120,7 +120,7 @@ router.post("/login", (req, res, next) => {
     const hash = results[0].password;
     bcrypt.compare(password, hash, (err, match) => {
       if (err) {
-        logger.error(err);
+        logger.error(err.message);
         return res.status(500).json(serverError);
       }
       if (!match) {
@@ -130,7 +130,7 @@ router.post("/login", (req, res, next) => {
       query = SQL.saveSessionToken(token, email, moment().add(12, "hours").toDate());
       conn.query(query, (err, results) => {
         if (err) {
-          logger.error(err);
+          logger.error(err.message);
           return res.status(500).json(serverError);
         }
         res.cookie("session", token, { maxAge: 1000 * 60 * 60 * 12 });
@@ -147,7 +147,7 @@ router.get("/reverify", (req, res, next) => {
   let query = SQL.getUserDetails(token);
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err);
+      logger.error(err.message);
       return res.status(500).json(error);
     }
     if (results.length === 0) return res.status(401).json(error);
@@ -159,7 +159,7 @@ router.get("/reverify", (req, res, next) => {
     query = SQL.saveEmailToken(token, email, expiry);
     conn.query(query, (err, results) => {
       if (err) {
-        logger.error(err);
+        logger.error(err.message);
         return res.status(500).json(error);
       }
 
@@ -169,7 +169,7 @@ router.get("/reverify", (req, res, next) => {
           return res.status(200).json("Success");
         })
         .catch(err => {
-          logger.error(err);
+          logger.error(err.message);
           return res.status(500).json(error);
         });
     });
@@ -183,7 +183,7 @@ router.get("/verify", (req, res, next) => {
   let query = SQL.getToken(token);
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err);
+      logger.error(err.message);
       return res.status(500).json(error);
     }
 
@@ -198,7 +198,7 @@ router.get("/verify", (req, res, next) => {
     query = SQL.verifyUser(userId);
     conn.query(query, (err, results) => {
       if (err) {
-        logger.error(err);
+        logger.error(err.message);
         return res.status(500).json(error);
       }
 
@@ -206,7 +206,7 @@ router.get("/verify", (req, res, next) => {
       query = SQL.deleteToken(token);
       conn.query(query, (err, results) => {
         if (err) {
-          logger.error(err);
+          logger.error(err.message);
           return res.status(500).json(error);
         }
         return res.status(200).json("Success");
@@ -228,7 +228,7 @@ router.post("/reset", (req, res, next) => {
   let query = SQL.getToken(token);
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err);
+      logger.error(err.message);
       return res.status(500).json(error);
     }
 
@@ -242,7 +242,7 @@ router.post("/reset", (req, res, next) => {
     error = "Error hashing password";
     bcrypt.hash(password, 10, (err, hash) => {
       if (err) {
-        logger.error(err);
+        logger.error(err.message);
         return res.status(500).json(error);
       }
 
@@ -250,7 +250,7 @@ router.post("/reset", (req, res, next) => {
       query = SQL.setPassword(hash, token);
       conn.query(query, (err, results) => {
         if (err) {
-          logger.error(err);
+          logger.error(err.message);
           return res.status(500).json(error);
         }
 
@@ -258,7 +258,7 @@ router.post("/reset", (req, res, next) => {
         query = SQL.deleteToken(token);
         conn.query(query, (err, results) => {
           if (err) {
-            logger.error(err);
+            logger.error(err.message);
             return res.status(500).json(error);
           }
           return res.status(200).json("Success");
@@ -276,7 +276,7 @@ router.post("/send-reset", (req, res, next) => {
   let query = SQL.getUserByEmail(email);
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err);
+      logger.error(err.message);
       return res.status(500).json(error);
     }
 
@@ -290,7 +290,7 @@ router.post("/send-reset", (req, res, next) => {
     query = SQL.saveResetToken(token, tokenEmail, expiry);
     conn.query(query, (err, results) => {
       if (err) {
-        logger.error(err);
+        logger.error(err.message);
         return res.status(500).json(error);
       }
 
@@ -300,7 +300,7 @@ router.post("/send-reset", (req, res, next) => {
           return res.status(200).json("Success");
         })
         .catch(err => {
-          logger.error(err);
+          logger.error(err.message);
           return res.status(500).json(error);
         });
     });
@@ -314,30 +314,6 @@ router.post("/send-reset", (req, res, next) => {
  */
 router.get("/from-cookie", isLoggedIn, (req, res, next) => res.status(200).json("Success"));
 
-/**
- * Refresh a user token
- * @name refreshToken
- * @route {GET} /api/users/refresh
- */
-router.get("/refresh", isLoggedIn, (req, res, next) => {
-  const prevToken = req.cookies.session;
-  const conn = app.get("conn");
-  const error = "Error refreshing token";
-
-  const token = generateToken();
-  const expiry = moment().add(12, "hours").toDate();
-  const query = SQL.refreshToken(token, expiry, prevToken);
-
-  conn.query(query, (err, results) => {
-    if (err) {
-      logger.error(err);
-      return res.status(500).json(error);
-    }
-    res.cookie("session", token, { maxAge: 1000 * 60 * 60 * 12 });
-    return res.status(200).json("Success");
-  });
-});
-
 router.get("/details", isLoggedIn, (req, res, next) => {
   const token = req.cookies.session;
   const conn = app.get("conn");
@@ -345,7 +321,7 @@ router.get("/details", isLoggedIn, (req, res, next) => {
   const query = SQL.getUserDetails(token);
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err);
+      logger.error(err.message);
       return res.status(500).json(error);
     }
     return res.status(200).json(results[0]);
@@ -368,7 +344,7 @@ router.put("/edit", isLoggedIn, (req, res, next) => {
   const query = SQL.editUser(email, name, companyName, token);
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err);
+      logger.error(err.message);
       return res.status(500).json(error);
     }
     return res.status(200).json(req.body);
@@ -382,7 +358,7 @@ router.get("/signout", isLoggedIn, (req, res, next) => {
   const query = SQL.deleteToken(token);
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err);
+      logger.error(err.message);
       return res.status(500).json(error);
     }
     return res.status(200).json("Success");

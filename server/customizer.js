@@ -20,7 +20,7 @@ router.get("/variables", (req, res, next) => {
   const query = SQL.getVariables();
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err);
+      logger.error(err.sqlMessage);
       return res.status(500).json(error);
     }
     return res.status(200).json(results);
@@ -40,7 +40,7 @@ router.get("/all-data", (req, res, next) => {
   let query = SQL.getVariables();
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err);
+      logger.error(err.sqlMessage);
       return res.status(500).json(error);
     }
     data.variables = results;
@@ -48,7 +48,7 @@ router.get("/all-data", (req, res, next) => {
     query = SQL.getPresets();
     conn.query(query, (err, results) => {
       if (err) {
-        logger.error(err);
+        logger.error(err.sqlMessage);
         return res.status(500).json(error);
       }
       data.presets = results;
@@ -80,7 +80,7 @@ router.put("/edit-variable", (req, res, next) => {
 
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err);
+      logger.error(err.sqlMessage);
       return res.status(500).json(error);
     }
     return res.status(200).json("Success");
@@ -100,7 +100,7 @@ router.get("/customizations", isLoggedIn, (req, res, next) => {
 
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err);
+      logger.error(err.sqlMessage);
       return res.status(500).json(error);
     }
     return res.status(200).json(results);
@@ -130,7 +130,7 @@ router.post("/new", isLoggedIn, (req, res, next) => {
   let query = SQL.getCustomizationByNameAndUser(name, token);
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err);
+      logger.error(err.sqlMessage);
       return res.status(500).json(error);
     }
 
@@ -141,7 +141,7 @@ router.post("/new", isLoggedIn, (req, res, next) => {
     query = SQL.newCustomization(token, name, description, volume, colour, hoppiness, maltFlavour);
     conn.query(query, (err, results) => {
       if (err) {
-        logger.error(err);
+        logger.error(err.sqlMessage);
         return res.status(500).json(error);
       }
       const id = results.insertId;
@@ -150,7 +150,7 @@ router.post("/new", isLoggedIn, (req, res, next) => {
       query = SQL.getCustomizations(token);
       conn.query(query, (err, results) => {
         if (err) {
-          logger.error(err);
+          logger.error(err.sqlMessage);
           return res.status(500).json(error);
         }
         return res.status(200).json({ customizations: results, id });
@@ -170,7 +170,7 @@ router.put("/update", isLoggedIn, (req, res, next) => {
   let query = SQL.updateCustomization(description, volume, colour, hoppiness, maltFlavour, name, token);
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err.message);
+      logger.error(err.sqlMessage);
       return res.status(500).json(error);
     }
 
@@ -183,7 +183,7 @@ router.put("/update", isLoggedIn, (req, res, next) => {
     query = SQL.getCustomizations(token);
     conn.query(query, (err, results) => {
       if (err) {
-        logger.error(err);
+        logger.error(err.sqlMessage);
         return res.status(500).json(error);
       }
       const id = results.find(c => c.name === name).id;
@@ -203,11 +203,11 @@ router.put("/edit-details", isLoggedIn, (req, res, next) => {
   let query = SQL.editCustomizationDetails(name, description, id, token);
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err.message);
+      logger.error(err.sqlMessage);
       return res.status(500).json(error);
     }
 
-    error = "No beer found with that name!";
+    error = "No beer found with that id!";
     if (results.affectedRows === 0) {
       return res.status(400).json(error);
     }
@@ -216,7 +216,7 @@ router.put("/edit-details", isLoggedIn, (req, res, next) => {
     query = SQL.getCustomizations(token);
     conn.query(query, (err, results) => {
       if (err) {
-        logger.error(err);
+        logger.error(err.sqlMessage);
         return res.status(500).json(error);
       }
       return res.status(200).json(results);
@@ -232,11 +232,11 @@ router.put("/edit-image", isLoggedIn, (req, res, next) => {
   let query = SQL.editCustomizationImage(imageType, customImage, id, token);
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err.message);
+      logger.error(err.sqlMessage);
       return res.status(500).json(error);
     }
 
-    error = "No beer found with that name!";
+    error = "No beer found with that id!";
     if (results.affectedRows === 0) {
       return res.status(400).json(error);
     }
@@ -245,7 +245,7 @@ router.put("/edit-image", isLoggedIn, (req, res, next) => {
     query = SQL.getCustomizations(token);
     conn.query(query, (err, results) => {
       if (err) {
-        logger.error(err);
+        logger.error(err.sqlMessage);
         return res.status(500).json(error);
       }
       return res.status(200).json(results);
@@ -265,19 +265,24 @@ router.delete("/delete", isLoggedIn, (req, res, next) => {
   const conn = app.get("conn");
   let error = "Error deleting customization";
   let query = SQL.deleteCustomization(id, token);
-  console.log(query);
 
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err);
+      logger.error(err.sqlMessage);
       return res.status(500).json(error);
     }
+
+    error = "No beer found with that id!";
+    if (results.affectedRows === 0) {
+      return res.status(400).json(error);
+    }
+
     error = "Error getting customizations";
     query = SQL.getCustomizations(token);
 
     conn.query(query, (err, results) => {
       if (err) {
-        logger.error(err);
+        logger.error(err.sqlMessage);
         return res.status(500).json(error);
       }
       return res.status(200).json(results);

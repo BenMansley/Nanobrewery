@@ -19,10 +19,9 @@ router.get("/products/category/:category", (req, res, next) => {
   let error = "Error retrieving products";
   const conn = app.get("conn");
   const query = SQL.getProductsByCategory(token, category);
-  console.log(query);
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err);
+      logger.error(err.message);
       return res.status(500).json(error);
     }
     error = "Invalid category";
@@ -52,14 +51,14 @@ router.post("/basket/add", isLoggedIn, (req, res, next) => {
   }
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err);
+      logger.error(err.message);
       return res.status(500).json(error);
     }
     query = SQL.getBasketSize(token);
     error = "Error getting updated basket";
     conn.query(query, (err, results) => {
       if (err) {
-        logger.error(err);
+        logger.error(err.message);
         return res.status(500).json(error);
       }
       return res.status(200).json(results[0]["COUNT(*)"]);
@@ -79,7 +78,7 @@ router.get("/basket/size", isLoggedIn, (req, res, next) => {
   const query = SQL.getBasketSize(token);
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err);
+      logger.error(err.message);
       return res.status(500).json(error);
     }
     return res.status(200).json(results[0]["COUNT(*)"]);
@@ -128,7 +127,7 @@ router.put("/basket/update", isLoggedIn, (req, res, next) => {
   const query = SQL.updateQuantity(quantity, productId, token);
   conn.query(query, (err, results) => {
     if (err) {
-      logger.error(err);
+      logger.error(err.message);
       return res.status(500).json(error);
     }
     getBasket(token)
