@@ -1,5 +1,9 @@
 .branding {
 
+  hr {
+    margin-top: 1.5em;
+  }
+
   .material-select {
     margin-bottom: 1em;
   }
@@ -10,18 +14,20 @@
     margin: 0.8em 2em 1em 0;
   }
 
-  .material-input {
-    margin: 1em 2em 2em 0;
-    width: 100%;
-  }
-  
-  .material-textarea {
-    margin-bottom: 0;
-  }
+  .beer-edit {
+    .material-input {
+      margin: 1em 2em 2em 0;
+      width: 100%;
+    }
+    
+    .material-textarea {
+      margin-bottom: 0;
+    }
 
-  .form-base {
-    margin-top: 0;
-    justify-content: flex-end;
+    .form-base {
+      margin-top: 0;
+      justify-content: flex-end;
+    }
   }
 
   .beer-facts {
@@ -66,7 +72,7 @@
 
       > img {
         margin-top: 20px;
-        max-width: 240px;
+        max-width: 100%;
       }
     }
 
