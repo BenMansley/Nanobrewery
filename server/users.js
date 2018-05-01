@@ -71,7 +71,7 @@ router.post("/new", (req, res, next) => {
         const token = generateToken();
         let expiry = moment().add(12, "hours").toDate();
         error = "Error creating token";
-        query = SQL.saveEmailToken(token, email, expiry);
+        query = SQL.saveVerifyToken(token, email, expiry);
         conn.query(query, (err, results) => {
           if (err) {
             logger.error(err);
