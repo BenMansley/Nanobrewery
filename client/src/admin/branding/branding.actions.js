@@ -13,6 +13,9 @@ export const actionTypes = {
   EDIT_CUSTOMIZATION_DETAILS_REQUEST: "EDIT_CUSTOMIZATION_DETAILS_REQUEST",
   EDIT_CUSTOMIZATION_DETAILS_SUCCESS: "EDIT_CUSTOMIZATION_DETAILS_SUCCESS",
   EDIT_CUSTOMIZATION_DETAILS_FAILURE: "EDIT_CUSTOMIZATION_DETAILS_FAILURE",
+  EDIT_CUSTOMIZATION_IMAGE_REQUEST: "EDIT_CUSTOMIZATION_IMAGE_REQUEST",
+  EDIT_CUSTOMIZATION_IMAGE_SUCCESS: "EDIT_CUSTOMIZATION_IMAGE_SUCCESS",
+  EDIT_CUSTOMIZATION_IMAGE_FAILURE: "EDIT_CUSTOMIZATION_IMAGE_FAILURE",
   DELETE_CUSTOMIZATION_REQUEST: "DELETE_CUSTOMIZATION_REQUEST",
   DELETE_CUSTOMIZATION_SUCCESS: "DELETE_CUSTOMIZATION_SUCCESS",
   DELETE_CUSTOMIZATION_FAILURE: "DELETE_CUSTOMIZATION_FAILURE",
@@ -110,6 +113,25 @@ export const editCustomizationDetails = (name, description, id) => {
   return asyncAction("/api/customizer/edit-details",
     { method: "PUT", body: JSON.stringify(data), credentials: "same-origin" },
     editCustomizationDetailsRequest, editCustomizationDetailsSuccess, editCustomizationDetailsFailure);
+};
+
+const editCustomizationImageRequest = _ => {
+  return { type: actionTypes.EDIT_CUSTOMIZATION_IMAGE_REQUEST };
+};
+
+const editCustomizationImageSuccess = customizations => {
+  return { type: actionTypes.EDIT_CUSTOMIZATION_IMAGE_SUCCESS, customizations };
+};
+
+const editCustomizationImageFailure = error => {
+  return { type: actionTypes.EDIT_CUSTOMIZATION_IMAGE_FAILURE, error };
+};
+
+export const editCustomizationImage = (imageType, customImage, id) => {
+  const data = { imageType, customImage, id };
+  return asyncAction("/api/customizer/edit-image",
+    { method: "PUT", body: JSON.stringify(data), credentials: "same-origin" },
+    editCustomizationImageRequest, editCustomizationImageSuccess, editCustomizationImageFailure);
 };
 
 export const resetBeerErrors = _ => {

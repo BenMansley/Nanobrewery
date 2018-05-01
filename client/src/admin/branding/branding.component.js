@@ -2,13 +2,17 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { getCustomizations, editCustomizationDetails } from "./branding.actions";
+import { getCustomizations, editCustomizationDetails, editCustomizationImage } from "./branding.actions";
 import MaterialSelect from "../../components/material-select.component";
 import BeerImage from "./beer-image.component";
 import MaterialInput from "../../components/material-input.component";
 import { addProductToBasket } from "../shop/shop.actions";
 import MaterialTextarea from "../../components/material-textarea.component";
-const imageOptions = [{ value: 0, text: "Custom" }, { value: 1, text: "Pilsen" }, { value: 2, text: "Ale" }];
+const imageOptions = [
+  { value: 0, text: "Custom" },
+  { value: 1, text: "Pilsen" },
+  { value: 2, text: "Ale" }
+];
 const imageTypes = ["pilsen", "ale"];
 
 class Branding extends Component {
@@ -21,7 +25,7 @@ class Branding extends Component {
       name: "",
       description: "",
       rgb: "",
-      imageType: 0,
+      imageType: 2,
       customImage: "",
       quantity: 140
     };
@@ -88,7 +92,7 @@ class Branding extends Component {
     const rgb = minRGB.map((c, i) => {
       return Math.round(c + step[i] * colour);
     }).join(",");
-    this.setState({ index: i, rgb });
+    this.setState({ index: i, rgb, imageType: customizations[i].imageType });
   }
 
   onAddToBasket() {
@@ -101,7 +105,11 @@ class Branding extends Component {
 
   render() {
     const { name, description, isEditing, rgb, index, imageType, customImage, quantity } = this.state;
-    const { customizations, editError, isLoadingEdits, isLoadingCustomizations, isLoadingBasket } = this.props;
+    const {
+      customizations, editError, isLoadingEdits, imageError, isLoadingImage, isLoadingCustomizations, isLoadingBasket,
+      editBeerImage
+    } = this.props;
+
     let beer = null;
     let options = null;
 
@@ -128,7 +136,7 @@ class Branding extends Component {
           ? <div>
             <div className="card beer">
               { isEditing
-                ? <form onSubmit={(event) => this.onSubmitEdits(event, beer)}>
+                ? <form className="beer-edit" onSubmit={(event) => this.onSubmitEdits(event, beer)}>
                   <MaterialInput type="text" id="beer-name" labelText="Name" value={name}
                     onChange={(event) => this.setState({ name: event.target.value })} />
                   <MaterialTextarea id="beer-description" labelText={"Description (" + description.length + "/800)"}
@@ -154,18 +162,20 @@ class Branding extends Component {
                   { !isLoadingEdits ? <p>{beer.description}</p> : null }
                 </React.Fragment>
               }
+              <hr />
+              <h3>Fact Sheet</h3>
               <ul className="beer-facts">
                 <li>Volume: {beer.volume}</li>
                 <li>Colour: <div className="beer-colour" style={{ backgroundColor: "rgb(" + rgb + ")" }} /></li>
                 <li>Hoppiness: {beer.hoppiness}</li> <li>Malt Flavour: {beer.maltFlavour}</li>
               </ul>
               <hr />
-              <h3>Make a Logo</h3>
+              <h3>Choose a Logo</h3>
               <div>
                 <div className="beer-flex">
                   <div className="beer-image-options">
                     <MaterialSelect options={imageOptions} selected={imageType}
-                      onSelect={(i) => this.setState({ imageType: i })} />
+                      onSelect={(type) => this.setState({ imageType: type })} />
                   </div>
                   { imageType === 0
                     ? <div className="custom-image">
@@ -173,6 +183,16 @@ class Branding extends Component {
                       { customImage ? <img src={customImage} alt={beer.name} /> : null }
                     </div>
                     : <BeerImage type={imageTypes[imageType - 1]} text={beer.name} />
+                  }
+                </div>
+                <div className="form-base">
+                  { isLoadingImage
+                    ? <span className="loading spin material-icons">toys</span>
+                    : <React.Fragment>
+                      <p className="error">{imageError && <span className="material-icons">error</span>}
+                        {imageError}</p>
+                      <button onClick={() => editBeerImage(imageType, customImage, beer.id)}>Save Image</button>
+                    </React.Fragment>
                   }
                 </div>
               </div>
@@ -217,9 +237,12 @@ Branding.propTypes = {
   isLoadingBasket: PropTypes.bool.isRequired,
   isLoadingEdits: PropTypes.bool.isRequired,
   editError: PropTypes.string.isRequired,
+  isLoadingImage: PropTypes.bool.isRequired,
+  imageError: PropTypes.string.isRequired,
   getCustomizations: PropTypes.func.isRequired,
   addToBasket: PropTypes.func.isRequired,
   editBeerDetails: PropTypes.func.isRequired,
+  editBeerImage: PropTypes.func.isRequired,
   location: PropTypes.object,
   history: PropTypes.object
 };
@@ -230,6 +253,8 @@ const mapStateToProps = state => {
     isLoadingCustomizations: state.branding.isLoading,
     isLoadingEdits: state.branding.isLoadingEdits,
     editError: state.branding.editError,
+    isLoadingImage: state.branding.isLoadingImage,
+    imageError: state.branding.imageError,
     isLoadingBasket: state.shop.isLoading,
   };
 };
@@ -238,7 +263,8 @@ const mapDispatchToProps = dispatch => {
   return {
     getCustomizations: () => dispatch(getCustomizations()),
     addToBasket: (quantity, customizationId) => dispatch(addProductToBasket(1, quantity, customizationId)),
-    editBeerDetails: (name, description, id) => dispatch(editCustomizationDetails(name, description, id))
+    editBeerDetails: (name, description, id) => dispatch(editCustomizationDetails(name, description, id)),
+    editBeerImage: (imageType, customImage, id) => dispatch(editCustomizationImage(imageType, customImage, id))
   };
 };
 

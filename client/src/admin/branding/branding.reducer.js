@@ -7,7 +7,9 @@ const brandingReducer =
     error: "",
     isLoading: false,
     editError: "",
-    isLoadingEdits: false
+    isLoadingEdits: false,
+    imageError: "",
+    isLoadingImage: false
   },
   action
   ) => {
@@ -24,6 +26,11 @@ const brandingReducer =
         return Object.assign({}, state, {
           isLoadingEdits: true,
           editError: ""
+        });
+      case actionTypes.EDIT_CUSTOMIZATION_IMAGE_REQUEST:
+        return Object.assign({}, state, {
+          isLoadingImage: true,
+          imageError: ""
         });
       case actionTypes.UPDATE_CUSTOMIZATION_SUCCESS:
       case actionTypes.NEW_CUSTOMIZATION_SUCCESS:
@@ -46,6 +53,12 @@ const brandingReducer =
           isLoadingEdits: false,
           editError: ""
         });
+      case actionTypes.EDIT_CUSTOMIZATION_IMAGE_SUCCESS:
+        return Object.assign({}, state, {
+          customizations: action.customizations,
+          isLoadingImage: false,
+          imageError: ""
+        });
       case actionTypes.NEW_CUSTOMIZATION_FAILURE:
       case actionTypes.UPDATE_CUSTOMIZATION_FAILURE:
       case actionTypes.DELETE_CUSTOMIZATION_FAILURE:
@@ -58,6 +71,11 @@ const brandingReducer =
         return Object.assign({}, state, {
           isLoadingEdits: false,
           editError: action.error
+        });
+      case actionTypes.EDIT_CUSTOMIZATION_IMAGE_FAILURE:
+        return Object.assign({}, state, {
+          isLoadingImage: false,
+          imageError: action.error
         });
       case actionTypes.RESET_BEER_ERRORS:
         return Object.assign({}, state, {
