@@ -243,7 +243,10 @@ button:not(.select-dropdown), .button {
     flex-wrap: wrap;
     max-width: none; }
     .customizer > .top .sliders {
-      flex: 1 1 40%; }
+      flex: 1 1 40%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around; }
     .customizer > .top .image {
       flex: 1 1 60%; }
       .customizer > .top .image .svg-container {
@@ -328,6 +331,9 @@ button:not(.select-dropdown), .button {
       border-color: transparent;
       color: transparent; }
 
+.branding hr {
+  margin-top: 1.5em; }
+
 .branding .material-select {
   margin-bottom: 1em; }
 
@@ -336,14 +342,14 @@ button:not(.select-dropdown), .button {
   vertical-align: baseline;
   margin: 0.8em 2em 1em 0; }
 
-.branding .material-input, .branding .material-textarea {
+.branding .beer-edit .material-input, .branding .beer-edit .material-textarea {
   margin: 1em 2em 2em 0;
   width: 100%; }
 
-.branding .material-textarea {
+.branding .beer-edit .material-textarea {
   margin-bottom: 0; }
 
-.branding .form-base {
+.branding .beer-edit .form-base {
   margin-top: 0;
   justify-content: flex-end; }
 
@@ -378,7 +384,7 @@ button:not(.select-dropdown), .button {
       font: inherit; }
     .branding .beer-flex .custom-image > img {
       margin-top: 20px;
-      max-width: 240px; }
+      max-width: 100%; }
   .branding .beer-flex .beer-image {
     flex: 1 1 0;
     min-width: 240px; }

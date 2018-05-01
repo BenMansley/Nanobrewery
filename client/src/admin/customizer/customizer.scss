@@ -31,6 +31,9 @@
 
     .sliders {
       flex: 1 1 40%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
     }
 
     .image {  

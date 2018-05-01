@@ -74,13 +74,17 @@ function getVariables() {
   return "SELECT * FROM Variables WHERE id<5;";
 }
 
+function getPresets() {
+  return "SELECT * FROM Customizations WHERE userId=1";
+}
+
 function editVariable(name, min, max, step, defaultVal, suffix, id) {
   const query = "UPDATE Variables SET name=?, min=?, max=?, step=?, defaultVal=?, suffix=? WHERE id=?;";
   return mysql.format(query, Object.values(arguments));
 }
 
 function getCustomizations(token) {
-  const query = "SELECT id, name, description, volume, colour, hoppiness, maltFlavour" +
+  const query = "SELECT id, name, description, volume, colour, hoppiness, maltFlavour, imageType, customImage" +
                 " FROM Customizations WHERE userId=" + userId;
   return mysql.format(query, [token]);
 }
@@ -99,6 +103,11 @@ function updateCustomization(description, volume, colour, hoppiness, maltFlavour
 
 function editCustomizationDetails(name, description, id, token) {
   const query = "UPDATE Customizations SET name=?, description=? WHERE id=? AND userId=" + userId;
+  return mysql.format(query, Object.values(arguments));
+}
+
+function editCustomizationImage(imageType, customImage, id, token) {
+  const query = "UPDATE Customizations SET imageType=?, customImage=? WHERE id=? AND userId=" + userId;
   return mysql.format(query, Object.values(arguments));
 }
 
@@ -177,11 +186,13 @@ module.exports = {
   },
   customizer: {
     getVariables,
+    getPresets,
     editVariable,
     getCustomizations,
     newCustomization,
     updateCustomization,
     editCustomizationDetails,
+    editCustomizationImage,
     deleteCustomization,
     getCustomizationById,
     getCustomizationByNameAndUser

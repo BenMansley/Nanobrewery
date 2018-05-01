@@ -3,6 +3,7 @@ import { actionTypes } from "./customizer.actions";
 const customizerReducer =
   (state = {
     variables: [],
+    presets: [],
     templates: [],
     updateVariableResponse: "",
     error: "",
@@ -18,6 +19,7 @@ const customizerReducer =
       case actionTypes.GET_DATA_SUCCESS:
         return Object.assign({}, state, {
           variables: action.data.variables,
+          presets: action.data.presets,
           templates: action.data.templates,
           error: "",
           isLoading: false

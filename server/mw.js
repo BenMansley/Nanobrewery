@@ -25,8 +25,9 @@ const isLoggedIn = (req, res, next) => {
         }
         return res.status(401).json(userError);
       });
+    } else {
+      next();
     }
-    next();
   });
 };
 

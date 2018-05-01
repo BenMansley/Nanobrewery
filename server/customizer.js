@@ -28,25 +28,35 @@ router.get("/variables", (req, res, next) => {
 });
 
 /**
- * Gets all data (variables and description template strings)
+ * Gets all data (variables, presets and description template strings)
  * @name getAllData
  * @route {GET} /api/customizer/all-data
  */
 router.get("/all-data", (req, res, next) => {
   const conn = app.get("conn");
   const error = "Error getting data";
-  let data = { variables: [], templates: [] };
+  let data = { variables: [], presets: [], templates: [] };
 
-  const query = SQL.getVariables();
+  let query = SQL.getVariables();
   conn.query(query, (err, results) => {
     if (err) {
       logger.error(err);
       return res.status(500).json(error);
     }
     data.variables = results;
-    const filename = path.join(__dirname, "../raw/strings.json");
-    data.templates = JSON.parse(readFileSync(filename, "utf-8"));
-    return res.status(200).json(data);
+
+    query = SQL.getPresets();
+    conn.query(query, (err, results) => {
+      if (err) {
+        logger.error(err);
+        return res.status(500).json(error);
+      }
+      data.presets = results;
+
+      const filename = path.join(__dirname, "../raw/strings.json");
+      data.templates = JSON.parse(readFileSync(filename, "utf-8"));
+      return res.status(200).json(data);
+    });
   });
 });
 
@@ -191,6 +201,35 @@ router.put("/edit-details", isLoggedIn, (req, res, next) => {
 
   error = "Error updating customization";
   let query = SQL.editCustomizationDetails(name, description, id, token);
+  conn.query(query, (err, results) => {
+    if (err) {
+      logger.error(err.message);
+      return res.status(500).json(error);
+    }
+
+    error = "No beer found with that name!";
+    if (results.affectedRows === 0) {
+      return res.status(400).json(error);
+    }
+
+    error = "Error retrieving customizations";
+    query = SQL.getCustomizations(token);
+    conn.query(query, (err, results) => {
+      if (err) {
+        logger.error(err);
+        return res.status(500).json(error);
+      }
+      return res.status(200).json(results);
+    });
+  });
+});
+
+router.put("/edit-image", isLoggedIn, (req, res, next) => {
+  const { imageType, customImage, id } = req.body;
+  const token = req.cookies.session;
+  const conn = app.get("conn");
+  let error = "Error updating customization";
+  let query = SQL.editCustomizationImage(imageType, customImage, id, token);
   conn.query(query, (err, results) => {
     if (err) {
       logger.error(err.message);

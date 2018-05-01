@@ -24,7 +24,9 @@ class Customizer extends Component {
       rgb: [55, 8, 10],
       description: "",
       name: "",
-      index: 0
+      index: 0,
+      presetOptions: [],
+      selectedPreset: 0,
     };
   }
 
@@ -74,9 +76,20 @@ class Customizer extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.templates.length !== 0 && prevProps.templates.length === 0) {
-      this.makeDescription(this.props.templates);
+    const { templates, presets } = this.props;
+    if (templates.length !== 0 && prevProps.templates.length === 0) {
+      this.makeDescription(templates);
     }
+    if (presets.length !== 0 && prevProps.presets.length === 0) {
+      this.loadPresets(presets);
+    }
+  }
+
+  loadPresets(presets) {
+    const presetOptions = presets.map((p, i) => {
+      return { value: i, text: p.name };
+    });
+    this.setState({ presetOptions, selectedPreset: presets.length });
   }
 
   makeDescription() {
@@ -148,8 +161,29 @@ class Customizer extends Component {
     this.setActiveBeer(customizations[i], i);
   }
 
+  onPresetSelect(i) {
+    console.log(i);
+    const preset = this.props.presets[i];
+    let variables;
+    const { volume:Volume, colour:Colour, hoppiness:Hoppiness, description } = preset;
+    variables = { "Malt Flavour": preset.maltFlavour, Volume, Colour, Hoppiness };
+    const minRGB = [55, 8, 10];
+    const step = [2, 2.25, 1.45];
+    const rgb = minRGB.map((colour, i) => {
+      return Math.round(colour + step[i] * preset.colour);
+    });
+    this.setState({
+      rgb,
+      index: this.props.customizations.length,
+      name: "",
+      description,
+      variables,
+      selectedPreset: i
+    });
+  }
+
   render() {
-    const { rgb, variables, name, description, index } = this.state;
+    const { rgb, variables, name, description, index, presetOptions, selectedPreset } = this.state;
     const { variables:variableSchema, customizations, customizationError, newCustomizationId,
       isLoadingData } = this.props;
 
@@ -189,7 +223,11 @@ class Customizer extends Component {
           <div className="customizer-element top card">
             <div className="customizer-element sliders">
               { isLoadingData ? <span className="material-icons loading spin">toys</span> : null }
-              { sliders }
+              { presetOptions.length !== 0 && index === customizations.length
+                ? <MaterialSelect options={presetOptions} selected={selectedPreset} placeholder="Select a Preset"
+                  onSelect={(i) => this.onPresetSelect(i)} />
+                : null}
+              <div>{ sliders }</div>
             </div>
             <div className="customizer-element image">
               <div className="svg-container">
@@ -264,6 +302,17 @@ Customizer.propTypes = {
       strings: PropTypes.arrayOf(PropTypes.string)
     })
   ),
+  presets: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      description: PropTypes.string,
+      volume: PropTypes.number,
+      colour: PropTypes.number,
+      hoppiness: PropTypes.number,
+      maltFlavour: PropTypes.number
+    })
+  ).isRequired,
   customizations: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
@@ -292,6 +341,7 @@ const mapStateToProps = state => {
     isLoggedIn: state.auth.isLoggedIn,
     variables: state.customizer.variables,
     templates: state.customizer.templates,
+    presets: state.customizer.presets,
     customizations: state.branding.customizations,
     newCustomizationId: state.branding.newCustomizationId,
     dataError: state.customizer.error,
