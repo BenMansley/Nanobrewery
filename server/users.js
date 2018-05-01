@@ -35,7 +35,7 @@ router.post("/new", (req, res, next) => {
   const { email, name, password, dob, companyName } = req.body;
   const conn = app.get("conn");
   let error = "Insecure Password!";
-  if (passwords.indexOf(password) !== -1 || password.length < 8) {
+  if (passwords.indexOf(password) !== -1 || password.length < 10) {
     return res.status(401).json(error);
   }
 
@@ -77,19 +77,19 @@ router.post("/new", (req, res, next) => {
             logger.error(err.message);
             return res.status(500).json(error);
           }
+
+          //     error = "Error sending verification email";
+          //     mailer.verify(name, email, token)
+          //       .then(_ => {
+          //         return res.status(200).json("Success");
+          //       })
+          //       .catch(err => {
+          //         logger.error(err);
+          //         return res.status(500).json(error);
+          //       });
+          //   });
           return res.status(200).json("Success");
         });
-
-      //     error = "Error sending verification email";
-      //     mailer.verify(name, email, token)
-      //       .then(_ => {
-      //         return res.status(200).json("Success");
-      //       })
-      //       .catch(err => {
-      //         logger.error(err.message);
-      //         return res.status(500).json(error);
-      //       });
-      //   });
       });
     });
   });

@@ -13,8 +13,8 @@ function getUserByEmail(email) {
 }
 
 function saveSessionToken(token, email, expiry) {
-  const query = "INSERT INTO Tokens (token, userId, expiry)" +
-                " VALUES (?, (SELECT id FROM Users WHERE email=?), ?);";
+  const query = "INSERT INTO Tokens (token, userId, expiry, type)" +
+                " VALUES (?, (SELECT id FROM Users WHERE email=?), ?, 'session');";
   return mysql.format(query, Object.values(arguments));
 }
 
