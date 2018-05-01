@@ -15,11 +15,9 @@ const isLoggedIn = (req, res, next) => {
       return res.status(500).json(serverError);
     }
     if (results.length === 0) {
-      console.log(`Token Not Found: ${token}`);
       return res.status(401).json(userError);
     }
     if (new Date(results[0].expiry) < new Date()) {
-      console.log("Deleting Token");
       query = SQL.deleteToken(token);
       serverError = "Error deleting token";
       conn.query(query, (err, results) => {

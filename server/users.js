@@ -36,14 +36,12 @@ router.post("/new", (req, res, next) => {
   const conn = app.get("conn");
   let error = "Insecure Password!";
   if (passwords.indexOf(password) !== -1 || password.length < 10) {
-    console.log("Bad Password");
     return res.status(401).json(error);
   }
 
   error = "You must be at least 18 to sign up";
   const isUnderage = moment().subtract(18, "years").isSameOrBefore(dob);
   if (isUnderage) {
-    console.log(error);
     return res.status(401).json(error);
   }
 
@@ -55,8 +53,6 @@ router.post("/new", (req, res, next) => {
       return res.status(500).json(error);
     }
     if (results.length !== 0) {
-      console.log("User exists");
-      console.log(results);
       return res.status(401).json(error);
     }
 
@@ -275,7 +271,6 @@ router.post("/reset", (req, res, next) => {
 
 router.post("/send-reset", (req, res, next) => {
   const email = req.body.email;
-  console.log(email);
   const conn = app.get("conn");
   let error = "Error getting user";
   let query = SQL.getUserByEmail(email);
