@@ -53,7 +53,10 @@ router.post("/new", (req, res, next) => {
       logger.error(err.message);
       return res.status(500).json(error);
     }
-    if (results.length !== 0) return res.status(401).json(error);
+    if (results.length !== 0) {
+      console.log("User exists");
+      return res.status(401).json(error);
+    }
 
     bcrypt.hash(password, 10, (err, hash) => {
       if (err) {
