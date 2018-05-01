@@ -38,7 +38,7 @@ describe("Register a new user", _ => {
     const badUser = Object.assign({}, newUser, { dob: "2002-05-01T12:34:29.503Z" });
     chai.request(app).post("/api/users/new").send(badUser).end((_, res) => {
       expect(res).to.have.status(401);
-      expect(res.body).to.equal("Error creating user");
+      expect(res.body).to.equal("You must be at least 18 to sign up");
       done();
     });
   });
