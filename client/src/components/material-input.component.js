@@ -20,7 +20,7 @@ MaterialInput.propTypes = {
   labelText: PropTypes.string.isRequired,
   inline: PropTypes.bool,
   className: PropTypes.string,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   onChange: PropTypes.func.isRequired
 };
 

@@ -68,7 +68,7 @@ class Home extends Component {
                 to build rapport with your customers.
               </p>
             </div>
-            <Link className="button" to="/admin/customizer">Make Your Own!</Link>
+            <Link className="button" to="/authentication/signup">Sign Up Now!</Link>
             <img className="cheers-image" src={CheersImage} alt="Cheers!" />
           </div>
         }

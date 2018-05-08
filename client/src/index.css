@@ -59,11 +59,12 @@
 
 button:not(.select-dropdown), .button {
   display: inline-block;
-  text-transform: uppercase;
-  font: inherit;
   padding: 0.25em 0.5em;
   border-radius: 2px;
   border: none;
+  background: transparent;
+  text-transform: uppercase;
+  font: inherit;
   color: #0D47A1;
   letter-spacing: 0.5px;
   cursor: pointer; }
