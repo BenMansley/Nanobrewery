@@ -20,6 +20,7 @@ class App extends Component {
     super(props);
 
     props.history.listen((location, action) => {
+      this.setState({ isMenuActive: false });
       props.changeRoute(location, action);
     });
 
