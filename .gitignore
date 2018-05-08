@@ -22,6 +22,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-*.sql
 /.nyc_output
 /client/.eslintrc
