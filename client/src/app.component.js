@@ -25,7 +25,7 @@ class App extends Component {
     });
 
     this.state = {
-      validating: true,
+      isValidating: true,
       isMenuActive: false
     };
   }
@@ -35,6 +35,8 @@ class App extends Component {
     const session = cookies.get("session");
     if (session) {
       this.props.getSessionFromCookie();
+    } else {
+      this.setState({ isValidating: false });
     }
   }
 
@@ -46,7 +48,7 @@ class App extends Component {
 
   componentWillReceiveProps(nextProps) {
     if ((!this.props.basketSize) && nextProps.basketSize) {
-      this.setState({ validating: false });
+      this.setState({ isValidating: false });
     }
   }
 
@@ -94,12 +96,12 @@ class App extends Component {
           <Route exact path="/verify" component={Verify} />
           <Route exact path="/authentication/reset-request" component={ResetRequest} />
           <Route exact path="/authentication/password-reset" component={PasswordReset} />
-          { (!this.state.validating || isLoggedIn)
+          { (!this.state.isValidating || isLoggedIn)
             ? <PrivateRoute path="/admin" allowAccess={isLoggedIn} component={Admin} />
-            : this.state.validating
+            : this.state.isValidating
               ? null : <NoMatch />
           }
-          { (!this.state.validating || isLoggedIn) ? <Route exact component={NoMatch} /> : null }
+          { (!(this.state.isValidating || isLoggedIn)) ? <Route component={NoMatch} /> : null }
         </Switch>
       </div>
     );

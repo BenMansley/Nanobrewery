@@ -64,6 +64,8 @@ class SignUp extends Component {
         </div>
         <p className="auth-link">Have an account? <Link
           to={{ pathname: "/authentication/signin", state: location.state }}>Sign In</Link></p>
+        <p className="auth-link">The Nanobrewery Company website uses cookies (just one) to manage login requests and more,
+          though this does not include any personal data. By signing up, you agree to the use of cookies on the site.</p>
       </div>
     );
   }
